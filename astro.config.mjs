@@ -6,24 +6,33 @@ import tailwind from '@astrojs/tailwind';
 export default defineConfig({
 	integrations: [
 		starlight({
-			title: 'Docs with Tailwind',
+			title: 'BlueBuild',
 			social: {
 				github: 'https://github.com/withastro/starlight',
 			},
 			sidebar: [
 				{
-					label: 'Guides',
+					label: 'Learn',
 					items: [
-						// Each item here is one entry in the navigation menu.
-						{ label: 'Example Guide', link: '/guides/example/' },
-					],
+						{ label: 'Getting started', link: '/learn/getting-started/' }
+					]
+				},
+				{
+					label: 'How-to',
+					autogenerate: { directory: 'how-to' },
 				},
 				{
 					label: 'Reference',
-					autogenerate: { directory: 'reference' },
+					items: [
+						{ label: 'recipe.yml', link: '/reference/recipe/' },
+						{ label: 'Modules', autogenerate: {directory: 'reference/modules' } }
+					]
 				},
 			],
 			customCss: ['./src/tailwind.css'],
+			components: {
+				SocialIcons: './src/components/NavLinks.astro',
+			},
 		}),
 		tailwind({ applyBaseStyles: false }),
 	],
