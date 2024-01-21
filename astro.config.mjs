@@ -33,6 +33,16 @@ export default defineConfig({
 			components: {
 				SocialIcons: './src/components/NavLinks.astro',
 			},
+			head: [
+				{
+					tag: 'script', 
+					attrs: {
+						defer: true,
+						src: 'https://eu.umami.is/script.js',
+						'data-website-id':'fdbab42b-cab4-4f46-b06a-172700ea1e1c'
+					}
+				}
+			]
 		}),
 		tailwind({ applyBaseStyles: false }),
 	],
