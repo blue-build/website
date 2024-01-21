@@ -14,7 +14,8 @@ export default defineConfig({
 				{
 					label: 'Learn',
 					items: [
-						{ label: 'Getting started', link: '/learn/getting-started/' }
+						{ label: 'Getting started', link: '/learn/getting-started/' },
+						{ label: 'Scope', link: '/learn/scope/' },
 					]
 				},
 				{
