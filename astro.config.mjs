@@ -30,7 +30,13 @@ export default defineConfig({
 					]
 				},
 			],
-			customCss: ['./src/tailwind.css'],
+			customCss: [
+				'@fontsource/atkinson-hyperlegible/400.css',
+				'@fontsource/atkinson-hyperlegible/700.css',
+				'@fontsource-variable/rubik',
+				'@fontsource/ibm-plex-mono',
+				'./src/tailwind.css',
+			],
 			components: {
 				SocialIcons: './src/components/NavLinks.astro',
 			},
