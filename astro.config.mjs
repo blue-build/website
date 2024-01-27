@@ -4,11 +4,15 @@ import tailwind from '@astrojs/tailwind';
 
 // https://astro.build/config
 export default defineConfig({
+	site: 'https://blue-build.org/',
 	integrations: [
 		starlight({
 			title: 'BlueBuild',
+			editLink: {
+				baseUrl: 'https://github.com/blue-build/website/edit/main/',
+			},
 			social: {
-				github: 'https://github.com/withastro/starlight',
+				github: 'https://github.com/blue-build/',
 			},
 			sidebar: [
 				{
