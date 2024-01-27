@@ -17,7 +17,10 @@
     "@fontsource-variable/rubik": "^5.0.20",
     "@fontsource/atkinson-hyperlegible": "^5.0.18",
     "@fontsource/ibm-plex-mono": "^5.0.8",
+    "@iconify-json/ic": "^1.1.17",
+    "@iconify-json/material-symbols": "^1.1.71",
     "astro": "^4.2.1",
+    "astro-icon": "^1.0.3",
     "sharp": "^0.32.5",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3"

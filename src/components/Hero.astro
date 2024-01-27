@@ -1,0 +1,41 @@
+---
+import LogoDark from "@assets/logo-round-dark.svg"
+import LogoLight from "@assets/logo-round-light.svg"
+import { Icon } from "astro-icon/components"
+const hero = Astro.props.entry.data.hero
+---
+
+<setion id="herosection" class="min-h-[75vh] grid md:grid-cols-[1fr_26rem] grid-cols-1 gap-4">
+    <div class="flex items-center justify-center md:order-1 md:-scale-x-100">
+        <img class="w-[24rem] md:rotate-[15deg] md:hover:rotate-[20deg] transition dark:block hidden" src={LogoDark.src}></img>
+        <img class="w-[24rem] md:rotate-[15deg] md:hover:rotate-[20deg] transition dark:hidden block" src={LogoLight.src}></img>
+        <div class="bg-accent-100 w-[312px] h-[312px] block absolute translate-x-12 translate-y-24 blur-[128px] rounded-full -z-10 opacity-5 invisible dark:visible"></div>
+    </div>
+    <div class="flex flex-col justify-center gap-8">
+        <h1 class="font-medium dark:text-white text-gray-900 font-display text-5xl" set:html={hero.title}></h1>
+        <p class="text-2xl" set:html={hero.tagline}></p>
+        <div class="bg-highlight-200 w-[468px] h-[468px] block absolute -translate-x-24 -translate-y-[128px] blur-[128px] rounded-full -z-10 opacity-10 invisible dark:visible"></div>
+        <div class="flex flex-row gap-4">
+            {hero.actions.map(a => 
+                <a
+                    href={a.link}
+                    class:list={[
+                        "p-4 text-xl px-8 hover:underline no-underline dark:text-gray-200 text-gray-800",
+                        "flex flex-row gap-2",
+                        {
+                            "bg-gradient-to-b dark:from-gray-900 dark:to-gray-800 from-gray-300 to-gray-200\
+                            dark:shadow-glow dark:hover:shadow-glow-active\
+                            dark:outline-0 outline outline-1 hover:outline-2 outline-gray-900": a.variant === "primary"
+                        },
+                        // unused {"": a.variant === "secondary"},
+                        {"": a.variant === "minimal"},
+                    ]}>
+                    {a.text}
+                    <!-Astro uses some "clever" validation to make sure only valid icons are used.
+                    Now that the property is hijacked, this ugly workaround is required instead.->
+                    {a.icon && <Icon name={a.icon.html.replace("<svg ", "")} class="self-center"/> }
+                </a>
+            )}
+        </div>
+    </div>
+</setion>

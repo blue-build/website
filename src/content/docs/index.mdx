@@ -3,18 +3,18 @@ title: The easiest way to build your own desktop Linux images.
 description: Get started building your docs site with Starlight.
 template: splash
 hero:
-  title: The <strong>easiest</strong> way to build your own desktop Linux images.
+  title: The <strong class="text-highlight-500 dark:text-highlight-200">easiest</strong> way to build your own desktop Linux images.
   tagline: The BlueBuild project creates accessible tools for you to configure, build, and create custom images of atomic Fedora distributions.
-  image:
-    file: ../../assets/houston.webp
   actions:
     - text: Let's get started!
       link: /learn/getting-started/
-      icon: right-arrow
+      # "<svg" is a required workaround, see Hero.astro
+      icon: "<svg material-symbols:book-5"
       variant: primary
     - text: Github
       link: https://github.com/blue-build/
-      icon: external
+      icon: "<svg ic:round-launch"
+      variant: minimal
 ---
 
 import { Card, CardGrid } from '@astrojs/starlight/components';

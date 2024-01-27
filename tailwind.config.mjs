@@ -53,6 +53,10 @@ export default {
 				display: ['Atkinson Hyperlegible', 'sans-serif'],
 				sans: ['Rubik Variable', 'system-ui', 'sans-serif'],
 				mono: ['IBM Plex Mono', 'monospace']
+			},
+			boxShadow: {
+				'glow': '2px 2px 6px rgb(166,223,255,0.15)',
+				'glow-active': '5px 5px 12px rgb(166,223,255,0.15)',
 			}
 		},
 	},
