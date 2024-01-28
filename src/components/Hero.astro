@@ -23,7 +23,7 @@ const hero = Astro.props.entry.data.hero
         <h1 class="font-medium dark:text-white text-gray-900 font-display text-5xl" set:html={hero.title}></h1>
         <p class="text-2xl" set:html={hero.tagline}></p>
         <div class="bg-highlight-200 w-[468px] h-[468px] block absolute -translate-x-24 -translate-y-[128px] blur-[128px] rounded-full -z-10 opacity-10 invisible dark:visible"></div>
-        <div class="flex flex-row gap-4">
+        <div class="flex flex-row flex-wrap gap-4">
             {hero.actions.map(a => 
                 <a
                     href={a.link}
