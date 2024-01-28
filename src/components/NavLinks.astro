@@ -1,12 +1,16 @@
-<a href="/" class="no-underline dark:text-gray-300 text-gray-700 hover:underline">
+---
+const id = Astro.props.id
+---
+
+<a href="/" class={`dark:text-gray-300 text-gray-700 hover:underline ${id.includes("index") ? "underline" : "no-underline"}`}>
     Home
 </a>
-<a href="/learn/getting-started/" class="no-underline dark:text-gray-300 text-gray-700 hover:underline">
+<a href="/learn/getting-started/" class={`dark:text-gray-300 text-gray-700 hover:underline ${id.includes("learn") || id.includes("how-to") || id.includes("reference") ? "underline" : "no-underline"}`}>
     Docs
+</a>
+<a href="/community" class={`dark:text-gray-300 text-gray-700 hover:underline ${id.includes("community") ? "underline" : "no-underline"}`}>
+    Community
 </a>
 <a href="https://github.com/blue-build/" class="no-underline dark:text-gray-300 text-gray-700 hover:underline">
     GitHub
-</a>
-<a href="/community" class="no-underline dark:text-gray-300 text-gray-700 hover:underline">
-    Community
 </a>
