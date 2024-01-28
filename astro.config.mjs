@@ -13,6 +13,7 @@ export default defineConfig({
         replacesTitle: true,
         dark: './src/assets/logo-dark.svg',
         light: './src/assets/logo-light.svg',
+        alt: 'BlueBuild. A minimal logo with a blue-billed duck holding a golden wrench in its beak.',
       },
       editLink: {
         baseUrl: 'https://github.com/blue-build/website/edit/main/'
