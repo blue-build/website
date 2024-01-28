@@ -9,12 +9,12 @@ const hero = Astro.props.entry.data.hero
     <div class="flex items-center justify-center lg:order-1 lg:-scale-x-100">
         <img
             class="w-[24rem] lg:rotate-[15deg] lg:hover:rotate-[20deg] transition p-2 dark:block hidden"
-            src={LogoDark.src}
+            src={LogoDark.src} width={LogoDark.width} height={LogoDark.height}
             alt="A minimal logo with a blue-billed duck holding a golden wrench in its beak."
         ></img>
         <img
             class="w-[24rem] lg:rotate-[15deg] lg:hover:rotate-[20deg] transition p-2 dark:hidden block"
-            src={LogoLight.src}
+            src={LogoLight.src} width={LogoLight.width} height={LogoLight.height}
             alt="A minimal logo with a blue-billed duck holding a golden wrench in its beak."
         ></img>
         <div class="bg-accent-100 w-[312px] h-[312px] block absolute translate-x-12 translate-y-24 blur-[128px] rounded-full -z-10 opacity-5 invisible dark:visible"></div>
