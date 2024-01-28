@@ -8,12 +8,12 @@ const hero = Astro.props.entry.data.hero
 <setion id="herosection" class="min-h-[75vh] grid lg:grid-cols-[1fr_26rem] grid-cols-1 gap-4">
     <div class="flex items-center justify-center lg:order-1 lg:-scale-x-100">
         <img
-            class="w-[24rem] lg:rotate-[15deg] lg:hover:rotate-[20deg] transition dark:block hidden"
+            class="w-[24rem] lg:rotate-[15deg] lg:hover:rotate-[20deg] transition p-2 dark:block hidden"
             src={LogoDark.src}
             alt="A minimal logo with a blue-billed duck holding a golden wrench in its beak."
         ></img>
         <img
-            class="w-[24rem] lg:rotate-[15deg] lg:hover:rotate-[20deg] transition dark:hidden block"
+            class="w-[24rem] lg:rotate-[15deg] lg:hover:rotate-[20deg] transition p-2 dark:hidden block"
             src={LogoLight.src}
             alt="A minimal logo with a blue-billed duck holding a golden wrench in its beak."
         ></img>
