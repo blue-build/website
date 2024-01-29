@@ -1,11 +1,46 @@
 ---
 title: How to build on top of an Universal Blue base image
-description: A guide in my new Starlight docs site.
+description: A guide to building your own image on top of a uBlue base
 ---
 
-Guides lead a user through a specific task they want to accomplish, often with a sequence of steps.
-Writing a good guide requires thinking about what your users are trying to do.
+import { templateUrl } from "../../config.ts"
+
+The <a href={templateUrl}>template</a> repo provides a simple yet flexible way to create custom images based on uBlue. For the simplest use cases, like adding or removing packages, you can get custom images building in just a few minutes. For more complex use cases, it enables you to create organized and maintainable image definitions. Once you've forked the repo, proceed to the steps listed below.
+
+## Choosing a base image
+
+For starters, find this line in the default `recipe.yml`:
+
+```
+base-image: ghcr.io/ublue-os/silverblue-main
+```
+
+This is the image upon which all your customizations will be based. You have many choices. Not only can you use any of the images listed on the [uBlue website](https://universal-blue.org/images/), you can also use any  BlueBuild image as a base image!
+
+Once you've made your choice and edited the base-image line, it's time to choose an image version. To do that, find this line below the base-image:
+
+```
+image-version: 39
+```
+
+You can choose between several tags. You most likely want either the `latest` tag or the tag corresponding to the latest fedora version. The difference between the two being that when the next version of fedora is released, `latest` will change over to the next fedora version as soon as the base image is available. Choosing a specific fedora version will keep your image on that version until you choose to modify it. If you want to use a different tag (such as a tag pinning your build to a specific day), simply paste your `base-image` url into your browser and it will redirect you to a page listing the available tags.
+
+
+
+## Adding and removing packages
+
+To add packages to a uBlue base image, find this line in the `recipe.yml`:
+
+```
+  - type: rpm-ostree
+```
+
+Beneath that, you can add packages you want to install under `install:` and packages you want to remove under `remove:`. To check for package availability in the Fedora repos, you can use the [Fedora package search site](https://packages.fedoraproject.org/). If there's a package that isn't available in Fedora but you'd like to install it from a copr or other repo, you can simply put the repo url in the `repos:` section.
+
+*Important note: Removing packages will not reduce the size of your custom image. Ironically, it will actually cause a slight increase in the image size. This is because the content of the base image must always be present, even if packages are removed from it. On top of that, layering package removals adds information to the image, and this information once stored in the image increases the total image size. For this reason, it is not possible to "debloat" base images using BlueBuild except in a cosmetic sense.*
+
+## More steps TBD
 
 ## Further reading
 
-- Read [about how-to guides](https://diataxis.fr/how-to-guides/) in the Diátaxis framework
+- TBD
