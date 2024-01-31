@@ -61,6 +61,15 @@ But you can help us in the [GitHub](https://github.com/blue-build/website) repo!
 
 Maybe, but not really. When making custom images, you're building on top of an existing distribution. You're most likely using its package manager and repositories and just adding your own flair with package set changes and configuration files. It's more like a more reliable version of maintaining/sharing your [dotfiles](https://wiki.archlinux.org/title/Dotfiles), but from the perspective of the system.
 
+### So this is the type of workaround necessary to make immutable distributions customizable?
+
+Someone, maybe not you, but someone might get turned off from so-called immutable Linux distributions due to fears of the taking away the ability to tinker and change the system as you please. The term comes from the usage of immutable root filesystems in these distributions, but in reality most 'immutable' Linux distributions are still pretty _change-able_. So while BlueBuild is a tool that helps you tinker with these sorts of distributions, it's not giving you back some freedom that was taken away.
+
+Here's some terms that can be used to better describe these sorts of distributions:
+
+_Atomic:_ instead of updated packages being swapped on the live running system, they're queued up to be available at the next boot.  
+_Image-based:_ instead of each computer updating each of its system packages individually, the system updates are bundled daily as images pulled onto the user computers.
+
 ### What's the difference between BlueBuild and [Universal Blue](https://universal-blue.org/)?
 
 Universal Blue is an open source project started by cloud developers that builds amazing custom images based on atomic Fedora along with related experiments, while BlueBuild only builds tools for custom image creation.
@@ -75,6 +84,12 @@ The project now known as BlueBuild started out as just a part of Universal Blue,
   - For just installing packages the system might be less useful, but for more complex build-time customizations it becomes way simpler to use a commonly maintained module instead.
 - It allows for parts of the build system be shared.
 - It allows for tooling to be created that programmatically configures custom images for users.
+
+### Is this project for me?
+
+If you want an easy way to package _your_ customization for use on multiple computers, or maybe even have a lab of full-fledged Linux computers that you want on the same centrally updateable base, BlueBuild might just be what you're looking for! Or maybe you're a tinkerer looking for a new and exciting space in Linux to dabble with, then this and related projects are definitely something to put on your radar.
+
+But if you're a total Linux and cloud nerd, you know Containerfiles by heart and are comfortable building CI/CD, our abstractions might feel limiting to you. You should still come hang around if you're interested in building custom images!
 
 ### What's up with the logo?
 
