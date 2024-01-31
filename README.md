@@ -1,41 +1,35 @@
 # BlueBuild website
 
-_WIP_
+This repository contains the website and documentation for BlueBuild. The site itself, https://blue-build.org/ is built using [Astro](https://starlight.astro.build/), [Starlight](https://starlight.astro.build/) and [Tailwind CSS](https://tailwindcss.com/).
 
-## 🚀 Project Structure
+## Documentation
 
-Inside of your Astro + Starlight project, you'll see the following folders and files:
+All documentation and the front page is written [`src/content/docs/`](./src/content/docs/) as either Markdown or [`MDX`](https://mdxjs.com/). The directory is rendered into docs by Starlight, and can be added into the docs sidebar in [`astro.config.mjs`](./astro.config.mjs). Markdown frontmatter is used to set metadata for each, including the title, so there is no need for a Markdown top-level title. 
 
+The documentation strives to broadly follow [the Diátaxis framework](https://diataxis.fr/). [`/learn/`](./src/content/docs/learn/) is mostly [explanation](https://diataxis.fr/explanation/), [`/how-to/`](./src/content/docs/how-to/) is [how-to guides](https://diataxis.fr/how-to-guides/), and [`/reference/`](./src/content/docs/reference/) is obviously [reference](https://diataxis.fr/reference/).
+
+To add images to documentation pages, the standard Markdown syntax should be used (`![alt](src)`). The source should be somewhere in [`src/content/docs/`](./src/content/docs/) or [`src/assets/`](./src/assets/). These images will be optimized automatically. Including meaningful alt-text is required.
+
+## Components
+
+Custom components are used to implement custom designs and new features. The code for the is stored in [`src/components/`](./src/components/). For static use cases, [Astro components](https://docs.astro.build/en/core-concepts/astro-components/) should be used. If more reactivity is needed, using [Svelte](https://svelte.dev/) components is preferred (none used yet). 
+
+## Creator (not implemented)
+
+The tooling part of this site will be written in [`src/pages/creator/`](./src/pages/creator/) mostly using [Svelte](https://svelte.dev/).
+
+## Local development
+
+This project requires `node` and `npm` or [`pnpm`](https://pnpm.io/) for local development. A [Devbox](https://www.jetpack.io/devbox/) configuration is provided and can be activated by running `devbox shell` in the project directory (if Devbox is installed).
+
+To get started with local development install the dependencies:
+```sh
+pnpm install # pnpm is recommended for faster speeds, use whatever you want
 ```
-.
-├── public/
-├── src/
-│   ├── assets/
-│   ├── content/
-│   │   ├── docs/
-│   │   └── config.ts
-│   └── env.d.ts
-├── astro.config.mjs
-├── package.json
-├── tailwind.config.mjs
-└── tsconfig.json
+
+Then to start the dev server to preview your changes:
+```sh
+pnpm dev
+# or
+npm run dev
 ```
-
-Starlight looks for `.md` or `.mdx` files in the `src/content/docs/` directory. Each file is exposed as a route based on its file name.
-
-Images can be added to `src/assets/` and embedded in Markdown with a relative link.
-
-Static assets, like favicons, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
