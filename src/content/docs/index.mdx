@@ -28,7 +28,8 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
 
 <CardGrid stagger>
 	<Card title="Easy configuration" icon="pencil">
-		The build process can be configured entirely in a straightforward YAML format or web UI (coming soon).
+		The build process can be configured entirely in a straightforward YAML format called a recipe.
+    When building, the recipe is transformed into a Containerfile by the BlueBuild cli tool.
 	</Card>
 	<Card title="Totally extensible" icon="add-document">
 		The modular build system can easily be extended by just writing a shell script.
@@ -55,3 +56,28 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
 
 Not at all! Basically none of the documentation pages have content, and work hasn't even started on the tooling part.
 But you can help us in the [GitHub](https://github.com/blue-build/website) repo!
+
+### So I can use this to make my own distro?
+
+Maybe, but not really. When making custom images, you're building on top of an existing distribution. You're most likely using its package manager and repositories and just adding your own flair with package set changes and configuration files. It's more like a more reliable version of maintaining/sharing your [dotfiles](https://wiki.archlinux.org/title/Dotfiles), but from the perspective of the system.
+
+### What's the difference between BlueBuild and [Universal Blue](https://universal-blue.org/)?
+
+Universal Blue is an open source project started by cloud developers that builds amazing custom images based on atomic Fedora along with related experiments, while BlueBuild only builds tools for custom image creation.
+The project now known as BlueBuild started out as just a part of Universal Blue, but was eventually split from it due to diverging from the scope and being mostly unrelated to the project's main maintainers.
+
+### Why build an abstraction on top of Containerfiles? (recipe.yml)
+
+- It is more accessible and helps onboard new users. 
+  - Editing a configuration file is something most people are likely familiar with, but editing a Containerfile, bespoke build scripts, and a GitHub Action file is something most probably have no prior experience.
+  - New curious tinkerer's using our tools won't be robbed of the experience of learning something new and generalizeable, as we also provide [documentation for that](/how-to/from-scratch/).
+- It allows us to make harder things simpler.
+  - For just installing packages the system might be less useful, but for more complex build-time customizations it becomes way simpler to use a commonly maintained module instead.
+- It allows for parts of the build system be shared.
+- It allows for tooling to be created that programmatically configures custom images for users.
+
+### What's up with the logo?
+
+_It's our mascot, a [blue-billed duck](https://en.wikipedia.org/wiki/Blue-billed_duck) with a wrench! A good pun, and cute too! The writer of this FAQ is definitely not at all biased!_
+
+The logo (along with all the other BlueBuild branding) was designed by [@xynydev](https://github.com/xynydev) and is licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/).
