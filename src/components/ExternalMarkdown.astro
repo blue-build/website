@@ -1,0 +1,14 @@
+---
+const { src } = Astro.props
+import { marked } from 'marked';
+const response = await fetch(src);
+const markdown = await response.text();
+const content = marked.parse(markdown.split('\n').slice(1,-1).join('\n'));
+---
+<article set:html={content} />
+<style>
+    article pre code {
+        white-space: pre-wrap !important;  
+        word-wrap: break-word;
+    }
+</style>

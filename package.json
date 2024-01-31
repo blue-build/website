@@ -21,6 +21,7 @@
     "@iconify-json/material-symbols": "^1.1.71",
     "astro": "^4.2.1",
     "astro-icon": "^1.0.3",
+    "marked": "^11.2.0",
     "sharp": "^0.32.5",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3"
