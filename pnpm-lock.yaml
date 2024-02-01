@@ -32,6 +32,12 @@ dependencies:
   '@iconify-json/material-symbols':
     specifier: ^1.1.71
     version: 1.1.71
+  '@iconify-json/ph':
+    specifier: ^1.1.10
+    version: 1.1.10
+  '@iconify-json/ri':
+    specifier: ^1.1.19
+    version: 1.1.19
   astro:
     specifier: ^4.2.1
     version: 4.2.1(typescript@5.3.3)
@@ -773,6 +779,18 @@ packages:
 
   /@iconify-json/material-symbols@1.1.71:
     resolution: {integrity: sha512-6zW73qQjzxPgQV0zJRyV9RabSJiVVGvDQtcZV4eZyw5Xpt5WZSJ7Gq3J0w+AkxAf5B21jMydJysQV6umrUMnrA==}
+    dependencies:
+      '@iconify/types': 2.0.0
+    dev: false
+
+  /@iconify-json/ph@1.1.10:
+    resolution: {integrity: sha512-e7owJfx9BgnUVGXKk/243iFV4tHH1UiBDl5mWYkwKoPf4nN2rzPGdD7ISfvwr3SB25VvOteSC5DOVWxjs56Ywg==}
+    dependencies:
+      '@iconify/types': 2.0.0
+    dev: false
+
+  /@iconify-json/ri@1.1.19:
+    resolution: {integrity: sha512-S9usTucQOY//J3LGIGZ+A6i8AYGCStDcLKjmWzI2UPnWJo+Xd5dESMQGkhOI5BlG3W4AtH6RmiXcpbPy3krmjQ==}
     dependencies:
       '@iconify/types': 2.0.0
     dev: false

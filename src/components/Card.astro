@@ -1,0 +1,18 @@
+---
+import { Icon } from "astro-icon/components";
+const { title, icon } = Astro.props
+---
+
+<article class="outline outline-1 outline-gray-900 dark:outline-gray-200">
+    <h3
+        class="outline outline-1 outline-gray-900 dark:outline-gray-200
+        bg-gradient-to-b from-accent-100 to-gray-300 dark:from-gray-900 dark:to-gray-800
+        p-5 text-center font-sans !font-normal !text-2xl -translate-x-3 -translate-y-3
+        flex flex-row gap-2 justify-center"
+    >
+        {title} <Icon name={icon} class="w-6"/>
+    </h3>
+    <div class="p-8 px-12 pt-2">
+        <slot/>
+    </div>
+</article>
