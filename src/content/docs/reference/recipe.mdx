@@ -3,7 +3,30 @@ title: recipe.yml
 description: A reference page in my new Starlight docs site.
 ---
 
-https://diataxis.fr/reference/
+*A `recipe.yml` file is used to configure a custom image. The top-level keys are used to set the metadata and base, and modules are used to add things on top of the base.*
 
-- technical description of recipe
-- list of all keys
+`name`
+
+The image name. Used when publishing to GHCR as `ghcr.io/<user>/<name>`
+
+`description`
+
+The image description. Published to GHCR in the image metadata.
+
+`base-image`
+
+The [OCI](https://opencontainers.org/) image upon which all your customizations will be based. Only atomic Fedora images and those based on them are officially supported. Universal Blue is recommended. uBlue images can be found on the [uBlue website](https://universal-blue.org/images/). BlueBuild-built images can be used as well. 
+
+Example:
+```
+base-image: ghcr.io/ublue-os/silverblue-main
+```
+
+`image-version`
+
+The tag of the base image to build on. Used to select a version explicitly (`39`) or to always use the latest stable version (`latest`). A list of all available tags can be viewed by pasting your `base-image` url into your browser.
+
+Example:
+```
+image-version: 39
+```
