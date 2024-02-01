@@ -1,13 +1,28 @@
 ---
 title: Contributing
-description: A guide in my new Starlight docs site.
+description: How should I contribute to the BlueBuild project?
 ---
 
-https://diataxis.fr/explanation/
+BlueBuild is an open source (Apache 2.0) community project maintained by volunteers. Your contribution is very welcome!   
+Make sure you have read the [Code of Conduct](/community#code-of-conduct) before contributing, and only contribute content that you have authored and have the right to license under the project license.
 
-- what are the important repos
-    - links to repos with more explanations in readme
-- conventional commits / semantic commits
-- lazy concencus
-- [be bold](https://en.wikipedia.org/wiki/Wikipedia:Be_bold)? well, at least don't be afraid
-- mirrors https://universal-blue.org/CONTRIBUTING/#i-want-to-contribute
+We try to follow [Lazy Concensus](https://community.apache.org/committers/decisionMaking.html), so feel free to [be bold](https://en.wikipedia.org/wiki/Wikipedia:Be_bold) with PRs.
+
+Most developer discussion happens in `#dev` on the Discord and the GitHub Issues, Pull Requests, and Discussions. Use the Discord for more synchronous conversation, and GitHub for things that shouldn't be forgotten and require more discussion and coordination. See [Community](/community).
+
+## How to contribute
+
+If you are new to git and/or GitHub, check out [GitHub's guide on contributing](https://docs.github.com/en/get-started/exploring-projects-on-github/contributing-to-a-project).
+
+When creating git commits and titling pull requests, please make sure to adhere to [Convential Commits](https://www.conventionalcommits.org/en/v1.0.0/) guidelines. Your commit messages and pull requests should always start with a type like `fix:` or `feat:`. Scopes can be useful when working on modules, for example `fix(default-flatpaks): make notifications work`.
+
+## Where to contribute
+
+See each repositories README for codebase-specific contributor instructions.
+
+- [blue-build/cli](https://github.com/blue-build/cli): this repository is the core of BlueBuild, it handles everything with turning your recipe.yml to the final image on your system.
+- [blue-build/modules](https://github.com/blue-build/modules): this repository contains BlueBuild's default modules that are used to extend your base image.
+    - this repository is currently at [ublue-os/bling](https://github.com/ublue-os/bling/), but will be moved soon
+- [blue-build/website](https://github.com/blue-build/website): this repository hosts the whole BlueBuild website and documentation.
+
+For other repositories, check out the [GitHub org](https://github.com/blue-build).
