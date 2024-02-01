@@ -14,6 +14,8 @@ To add images to documentation pages, the standard Markdown syntax should be use
 
 Custom components are used to implement custom designs and new features. The code for the is stored in [`src/components/`](./src/components/). For static use cases, [Astro components](https://docs.astro.build/en/core-concepts/astro-components/) should be used. If more reactivity is needed, using [Svelte](https://svelte.dev/) components is preferred (none used yet). 
 
+Icons can be used anywhere on this site with the `Icon` component from [`astro-icon`](https://www.astroicon.dev/). Use [Icones](https://icones.js.org/) to search for icons. New icon sets need to be added with `pnpm add @iconify-json/<collectionName>`.
+
 ## Creator (not implemented)
 
 The tooling part of this site will be written in [`src/pages/creator/`](./src/pages/creator/) mostly using [Svelte](https://svelte.dev/).
