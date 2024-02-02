@@ -6,7 +6,7 @@ This repository contains the website and documentation for BlueBuild. The site i
 
 All documentation and the front page is written [`src/content/docs/`](./src/content/docs/) as either Markdown or [`MDX`](https://mdxjs.com/). The directory is rendered into docs by Starlight, and can be added into the docs sidebar in [`astro.config.mjs`](./astro.config.mjs). Markdown frontmatter is used to set metadata for each, including the title, so there is no need for a Markdown top-level title. 
 
-The documentation strives to broadly follow [the Diátaxis framework](https://diataxis.fr/). [`/learn/`](./src/content/docs/learn/) is mostly [explanation](https://diataxis.fr/explanation/), [`/how-to/`](./src/content/docs/how-to/) is [how-to guides](https://diataxis.fr/how-to-guides/), and [`/reference/`](./src/content/docs/reference/) is obviously [reference](https://diataxis.fr/reference/).
+The documentation strives to broadly follow the [Diátaxis framework](https://diataxis.fr/). [`/learn/`](./src/content/docs/learn/) is mostly [explanation](https://diataxis.fr/explanation/), [`/how-to/`](./src/content/docs/how-to/) is [how-to guides](https://diataxis.fr/how-to-guides/), and [`/reference/`](./src/content/docs/reference/) is obviously [reference](https://diataxis.fr/reference/).
 
 To add images to documentation pages, the standard Markdown syntax should be used (`![alt](src)`). The source should be somewhere in [`src/content/docs/`](./src/content/docs/) or [`src/assets/`](./src/assets/). These images will be optimized automatically. Including meaningful alt-text is required.
 
