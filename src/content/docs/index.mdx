@@ -30,20 +30,20 @@ import Card from '@components/Card.astro';
 <hr class="opacity-0"/>
 <CardGrid stagger>
 	<Card title="Easy configuration" icon="material-symbols:edit-outline-rounded">
-		The build process can be configured entirely in a straightforward YAML format called a recipe.
+		The build process can be configured entirely in a straightforward YAML format called a [recipe](/reference/recipe/).
     When building, the recipe is transformed into a Containerfile by the BlueBuild cli tool.
 	</Card>
 	<Card title="Totally extensible" icon="material-symbols:extension-rounded">
-		The modular build system can easily be extended by just writing a shell script.
+		The modular build system [can easily be extended](/how-to/making-modules/) by just writing a shell script.
     Modules you create can be added into the official BlueBuild repository or your own for the community to take advantage of.
 	</Card>
 	<Card title="Based on well-known standards" icon="material-symbols:book-2-rounded">
 		The format of your OS images is the familiar OCI image format, famously used by Docker & Podman.
-    With Fedora's Native Container support, it becomes possible to boot natively into a OCI compatible image.
+    With [Fedora's Native Container support](https://fedoraproject.org/wiki/Changes/OstreeNativeContainerStable), it becomes possible to boot natively into a OCI compatible image.
 	</Card>
 	<Card title="Free & open-source" icon="ri:open-source-fill">
 		BlueBuild is an open-source project built by the community for the community.
-    Feel free to peek at & tinker with the source code!
+    Feel free to peek at & tinker with the [source code](https://github.com/blue-build/)!
     GitHub also provides CI/CD & a container registry for free, though other providers are supported as well.
 	</Card>
   <Card title="Effortless reliability" icon="ph:scales-bold">
