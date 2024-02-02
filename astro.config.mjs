@@ -65,7 +65,7 @@ export default defineConfig({
               link: "/reference/recipe/",
             },
             {
-              label: "module",
+              label: "Module",
               link: "/reference/module/",
             },
             {

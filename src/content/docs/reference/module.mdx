@@ -1,10 +1,76 @@
 ---
-title: recipe.yml
-description: A reference page in my new Starlight docs site.
+title: Module
+description: A module is a script executed during the build process of an image.
 ---
 
-https://diataxis.fr/reference/
+A module is a script executed during the build process of an image. Modules are configured in the [recipe](/reference/recipe/) or an external configuration file.
 
-- technical description of module
-- what the configuration is converted into
-- default keys, `type:` and `source:` (not available yet)
+## Default configuration options
+
+Modules themselves differ on what configuration options they use and require, and that information is available on module-specific reference pages. These options are always available.
+
+### `type:`
+
+The name of the module to run.
+
+### `source:` (optional) (not implemented)
+
+The URL of the module repository (an OCI image) to pull the module from. If left unspecified, sources used are both the default module repository at `ghcr.io/blue-build/modules` and the custom modules in the local `modules/` directory.
+
+:::caution
+A module can execute arbitrary code both in the image build and consequently on your booted system, so make sure you trust the source you specify.
+:::
+
+## How modules are launched
+
+A module added into an image's configuration is turned into a `RUN`-statement that launches the module with a JSON version of its configuration in the generated Containerfile (or an equivalent dynamic bash command if using the legacy template).
+
+For example, the following module configuration would be would be turned into the `RUN`-statement below:
+```yaml
+# config/module.yml
+type: rpm-ostree
+install:
+    - micro
+uninstall:
+    - firefox
+    - firefox-langpacks
+```
+```dockerfile title="Containerfile"
+# the contents of this statement have been simplified slightly to better illustrate the topic on hand
+RUN /tmp/modules/rpm-ostree/rpm-ostree.sh '{"type":"rpm-ostree,"from-file":"module.yml","repos":null,"install":["micro"],"remove":["firefox","firefox-langpacks"]}'
+```
+
+## Module run environment
+
+Every module is ran in an environment containing the following environment variables and functions.
+
+### `CONFIG_DIRECTORY`
+
+Environment variable containing the path to the configuration files for the build (`/tmp/config`).
+
+### `MODULE_DIRECTORY`
+
+Environment variable containing the path to the directory containing all the modules of the module repository the current module is from (`/tmp/modules` for default modules).
+
+### `IMAGE_NAME`
+
+Environment variable containing the name of the image declared in `recipe.yml`.
+
+### `BASE_IMAGE`
+
+Environment variable containing the uRL of the OCI image used as the base.
+
+### `OS_VERSION`
+
+Environment variable containing the major version of running operating system. The value is gathered from the `VERSION_ID` in `/etc/os-release`.
+
+### `get_yaml_array`
+
+Bash function that helps with reading arrays from the module's configuration.
+```bash frame="none"
+get_yaml_array OUTPUT_VAR_NAME '.yq.key.to.array[]' "$1"
+```
+
+## `module.yml`
+
+A `module.yml` is the metadata file for a public module. (TODO, not planned yet).

@@ -1,12 +1,65 @@
 ---
 title: How to make a custom module
-description: A guide in my new Starlight docs site.
+description: If you want to extend your image with custom functionality that requires configuration, you should create a module.
 ---
 
-https://diataxis.fr/how-to-guides/
+If you want to extend your image with custom functionality that requires configuration, you should create a [module](/reference/module/). 
 
-- link to modules reference
-- creating a folder and a script
-- what to put in the script
-- what inputs the script gets
-- mirrors https://github.com/blue-build/template/blob/e386fb1859e84d4083230f0d32e2a75145e52729/modules/README.md
+## Creating a new module
+
+1. Open your repository and create a new directory inside the `modules/` directory. The name of this directory should be the name of your module.
+    - This name will be used as the `type:` when launching your module.
+    - If this name has multiple parts, they should be separated with a dash `-`.
+    - As a guideline for (to be) official modules, the name should be a short and sweet noun or modifier-noun combination, without a `-installer` or `-setup` suffix being recommended.
+2. Inside your newly created directory, create a file called `<name-of-your-module>.sh` and paste the following code into it:
+    ```bash title="modules/<name-of-your-module>/<name-of-your-module>.sh"
+    #!/usr/bin/env bash
+    set -euo pipefail
+    ```
+    - This makes sure the correct shell is used and errors in your module cause the build to fail.
+3. You have now created an empty module and can proceed to coding it.
+
+## Coding your module
+
+This guide only includes the bare minimum information to get you started on your coding adventure. Check out the [module reference](/reference/module/) for more technical information about modules.
+
+When being launched, your module receives its configuration as a JSON string as the first argument. It can be read from in bash using `jq` or `yq` like this:
+```bash title="modules/<name-of-your-module>/<name-of-your-module>.sh"
+#!/usr/bin/env bash
+set -euo pipefail
+
+# read a single variable from the configuration
+VAR=$(echo "$1" | yq -I=0 ".var") # `-I=0` makes sure the output isn't indented
+echo "$VAR"
+
+# read an array from the configuration
+get_yaml_array ARRAY '.array[]' "$1"
+# loop over the array
+for THING in "${ARRAY[@]}"; do
+    echo "$THING"
+done
+```
+
+In addition to the module's own configuration, each module has access to a set of environment variables. Check out the [module reference's run environment section](/reference/module/#module-run-environment) for a list.
+
+Though bash is the recommended language to write modules, they can technically be written in any language as long as the `.sh` is used to launch them while passing the configuration.
+
+## Style guidelines for official modules
+
+These are general guidelines for writing official modules and their documentation to follow to keep a consistent style. Not all of these are to be mindlessly followed, especially the ones about grammar and writing style, but it's good to keep these in mind if you intend to contribute back upstream, so that your module doesn't feel out of place.
+
+### Bash
+
+- Echo what you're doing on each step and on errors to help debugging.
+- Don't echo blocks using "===", that is reserved for the code launching the modules.
+- Use `snake_case` for functions and variables changed by the code.
+- Use `SCREAMING_SNAKE_CASE` for variables that are set once and stay unchanged.
+
+### `module.yml` (not implemented) (will replace READMEs)
+
+Each public module should also include a `module.yml` with the following keys: (TODO, not planned yet).
+
+#### `description:`
+
+- At the start of each paragraph, refer to the module using its name or with "the module", not "it" or "the script"
+- Use passive grammar when talking about the user, ie. "should be used", "can be configured", preferring references to what the module does, ie. "This module downloads the answer to the question of life, the universe and everything..."
