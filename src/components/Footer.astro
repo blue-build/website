@@ -1,6 +1,8 @@
 ---
 import Default from '@astrojs/starlight/components/Footer.astro';
+import type { StarlightRouteData } from 'node_modules/@astrojs/starlight/utils/route-data';
 import NavLinks from '@components/NavLinks.astro';
+
 const isFrontPage = Astro.url.pathname === "/"
 ---
 
@@ -15,5 +17,5 @@ const isFrontPage = Astro.url.pathname === "/"
         </div>
     </footer>
 :
-    <Default {...Astro.props}/>
+    <Default {...Astro.props as StarlightRouteData}/>
 }
