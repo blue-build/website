@@ -88,6 +88,7 @@ export default defineConfig({
         SocialIcons: "./src/components/NavLinks.astro",
         Hero: "./src/components/Hero.astro",
         Footer: "./src/components/Footer.astro",
+        Head: './src/components/Head.astro',
       },
       head: [
         {
