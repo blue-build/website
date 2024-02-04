@@ -50,9 +50,6 @@ dependencies:
   canvaskit-wasm:
     specifier: ^0.39.1
     version: 0.39.1
-  marked:
-    specifier: ^11.2.0
-    version: 11.2.0
   sharp:
     specifier: ^0.32.5
     version: 0.32.6
@@ -62,6 +59,9 @@ dependencies:
   typescript:
     specifier: ^5.3.3
     version: 5.3.3
+  yaml:
+    specifier: ^2.3.4
+    version: 2.3.4
 
 packages:
 
@@ -3038,12 +3038,6 @@ packages:
 
   /markdown-table@3.0.3:
     resolution: {integrity: sha512-Z1NL3Tb1M9wH4XESsCDEksWoKTdlUafKc4pt0GRwjUyXaCFZ+dc3g2erqB6zm3szA2IUSi7VnPI+o/9jnxh9hw==}
-    dev: false
-
-  /marked@11.2.0:
-    resolution: {integrity: sha512-HR0m3bvu0jAPYiIvLUUQtdg1g6D247//lvcekpHO1WMvbwDlwSkZAX9Lw4F4YHE1T0HaaNve0tuAWuV1UJ6vtw==}
-    engines: {node: '>= 18'}
-    hasBin: true
     dev: false
 
   /mdast-util-definitions@6.0.0:
