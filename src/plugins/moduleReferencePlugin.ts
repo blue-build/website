@@ -73,7 +73,7 @@ ${moduleYml.example}
         if (err) {
             throw new Error("Failed to write reference page: " + err.message);
         } else {
-            console.log("Reference page written successfully")
+            console.log("Reference page written successfully: " + path.join(outputPath, moduleYml.name+".md"))
         }
     })
 }
