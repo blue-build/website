@@ -80,7 +80,7 @@ export default defineConfig({
       ],
       plugins: [
         moduleReferencePlugin({moduleSources: [
-          { source: "https://raw.githubusercontent.com/ublue-os/bling/moduleyml/modules.json", path: "reference/modules/" }
+          { source: "https://raw.githubusercontent.com/ublue-os/bling/main/modules.json", path: "reference/modules/" }
         ]})
       ],
       customCss: [

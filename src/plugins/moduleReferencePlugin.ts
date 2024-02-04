@@ -47,33 +47,33 @@ export interface ModuleReferencePluginOptions {
     }>
 }
 
-async function generateReferencePage(moduleYmlUrl, outputPath) {
-    console.log("Fetching: " + moduleYmlUrl)
-    const moduleYmlRes = await fetch(moduleYmlUrl)
-    const moduleYmlStr = await moduleYmlRes.text()
-    const moduleYml = parse(moduleYmlStr)
-    console.log("Generating page for: " + moduleYml.name)
+async function generateReferencePage(mainUrl, outputPath) {
+    console.log("Fetching: " + mainUrl)
+    const mainRes = await fetch(mainUrl)
+    const mainStr = await mainRes.text()
+    const main = parse(mainStr)
+    console.log("Generating page for: " + main.name)
 
-    const readmeRes = await fetch(moduleYml.readme)
+    const readmeRes = await fetch(main.readme)
     const readme = await readmeRes.text()
 
     const content = `\
 ---
-title: "${moduleYml.name}"
-description: ${moduleYml.shortdesc}
-editUrl: "${rawUrlToEditUrl(moduleYmlUrl)}"
+title: "${main.name}"
+description: ${main.shortdesc}
+editUrl: "${rawUrlToEditUrl(mainUrl)}"
 ---
 ${readme.replace(/^#{1}\s.*$/gm, "")}
 ## Example configuration
 \`\`\`yaml
-${moduleYml.example}
+${main.example}
 \`\`\`
 `
-    fs.writeFile(path.join(outputPath, moduleYml.name+".md"), content, err => {
+    fs.writeFile(path.join(outputPath, main.name+".md"), content, err => {
         if (err) {
             throw new Error("Failed to write reference page: " + err.message);
         } else {
-            console.log("Reference page written successfully: " + path.join(outputPath, moduleYml.name+".md"))
+            console.log("Reference page written successfully: " + path.join(outputPath, main.name+".md"))
         }
     })
 }
