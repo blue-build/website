@@ -57,7 +57,7 @@ async function generateReferencePage(moduleYmlUrl, outputPath) {
     const content = `\
 ---
 title: "${moduleYml.name}"
-description: "${moduleYml.shortdesc}"
+description: ${moduleYml.shortdesc}
 editUrl: "${rawUrlToEditUrl(moduleYmlUrl)}"
 ---
 ${moduleYml.description}
