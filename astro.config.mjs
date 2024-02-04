@@ -2,6 +2,7 @@ import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 import tailwind from "@astrojs/tailwind";
 import icon from "astro-icon";
+import moduleReferencePlugin from "./src/plugins/moduleReferencePlugin";
 
 // https://astro.build/config
 export default defineConfig({
@@ -76,6 +77,11 @@ export default defineConfig({
             },
           ],
         },
+      ],
+      plugins: [
+        moduleReferencePlugin({moduleSources: [
+          { source: "https://raw.githubusercontent.com/ublue-os/bling/moduleyml/modules.json", path: "reference/modules/" }
+        ]})
       ],
       customCss: [
         "@fontsource/atkinson-hyperlegible/400.css",

@@ -28,6 +28,7 @@
     "marked": "^11.2.0",
     "sharp": "^0.32.5",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "yaml": "^2.3.4"
   }
 }
