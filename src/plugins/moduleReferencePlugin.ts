@@ -54,13 +54,16 @@ async function generateReferencePage(moduleYmlUrl, outputPath) {
     const moduleYml = parse(moduleYmlStr)
     console.log("Generating page for: " + moduleYml.name)
 
+    const readmeRes = await fetch(moduleYml.readme)
+    const readme = await readmeRes.text()
+
     const content = `\
 ---
 title: "${moduleYml.name}"
 description: ${moduleYml.shortdesc}
 editUrl: "${rawUrlToEditUrl(moduleYmlUrl)}"
 ---
-${moduleYml.description}
+${readme}
 ## Example configuration
 \`\`\`yaml
 ${moduleYml.example}
