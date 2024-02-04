@@ -32,7 +32,9 @@ export default function moduleReferencePlugin(options: ModuleReferencePluginOpti
                     const modulesRes = await fetch(moduleSource.source)
                     const modules = await modulesRes.json()
                     for (let module of modules) {
-                        generateReferencePage(module, outputPath)
+                        generateReferencePage(module, outputPath).catch((err) => {
+                            throw new Error("Failed to generate reference page: " + err.message);
+                        })
                     }
                 }
             },
