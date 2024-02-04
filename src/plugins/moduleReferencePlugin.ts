@@ -63,7 +63,7 @@ title: "${moduleYml.name}"
 description: ${moduleYml.shortdesc}
 editUrl: "${rawUrlToEditUrl(moduleYmlUrl)}"
 ---
-${readme}
+${readme.replace(/^#{1}\s.*$/gm, "")}
 ## Example configuration
 \`\`\`yaml
 ${moduleYml.example}
