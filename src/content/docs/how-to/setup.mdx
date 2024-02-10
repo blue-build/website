@@ -1,18 +1,36 @@
 ---
 title: How to set up a new repository
-description: A guide in my new Starlight docs site.
+description: Get started with developing your custom image quickly
 sidebar:
     order: 0 # ensure this guide will be at the top
 ---
 
-https://diataxis.fr/how-to-guides/
+This guide shows you how to set up a new repository for building custom images based on [blue-build/template](https://github.com/blue-build/template), which provides a minimal example configuration along with GitHub Actions to build your image and a netinstall ISO of it. Updates to BlueBuild in your repository will be handled by the [Pull](https://github.com/wei/pull) and [Dependabot](https://github.com/dependabot) apps, which are set up in the template.
 
-- what templates are available
-- what automated solutions are available
-    - `bb init` (not ready)
-    - webui (not ready)
-    - manual setup (always ready)
-- recommend `bb init` as the default option for now
-- manual setup instructions on the bottom, with links to cosign page
-    - will be pretty short thanks to separation with cosign page, and simplification of the template
-- mirrors https://universal-blue.org/tinker/setup/
+## Automatic setup using the web interface
+
+The automatic setup will apply some default configuration based on your preferences. This approach currently requires running a [`podman`](https://podman.io/) command locally, so make sure you have the program installed before proceeding.
+
+The current web interface is a placeholder and will be rewritten. No new features will be added for the time being, but bugs will be fixed if reported. The GitHub repository is currently [ublue-os/images-website](https://github.com/ublue-os/images-website).
+
+1. Open https://createimage.blue-build.org/.
+2. Press "Pick or create an image".
+3. Pick your preferred desktop environment and whether you want Nvidia drivers.
+4. On the next screen, press "Continue to creating your own".
+5. Choose a name and description for your image. These details can be changed later.
+6. Log in with GitHub. The GitHub API will be used to create a new repository for you and modify it contents.
+7. Press "Create repo". A log box will pop up below the button. It might say "repo creation failed" while succeeding, this is a harmless known issue.
+8. Scroll down to the container signing step and follow instructions, then press "Submit". Setting up container signing is important for security, and builds will fail without a proper signing setup.
+9. You're done! You can now open `config/recipe.yml` and start customizing! The [reference section](/reference/recipe/) of the documentation is your friend here.
+
+## Manual setup with git and cosign
+
+The manual setup is useful if the other methods aren't working correctly or if you want to learn what they do. This approach requires [`git`](https://git-scm.com/) and either [`cosign`](https://github.com/sigstore/cosign) or [`skopeo`](https://github.com/containers/skopeo), so make sure the necessary programs are installed before proceeding.
+
+1. Open [blue-build/template](https://github.com/blue-build/template).
+2. Press "Use this template" and create a new repository.
+3. [Set up container signing](/how-to/cosign/), then come back to this guide.
+4. Change the `name:` in `config/recipe.yml` and commit your changes. You can also apply some initial customizations here.
+5. Open the Actions tab of your repository and make sure GitHub Actions are enabled.
+6. Change all references to `blue-build/template` in the `README.md` to the details of your repository or custom image and commit your changes. You should also change the title and the short description below it so that people stumbling on your repository know what they are looking at.
+7. You're done! You can now open `config/recipe.yml` and start customizing! The [reference section](/reference/recipe/) of the documentation is your friend here.
