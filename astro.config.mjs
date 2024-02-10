@@ -99,7 +99,10 @@ export default defineConfig({
         Hero: "./src/components/Hero.astro",
         Footer: "./src/components/Footer.astro",
         Head: './src/components/Head.astro',
+        Sidebar: './src/components/Sidebar.astro',
+        MarkdownContent: './src/components/MarkdownContent.astro',
       },
+      lastUpdated: true,
       head: [
         {
           tag: "script",
