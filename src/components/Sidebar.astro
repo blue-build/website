@@ -6,14 +6,17 @@ import type { SidebarEntry } from 'node_modules/@astrojs/starlight/utils/navigat
 const isBlog = Astro.props.id.includes("blog")
 const blogPosts = await Astro.glob("../content/docs/blog/*.mdx")
 const sidebarPostList: StarlightRouteData['sidebar'] =
-    blogPosts.filter(p => !p.url.includes("index")).map(((p) => {
+    blogPosts
+    .filter(p => !p.url.includes("index"))
+    .sort((a, b) => new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime())
+    .map(((p) => {
         const url = p.url.replace("src/content/docs", "").replace(".mdx", "")
         return {
             attrs: {},
             badge: undefined,
             href: url,
             isCurrent: Astro.url.pathname.includes(url),
-            label: p.frontmatter.title,
+            label: ` ${p.frontmatter.title} – ${new Date(p.frontmatter.date).toISOString().substring(0, 10)}`,
             type: 'link',
         } as SidebarEntry
     }))
