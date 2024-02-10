@@ -13,4 +13,5 @@ h1, h2, h3, h4, h5, h6 {
 
 :root {
     --sl-color-bg-nav: var(--sl-color-black);
+    --sl-color-bg-inline-code: var(--sl-color-gray-6);
 }
