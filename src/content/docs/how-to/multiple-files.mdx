@@ -1,10 +1,40 @@
 ---
 title: How to split configuration into multiple files
-description: A guide in my new Starlight docs site.
+description: This guide shows you how to include module configuration into your recipe from an external file.
 ---
 
-https://diataxis.fr/how-to-guides/
+This guide shows you how to include module configuration into your recipe from an external file. This is useful if you're [building multiple images](/how-to/multiple-images) or your recipe file is just getting cluttered.
 
-- create a new yml file
-- either a single module or a list of `modules:`
-- `from-file:` (link to recipe reference)
+1. Create a new YAML file for your module(s) inside the `config/` directory.
+2. Add your module configuration into the file.
+    - The file can configure just one module like this:
+        ```yaml
+        # config/common-flatpaks.yml
+        type: default-flatpaks
+        system:
+            install: 
+                - org.blender.Blender
+        ```
+    - Or it can configure multiple modules by declaring them under `modules:`:
+        ```yaml
+        # config/common-modules.yml
+        modules:
+            - type: signing
+            - type: files
+              files:
+                - usr: /usr
+            - type: fonts
+              fonts:
+                nerd-fonts:
+                    - Hack
+            - from-file: common-packages.yml
+        ```
+3. Import your module configuration file in your recipe with [`from-file:`](http://localhost:4321/reference/recipe/#modules).
+    - Example:
+        ```yaml
+        # recipe.yml
+        # ...rest of the recipe
+        modules:
+            - from-file: common-modules.yml
+            - from-file: common-flatpaks.yml
+        ```
