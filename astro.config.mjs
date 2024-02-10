@@ -43,6 +43,10 @@ export default defineConfig({
               link: "/learn/how/",
             },
             {
+              label: "Troubleshooting and common errors",
+              link: "/learn/troubleshooting/",
+            },
+            {
               label: "Contributing",
               link: "/learn/contributing/",
             },
