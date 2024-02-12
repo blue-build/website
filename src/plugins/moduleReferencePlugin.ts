@@ -63,7 +63,7 @@ async function generateReferencePage(moduleYmlUrl, outputPath) {
 ---
 title: "${moduleYml.name}"
 description: ${moduleYml.shortdesc}
-editUrl: "${rawUrlToEditUrl(moduleYmlUrl)}"
+editUrl: "${rawUrlToEditUrl(moduleYml.readme)}"
 ---
 ${readme.replace(/^#{1}\s.*$/gm, "")}
 ## Example configuration
