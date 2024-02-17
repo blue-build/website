@@ -8,17 +8,52 @@ authors:
       github: xynydev
 ---
 
-Per mutual decision, Universal Blue's custom image tooling has now been transferred to the BlueBuild org.
+:::note
+If you're not totally sure what this is about, check out the [front page](/).
+:::
 
-- links to issues
-- some background
+Per mutual decision, [Universal Blue](https://universal-blue.org/)'s old custom image tooling has now been transferred to the BlueBuild org and development will be continuing under the BlueBuild project with basically the same team of maintainers and developers as before. The issue was discussed extensively in [ublue-os/startingpoint#223](https://github.com/ublue-os/startingpoint/issues/223) and eventually voted for in [ublue-os/main#476](https://github.com/ublue-os/main/issues/476).
+
+We've been working on BlueBuild for a month now, to provide you a smooth [migration](#how-to-migrate) and exciting [new features](#whats-new), so don't worry, _this change is positive_.
+
+To briefly summarize, this desire to split stemmed from a difference in philosophy and scope between the main Universal Blue maintainers and the developers of 'startingpoint'. Since most Universal Blue project's build systems use classic cloud methologies like Containerfiles and GitHub Actions directly to build their images, the abstraction introduced with [recipes](/reference/recipe/) in 'startingpoint' might have seemed unnecessary. Additionally, I felt that as a subproject of Universal Blue this project couldn't really achieve its full potential.
+
+The repositories affected by this transition are:
+- [ublue-os/startingpoint](https://github.com/ublue-os/startingpoint) (transferred to [blue-build/legacy-template](https://github.com/blue-build/legacy-template))
+- [ublue-os/bling](https://github.com/ublue-os/bling) (transferred to [blue-build/modules](https://github.com/blue-build/modules))
+- [ublue-os/images-website](https://github.com/ublue-os/images-website) (transferred to [blue-build/images-website](https://github.com/blue-build/images-website))
+
+## History lesson...
+
+_This section gives a bigger picture of the developments in the history of this project from [my](https://github.com/xynydev) perspective. Jump to the [What's new?](#whats-new) section to jump straight to the important stuff._
+
+When the [Universal Blue](https://universal-blue.org/) organization was starting out, the base was just a single repository: [ublue-os/base](https://github.com/ublue-os/base/tree/785b8f0d8adb8513bbe94b8918bfc0033ee0ca45). This repository never built more than a single Silverblue image, and was easily forked into a new image by a tinkerer wishing to use a different base image or set of packages. The repository also had a script for installing Flatpaks after the first boot, and in [my first PR](https://github.com/ublue-os/base/pull/79) I added in a `recipe.yml` file for easier customization of the Flatpaks and RPM-packages by people tinkering the images. This was in February 2023, so a few months before the [first commit](https://github.com/Vanilla-OS/Vib/commit/8041d630cbe5fa51dc4d19080a3bbc958ab9e214) to [VanillaOS' Vib](https://vib.vanillaos.org/), which is a similar project that uses a slightly different `recipe.yml` format.
+
+A while after, [ublue-os/base](https://github.com/ublue-os/base/tree/785b8f0d8adb8513bbe94b8918bfc0033ee0ca45) was deprecated in favor of [ublue-os/main](https://github.com/ublue-os/main). I got to keep working on the `recipe.yml`-based repository as [ublue-os/startingpoint](https://github.com/ublue-os/startingpoint), which would now only serve the part of a template. Eventually it became possible to build a full image only by editing the recipe, with no need to delve into Containerfiles or GitHub Actions.
+
+The `recipe.yml` format was still quite different than today, but after the [rewrite](https://github.com/ublue-os/startingpoint/pull/135) in September 2023, the current modular system was established, and we started utilizing the [ublue-os/bling](https://github.com/ublue-os/bling) repository as a source of modules instead of including them all in the template. This change made the project way more maintainable and extensible, and more abstract.
+ 
+The BlueBuild project is a direct continuation of this lineage, aiming to be an accessible way of building custom images of Linux distributions.
 
 ## What's new?
 
-- website
-- cli
+The shiny new website is probably what you'll notice first, but that isn't the only new thing to be excited about!
 
-## Migration
+### Recipe compiler
+
+The recipe compiler turns your recipe into a Containerfile, freeing us from the restrictions that having the entire build system being based on a shell script ran during the image build caused. For example, it will now be possible to include Containerfile snippets from the recipe directly. The compiler lives as part of the [blue-build/cli](https://github.com/blue-build/cli) program, which is written in Rust, and also offers other features including building images and rebasing to them locally.
+
+Our new re-usable GitHub Action and template repository use the compiler by default, so new users will get the benefits instantly. The new template requires less maintenance, as important parts of the build system have been moved to other repositories.
+
+### OIDC
+
+TODO
+
+### other?
+
+TODO
+
+## How to migrate?
 
 - multiple ways
     - copy config folder over
