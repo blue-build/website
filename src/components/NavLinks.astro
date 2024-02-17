@@ -2,7 +2,7 @@
 const id = Astro.props.id
 ---
 
-<a href="/" class={`dark:text-gray-300 text-gray-700 hover:underline ${id === "index.mdx" ? "underline" : "no-underline"}`}>
+<a href="/" class={`dark:text-gray-300 text-gray-700 hover:underline hidden sm:block ${id === "index.mdx" ? "underline" : "no-underline"}`}>
     Home
 </a>
 <a href="/learn/getting-started/" class={`dark:text-gray-300 text-gray-700 hover:underline ${id.includes("learn") || id.includes("how-to") || id.includes("reference") ? "underline" : "no-underline"}`}>
