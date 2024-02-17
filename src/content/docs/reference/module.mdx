@@ -73,4 +73,20 @@ get_yaml_array OUTPUT_VAR_NAME '.yq.key.to.array[]' "$1"
 
 ## `module.yml`
 
-A `module.yml` is the metadata file for a public module. (TODO, not planned yet).
+A `module.yml` is the metadata file for a public module, used on the website to generate module reference pages. May be used in future projects to showcase modules and supply some defaults for them.
+
+### `name:`
+
+The name of the module, same as the name of the directory and script.
+
+### `shortdesc:`
+
+A short description of the module, ideally not more than one sentence long. This is used in website metadata or anywhere a shorter module description is needed.
+
+### `readme:`
+
+The URL to the raw contents of the module's `README.md` in plain text, not HTML. The README may include a top-level heading for readability, but it will be stripped out in favor of `name:` when the README is ingested for the website.
+
+### `example:`
+
+A YAML string of example configuration showcasing the configuration options available with inline documentation to describe them.
