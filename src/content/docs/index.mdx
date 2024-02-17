@@ -58,11 +58,6 @@ import Card from '@components/Card.astro';
 
 ## FAQ
 
-### Is this site ready?
-
-Not at all! Basically none of the documentation pages have content, and work hasn't even started on the tooling part.
-But you can help us in the [GitHub](https://github.com/blue-build/website) repo!
-
 ### So I can use this to make my own distro?
 
 Maybe, but not really. When making custom images, you're building on top of an existing distribution. You're most likely using its package manager and repositories and just adding your own flair with package set changes and configuration files. It's more like a more reliable version of maintaining/sharing your [dotfiles](https://wiki.archlinux.org/title/Dotfiles), but from the perspective of the system.
@@ -77,6 +72,14 @@ _Atomic:_ instead of updated packages being swapped on the live running system, 
 _Image-based:_ instead of each computer updating each of its system packages individually, the system updates are bundled daily as images pulled onto the user computers.
 
 Read more [here](https://blog.verbum.org/2020/08/22/immutable-%E2%86%92-reprovisionable-anti-hysteresis/?ref=blue-build.org).
+
+### What's the difference between BlueBuild and [VanillaOS' Vib](https://vib.vanillaos.org/)?
+
+BlueBuild and Vib seem very similar and both use similar concepts: [recipes](/reference/recipe/) and [modules](/reference/module/). While Vib technically does the same thing as BlueBuild, it is positioned more as a generalized tool to build any OCI container image that just happens to be what is used by Vanilla to build their desktop. BlueBuild focuses on image-based desktop Linux more than containers, using container images as just a distribution mechanism. As such, BlueBuild supports more features specifically useful on desktop by default, such as the [fonts module](/reference/modules/fonts/) to fetch a selection of fonts.
+
+BlueBuild also aims to support building custom images of VanillaOS in the near future.
+
+_And in the FAQ writer's opinion, BlueBuild's documentation is better and the recipe format is slightly cleaner._
 
 ### What's the difference between BlueBuild and [Universal Blue](https://universal-blue.org/)?
 
@@ -98,6 +101,8 @@ The project now known as BlueBuild started out as just a part of Universal Blue,
 If you want an easy way to package _your_ customization for use on multiple computers, or maybe even have a lab of full-fledged Linux computers that you want on the same centrally updateable base, BlueBuild might just be what you're looking for! Or maybe you're a tinkerer looking for a new and exciting space in Linux to dabble with, then this and related projects are definitely something to put on your radar.
 
 But if you're a total Linux and cloud nerd, you know Containerfiles by heart and are comfortable building CI/CD, our abstractions might feel limiting to you. You should still come hang around if you're interested in building custom images!
+
+If you're just looking to build a simple container image to run on the cloud or locally, a Containerfile might still be the easiest way to get the result you want. If you need some help setting up the GitHub Actions for that, check out our [guide](/how-to/from-scratch/) for building a build system from scratch.
 
 ### What's up with the logo?
 
