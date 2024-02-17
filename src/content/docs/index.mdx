@@ -62,14 +62,14 @@ import Card from '@components/Card.astro';
 
 Maybe, but not really. When making custom images, you're building on top of an existing distribution. You're most likely using its package manager and repositories and just adding your own flair with package set changes and configuration files. It's more like a more reliable version of maintaining/sharing your [dotfiles](https://wiki.archlinux.org/title/Dotfiles), but from the perspective of the system.
 
-### So this is the type of workaround necessary to make immutable distributions customizable?
+### So this is the type of workaround necessary to make 'immutable' distributions customizable?
 
-Someone, maybe not you, but someone might get turned off from so-called immutable Linux distributions due to fears of the taking away the ability to tinker and change the system as you please. The term comes from the usage of immutable root filesystems in these distributions, but in reality most 'immutable' Linux distributions are still pretty _change-able_. So while BlueBuild is a tool that helps you tinker with these sorts of distributions, it's not giving you back some freedom that was taken away.
+Someone might get turned off from so-called 'immutable' Linux distributions due to fears of the taking away them ability to tinker and change the system as you please. The term comes from the usage of immutable root filesystems in these distributions, but in reality most 'immutable' Linux distributions are still pretty _change-able_. So while BlueBuild is a tool that helps you tinker with these sorts of distributions, it's not giving you back some freedom that was taken away.
 
 Here's some terms that can be used to better describe these sorts of distributions:
 
-_Atomic:_ instead of updated packages being swapped on the live running system, they're queued up to be available at the next boot.  
-_Image-based:_ instead of each computer updating each of its system packages individually, the system updates are bundled daily as images pulled onto the user computers.
+_Atomic:_ instead of new and updated packages being swapped on the running system live, they're queued up to be used after the next boot.  
+_Image-based:_ instead of each computer updating each of its system packages individually, the system updates are bundled (usually daily) as images that are pulled onto the user computers and queued up to be used after the next boot.
 
 Read more [here](https://blog.verbum.org/2020/08/22/immutable-%E2%86%92-reprovisionable-anti-hysteresis/?ref=blue-build.org).
 
