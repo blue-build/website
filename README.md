@@ -41,3 +41,5 @@ npm run dev
 ## Linting & formatting
 
 This project uses linting with ESLint and formatting with Prettier. To format all files locally, run `pnpm run fmt` (or `npm run fmt`). If you're using VSCode, some recommended plugins and default settings are supplied with this project, and formatting should work directly in the editor.
+
+Unfortunately, linting for `.astro` and `.mdx` files with ESLint isn't currently stable enough to be included.
