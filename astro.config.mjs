@@ -83,9 +83,15 @@ export default defineConfig({
         },
       ],
       plugins: [
-        moduleReferencePlugin({moduleSources: [
-          { source: "https://raw.githubusercontent.com/ublue-os/bling/main/modules.json", path: "reference/modules/" }
-        ]})
+        moduleReferencePlugin({
+          moduleSources: [
+            {
+              source:
+                "https://raw.githubusercontent.com/ublue-os/bling/main/modules.json",
+              path: "reference/modules/",
+            },
+          ],
+        }),
       ],
       customCss: [
         "@fontsource/atkinson-hyperlegible/400.css",
@@ -98,8 +104,8 @@ export default defineConfig({
         SocialIcons: "./src/components/NavLinks.astro",
         Hero: "./src/components/Hero.astro",
         Footer: "./src/components/Footer.astro",
-        Head: './src/components/Head.astro',
-        Search: "./src/components/Search.astro"
+        Head: "./src/components/Head.astro",
+        Search: "./src/components/Search.astro",
       },
       head: [
         {
