@@ -1,7 +1,7 @@
 ---
 title: Introducing BlueBuild
-description: Per mutual decision, Universal Blue's custom image tooling has now been transferred to the BlueBuild org.
-date: 2024-02-10
+description: Per a mutual decision, Universal Blue's old custom image tooling has now been transferred to the BlueBuild org. Here's what you should know.
+date: 2024-02-25
 authors:
     - name: xyny
       img: https://avatars.githubusercontent.com/u/60004820
@@ -12,7 +12,7 @@ authors:
 If you're not totally sure what this is about, check out the [front page](/).
 :::
 
-Per mutual decision, [Universal Blue](https://universal-blue.org/)'s old custom image tooling has now been transferred to the BlueBuild org and development will be continuing under the BlueBuild project with basically the same team of maintainers and developers as before. The issue was discussed extensively in [ublue-os/startingpoint#223](https://github.com/ublue-os/startingpoint/issues/223) and eventually voted for in [ublue-os/main#476](https://github.com/ublue-os/main/issues/476).
+Per a mutual decision, [Universal Blue](https://universal-blue.org/)'s old custom image tooling has now been transferred to the BlueBuild org and development will be continuing under the BlueBuild project with basically the same team of maintainers and developers as before. The issue was discussed extensively in [ublue-os/startingpoint#223](https://github.com/ublue-os/startingpoint/issues/223) and eventually voted for in [ublue-os/main#476](https://github.com/ublue-os/main/issues/476).
 
 We've been working on BlueBuild for a month now, to provide you a smooth [migration](#how-to-migrate) and exciting [new features](#whats-new), so don't worry, _this change is positive_.
 
@@ -37,7 +37,7 @@ The BlueBuild project is a direct continuation of this lineage, aiming to be an 
 
 ## What's new?
 
-The shiny new website is probably what you'll notice first, but that isn't the only new thing to be excited about!
+The shiny new brand and website is probably what you'll notice first, but that isn't the only new thing to be excited about!
 
 ### Recipe compiler
 
@@ -55,7 +55,71 @@ TODO
 
 ## How to migrate?
 
-- multiple ways
-    - copy config folder over
-    - detach fork & change relevant parts
-    - do nothing
+With the important repositories having been moved, it is unfortunately required to do at least _some_ migration. It is also possible to migrate to your old custom image to be built using the new recipe compiler, allowing you to make use of new and upcoming features. From the list below, choose your preferred migration path.
+
+### Upgrade your current repository (recommended)
+
+#### Pros/cons
+
+`+` Keep git history and repository  
+`+` Keep your existing configuration  
+`-` Requires some copy-pasting of workflow files
+
+#### Instructions
+
+1. Temporarily [clone](https://git-scm.com/docs/git-clone) the [new template repository](https://github.com/blue-build/template) to your computer.
+2. Overwrite your old `.github/` folder with the `.github/` folder from the new template.
+    - **If you're building multiple images,** remember to copy your matrix of recipes from the old `build.yml` to the new `build.yml`.
+    - **If you've made changes to `build.yml`**, those have to be ported manually. 
+3. Remove irrelevant files from your repository.
+    - The `Containerfile` and `build.sh` are not used by the recipe compiler -based build system. If you've made any changes to those files, they have to be manually ported over.
+    - It is also recommended to clean out files that are related to Universal Blue community management (`CODE_OF_CONDUCT.md` and `CONTRIBUTING.md`), if you haven't changed them to contain information relevant to your custom image project.
+4. Detach your custom image repository, which is mostly likely a fork of the upstream template.
+    - While this step isn't strictly required, it should still be done because your repository is no longer related to its old upstream template and it now functions exactly as though it was generated from the new template.
+    - This can be done through the [GitHub Virtual Support Assistant](https://support.github.com/contact?tags=rr-forks&subject=Detach%20Fork&flow=detach_fork).
+5. You should be all set now! Try starting your builds if you haven't already.
+
+### Create a new repository (not recommended)
+
+#### Pros/cons
+
+`+` Accidental breakage unlikely  
+`+` Keep your existing configuration  
+`-` Lose git history  
+`-` Will change cosign keys  
+`-` You'll have two repositories
+
+#### Instructions
+
+1. Set up a new repository using the [guide](/how-to/setup/).
+2. Make sure both your old and new repositories are [cloned](https://git-scm.com/docs/git-clone) locally.
+3. Copy relevant parts from your old repository to the new one.
+    - **Everyone should copy at least the `config/` directory,** but you can also copy `README.md` and `modules/`, if you've made any changes to those.
+    - **If you're building multiple images,** remember to copy your matrix of recipes from the old `build.yml` to the new `build.yml`.
+    - **If you've made changes to `build.sh`, `build.yml`, or the `Containerfile`**, those have to be ported manually. 
+4. Add a message to the README of your old repository pointing to the new one, disable the workflows (either in the GitHub UI or by removing `build.yml`), and archive it.
+5. Fix `ghcr.io: denied: permission_denied: write_package` errors in your new repo.
+    - If you're trying to build an image with the same name from a new repository, you might get this error.
+    - To fix this issue:
+      1. Go to the "Packages" tab on your GitHub profile.
+      2. Choose the package you are trying to build.
+      3. Open "Package settings".
+      4. Under "Manage Actions access", add your new repository and give it the "Admin" role.
+      5. Manually retrigger build.
+5. You should be all set now! Try starting your builds if you haven't already.
+
+### Do nothing
+
+It is also possible to keep building the a custom image based on the legacy template / build system as it will be supported for the foreseeable future. A quick migration process is still needed to prevent your custom image builds from breaking after 90 days time (from 2024-02-25), when GitHub will clean up the old module repository image from the `ublue-os` GitHub organization.
+
+#### Pros/cons
+
+`+` Keep your existing configuration and whatever customizations you might have made to the build system  
+`+` Only a quick migration process needed to keep receiving updates to modules  
+`-` You won't get new features that depend on the recipe compiler
+
+#### Instructions
+
+1. Either sync up with the upstream template or manually change the occurrences of `ublue-os/bling` in the Containerfile to `blue-build/modules`.
+    - On the latest version of the template, there should be just one on line 31.
+2. Migration complete! You can now resume chilling.
