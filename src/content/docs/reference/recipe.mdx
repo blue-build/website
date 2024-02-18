@@ -1,6 +1,6 @@
 ---
 title: recipe.yml
-description: A `recipe.yml` file is used to configure a custom image. 
+description: A `recipe.yml` file is used to configure a custom image.
 ---
 
 A `recipe.yml` file is used to configure a custom image. The top-level keys are used to set the metadata and base, and modules are used to add things on top of the base.
@@ -10,6 +10,7 @@ A `recipe.yml` file is used to configure a custom image. The top-level keys are 
 The image name. Used when publishing to GHCR as `ghcr.io/<user>/<name>`.
 
 #### Example:
+
 ```yaml
 # config/recipe.yml
 name: weird-os
@@ -20,6 +21,7 @@ name: weird-os
 The image description. Published to GHCR in the image metadata.
 
 #### Example:
+
 ```yaml
 # config/recipe.yml
 description: This is my personal OS image.
@@ -27,9 +29,10 @@ description: This is my personal OS image.
 
 ### `base-image:`
 
-The [OCI](https://opencontainers.org/) image to base your custom image on. Only atomic Fedora images and those based on them are officially supported. Universal Blue is recommended. A list of uBlue images can be found on the [uBlue website](https://universal-blue.org/images/). BlueBuild-built images can be used as well. 
+The [OCI](https://opencontainers.org/) image to base your custom image on. Only atomic Fedora images and those based on them are officially supported. Universal Blue is recommended. A list of uBlue images can be found on the [uBlue website](https://universal-blue.org/images/). BlueBuild-built images can be used as well.
 
 #### Example:
+
 ```yaml
 # config/recipe.yml
 base-image: ghcr.io/ublue-os/silverblue-main
@@ -40,6 +43,7 @@ base-image: ghcr.io/ublue-os/silverblue-main
 The tag of the base image to build on. Used to select a version explicitly (`39`) or to always use the latest stable version (`latest`). A list of all available tags can be viewed by pasting your `base-image` url into your browser.
 
 #### Example:
+
 ```yaml
 # config/recipe.yml
 image-version: 39
@@ -47,17 +51,18 @@ image-version: 39
 
 ### `modules:`
 
-A list of [modules](/reference/module/) that is executed in order. Multiple of the same module can be included. 
+A list of [modules](/reference/module/) that is executed in order. Multiple of the same module can be included.
 
 Each item in this list should have at least a `type:` or be specified to be included from an external file in the `config/` directory with `from-file:`.
 
 #### Example:
+
 ```yaml
 # config/recipe.yml
 modules:
-    - type: rpm-ostree
-      # rest of the module config...
-    - from-file: common-packages.yml
+  - type: rpm-ostree
+    # rest of the module config...
+  - from-file: common-packages.yml
 ```
 
 The included file can have one or multiple modules:
@@ -68,12 +73,13 @@ The included file can have one or multiple modules:
 type: rpm-ostree
 # rest of the module config...
 ```
+
 ```yaml
 # config/common-packages.yml
 # multiple modules
 modules:
-    - type: script
-      # rest of the module config...
-    - type: rpm-ostree
-      # rest of the module config...
+  - type: script
+    # rest of the module config...
+  - type: rpm-ostree
+    # rest of the module config...
 ```

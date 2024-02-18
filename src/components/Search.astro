@@ -1,12 +1,17 @@
 ---
-import Default from '@astrojs/starlight/components/Search.astro'
-import type { StarlightRouteData } from 'node_modules/@astrojs/starlight/utils/route-data';
+import Default from "@astrojs/starlight/components/Search.astro";
+import type { StarlightRouteData } from "node_modules/@astrojs/starlight/utils/route-data";
 ---
 
-{Astro.url.pathname === "/" &&
-    <a href="/learn/getting-started/" class={`dark:text-gray-200 text-gray-500 no-underline hover:underline active:underline md:hidden my-auto mr-4`}>
-        Docs
+{
+  Astro.url.pathname === "/" && (
+    <a
+      href="/learn/getting-started/"
+      class={`dark:text-gray-200 text-gray-500 no-underline hover:underline active:underline md:hidden my-auto mr-4`}
+    >
+      Docs
     </a>
+  )
 }
 
-<Default {...Astro.props as StarlightRouteData}/>
+<Default {...Astro.props as StarlightRouteData} />

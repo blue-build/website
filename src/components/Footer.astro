@@ -1,21 +1,25 @@
 ---
-import Default from '@astrojs/starlight/components/Footer.astro';
-import type { StarlightRouteData } from 'node_modules/@astrojs/starlight/utils/route-data';
-import NavLinks from '@components/NavLinks.astro';
+import Default from "@astrojs/starlight/components/Footer.astro";
+import type { StarlightRouteData } from "node_modules/@astrojs/starlight/utils/route-data";
+import NavLinks from "@components/NavLinks.astro";
 
-const isFrontPage = Astro.url.pathname === "/"
+const isFrontPage = Astro.url.pathname === "/";
 ---
 
-{isFrontPage ?
-    <hr class="mt-32">
-    <footer class="absolute left-0 w-screen h-16 bg-gradient-to-b dark:from-gray-600/50 from-accent-300/50 to-transparent">
+{
+  isFrontPage ? (
+    <>
+      <hr class="mt-32" />
+      <footer class="absolute left-0 w-screen h-16 bg-gradient-to-b dark:from-gray-600/50 from-accent-300/50 to-transparent">
         <div
-            class="absolute sm:translate-x-6 sm:-translate-y-6 translate-x-3 -translate-y-3 h-16 sm:px-16 px-8 flex flex-row sm:gap-8 gap-4 items-center
+          class="absolute sm:translate-x-6 sm:-translate-y-6 translate-x-3 -translate-y-3 h-16 sm:px-16 px-8 flex flex-row sm:gap-8 gap-4 items-center
             dark:bg-gray-900 bg-white outline dark:outline-gray-200 outline-gray-900 outline-1"
         >
-            <NavLinks {...Astro.props}/>
+          <NavLinks {...Astro.props} />
         </div>
-    </footer>
-:
-    <Default {...Astro.props as StarlightRouteData}/>
+      </footer>
+    </>
+  ) : (
+    <Default {...(Astro.props as StarlightRouteData)} />
+  )
 }

@@ -3,20 +3,20 @@ title: How to make a custom module
 description: If you want to extend your image with custom functionality that requires configuration, you should create a module.
 ---
 
-If you want to extend your image with custom functionality that requires configuration, you should create a [module](/reference/module/). 
+If you want to extend your image with custom functionality that requires configuration, you should create a [module](/reference/module/).
 
 ## Creating a new module
 
 1. Open your repository and create a new directory inside the `modules/` directory. The name of this directory should be the name of your module.
-    - This name will be used as the `type:` when launching your module.
-    - If this name has multiple parts, they should be separated with a dash `-`.
-    - As a guideline for (to be) official modules, the name should be a short and sweet noun or modifier-noun combination, without a `-installer` or `-setup` suffix being recommended.
+   - This name will be used as the `type:` when launching your module.
+   - If this name has multiple parts, they should be separated with a dash `-`.
+   - As a guideline for (to be) official modules, the name should be a short and sweet noun or modifier-noun combination, without a `-installer` or `-setup` suffix being recommended.
 2. Inside your newly created directory, create a file called `<name-of-your-module>.sh` and paste the following code into it:
-    ```bash title="modules/<name-of-your-module>/<name-of-your-module>.sh"
-    #!/usr/bin/env bash
-    set -euo pipefail
-    ```
-    - This makes sure the correct shell is used and errors in your module cause the build to fail.
+   ```bash title="modules/<name-of-your-module>/<name-of-your-module>.sh"
+   #!/usr/bin/env bash
+   set -euo pipefail
+   ```
+   - This makes sure the correct shell is used and errors in your module cause the build to fail.
 3. You have now created an empty module and can proceed to coding it.
 
 ## Coding your module
@@ -24,6 +24,7 @@ If you want to extend your image with custom functionality that requires configu
 This guide only includes the bare minimum information to get you started on your coding adventure. Check out the [module reference](/reference/module/) for more technical information about modules.
 
 When being launched, your module receives its configuration as a JSON string as the first argument. It can be read from in bash using `jq` or `yq` like this:
+
 ```bash title="modules/<name-of-your-module>/<name-of-your-module>.sh"
 #!/usr/bin/env bash
 set -euo pipefail

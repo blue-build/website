@@ -16,43 +16,57 @@ hero:
       icon: "<svg ic:round-launch"
       variant: minimal
 banner:
-  content: | 
+  content: |
     We're the new home of the old custom image tooling from <a href="https://universal-blue.org/">Universal Blue</a>.
     This website is very new & a lot of content is missing. 
     <a href="https://github.com/blue-build/">Contribute!</a>
 hasSidebar: true
 ---
 
-import { CardGrid } from '@astrojs/starlight/components';
-import Card from '@components/Card.astro';
+import { CardGrid } from "@astrojs/starlight/components";
+import Card from "@components/Card.astro";
 
 ## Features
 
-<hr class="opacity-0"/>
+<hr class="opacity-0" />
 <CardGrid stagger>
-	<Card title="Easy configuration" icon="material-symbols:edit-outline-rounded">
-		The build process can be configured entirely in a straightforward YAML format called a [recipe](/reference/recipe/).
-    When building, the recipe is transformed into a Containerfile by the BlueBuild cli tool.
-	</Card>
-	<Card title="Totally extensible" icon="material-symbols:extension-rounded">
-		The modular build system [can easily be extended](/how-to/making-modules/) by just writing a shell script.
-    Modules you create can be added into the official BlueBuild repository or your own for the community to take advantage of.
-	</Card>
-	<Card title="Based on well-known standards" icon="material-symbols:book-2-rounded">
-		The format of your OS images is the familiar OCI image format, famously used by Docker & Podman.
-    With [Fedora's Native Container support](https://fedoraproject.org/wiki/Changes/OstreeNativeContainerStable), it becomes possible to boot natively into a OCI compatible image.
-	</Card>
-	<Card title="Free & open-source" icon="ri:open-source-fill">
-		BlueBuild is an open-source project built by the community for the community.
-    Feel free to peek at & tinker with the [source code](https://github.com/blue-build/)!
-    GitHub also provides CI/CD & a container registry for free, though other providers are supported as well.
-	</Card>
+  <Card title="Easy configuration" icon="material-symbols:edit-outline-rounded">
+    The build process can be configured entirely in a straightforward YAML
+    format called a [recipe](/reference/recipe/). When building, the recipe is
+    transformed into a Containerfile by the BlueBuild cli tool.
+  </Card>
+  <Card title="Totally extensible" icon="material-symbols:extension-rounded">
+    The modular build system [can easily be extended](/how-to/making-modules/)
+    by just writing a shell script. Modules you create can be added into the
+    official BlueBuild repository or your own for the community to take
+    advantage of.
+  </Card>
+  <Card
+    title="Based on well-known standards"
+    icon="material-symbols:book-2-rounded"
+  >
+    The format of your OS images is the familiar OCI image format, famously used
+    by Docker & Podman. With [Fedora's Native Container
+    support](https://fedoraproject.org/wiki/Changes/OstreeNativeContainerStable),
+    it becomes possible to boot natively into a OCI compatible image.
+  </Card>
+  <Card title="Free & open-source" icon="ri:open-source-fill">
+    BlueBuild is an open-source project built by the community for the
+    community. Feel free to peek at & tinker with the [source
+    code](https://github.com/blue-build/)! GitHub also provides CI/CD & a
+    container registry for free, though other providers are supported as well.
+  </Card>
   <Card title="Effortless reliability" icon="ph:scales-bold">
-		With your custom images being based on reliable atomic distributions, your setup will be rock solid.
-    As all errors related to customizing your environment happen during the build process in the cloud, it's way harder to end up with a bricked system.
-	</Card>
+    With your custom images being based on reliable atomic distributions, your
+    setup will be rock solid. As all errors related to customizing your
+    environment happen during the build process in the cloud, it's way harder to
+    end up with a bricked system.
+  </Card>
   <Card title="Build on the best" icon="material-symbols:stacks-rounded">
-    Build your custom images on [Universal Blue](https://universal-blue.org/)'s awesome base, with the option to build on [atomic Fedora desktops](https://fedoraproject.org/atomic-desktops/) and more options being supported soon.
+    Build your custom images on [Universal Blue](https://universal-blue.org/)'s
+    awesome base, with the option to build on [atomic Fedora
+    desktops](https://fedoraproject.org/atomic-desktops/) and more options being
+    supported soon.
   </Card>
 </CardGrid>
 
@@ -88,7 +102,7 @@ The project now known as BlueBuild started out as just a part of Universal Blue,
 
 ### Why build an abstraction on top of Containerfiles? (recipe.yml)
 
-- It is more accessible and helps onboard new users. 
+- It is more accessible and helps onboard new users.
   - Editing a configuration file is something most people are likely familiar with, but editing a Containerfile, bespoke build scripts, and a GitHub Action file is something most probably have no prior experience.
   - New curious tinkerer's using our tools won't be robbed of the experience of learning something new and generalizeable, as we also provide [documentation for that](/how-to/from-scratch/).
 - It allows us to make harder things simpler.

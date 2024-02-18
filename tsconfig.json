@@ -8,5 +8,5 @@
     }
   },
   "include": ["./.eslintrc.cjs", "./src"],
-  "allowJs": true,
+  "allowJs": true
 }

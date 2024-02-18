@@ -1,7 +1,7 @@
 {
   "eslint.validate": [
     "javascript",
-    "typescript", // Enable .ts
+    "typescript" // Enable .ts
   ],
   "prettier.documentSelectors": ["**/*.astro"],
   "[astro]": {
