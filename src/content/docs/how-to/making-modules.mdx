@@ -44,3 +44,14 @@ done
 In addition to the module's own configuration, each module has access to a set of environment variables. Check out the [module reference's run environment section](/reference/module/#module-run-environment) for a list.
 
 Though bash is the recommended language to write modules, they can technically be written in any language as long as the `.sh` is used to launch them while passing the configuration.
+
+## Using your module
+
+Your custom modules are available by default in custom images built in the same repository. There is no need to specify the source, you can just use them the same way you can use default modules. If the name of your custom module is the same as a default module's name, the custom module will always be used instead.
+
+```yml
+# recipe.yml
+modules:
+   - type: <name-of-your-module>
+     option: true
+```
