@@ -13,7 +13,7 @@ export default function moduleReferencePlugin(
     name: "moduleReferencePlugin",
     hooks: {
       async setup() {
-        for (let moduleSource of options.moduleSources) {
+        for (const moduleSource of options.moduleSources) {
           const outputPath = path.join("src/content/docs", moduleSource.path);
           if (fs.existsSync(outputPath)) {
             try {
@@ -25,12 +25,12 @@ export default function moduleReferencePlugin(
             } catch (err) {
               throw new Error(
                 "Failed to clear module reference directory before recreating: " +
-                  err.message,
+                  (err as Error).message,
               );
             }
           }
           fs.mkdir(outputPath, { recursive: true }, (err) => {
-            if (err) {
+            if (err != null) {
               throw new Error(
                 "Failed to create module reference directory: " + err.message,
               );
@@ -43,8 +43,8 @@ export default function moduleReferencePlugin(
           });
           const modulesRes = await fetch(moduleSource.source);
           const modules = await modulesRes.json();
-          for (let module of modules) {
-            generateReferencePage(module, outputPath).catch((err) => {
+          for (const module of modules) {
+            generateReferencePage(module as string, outputPath).catch((err) => {
               throw new Error(
                 "Failed to generate reference page: " + err.message,
               );
@@ -63,21 +63,24 @@ export interface ModuleReferencePluginOptions {
   }>;
 }
 
-async function generateReferencePage(moduleYmlUrl, outputPath) {
+async function generateReferencePage(
+  moduleYmlUrl: string,
+  outputPath: string,
+): Promise<void> {
   console.log("Fetching: " + moduleYmlUrl);
   const moduleYmlRes = await fetch(moduleYmlUrl);
   const moduleYmlStr = await moduleYmlRes.text();
   const moduleYml = parse(moduleYmlStr);
   console.log("Generating page for: " + moduleYml.name);
 
-  const readmeRes = await fetch(moduleYml.readme);
+  const readmeRes = await fetch(moduleYml.readme as URL);
   const readme = await readmeRes.text();
 
   const content = `\
 ---
 title: "${moduleYml.name}"
 description: ${moduleYml.shortdesc}
-editUrl: "${rawUrlToEditUrl(moduleYml.readme)}"
+editUrl: "${rawUrlToEditUrl(moduleYml.readme as string)}"
 ---
 ${readme.replace(/^#{1}\s.*$/gm, "")}
 ## Example configuration
@@ -89,7 +92,7 @@ ${moduleYml.example}
     path.join(outputPath, moduleYml.name + ".md"),
     content,
     (err) => {
-      if (err) {
+      if (err != null) {
         throw new Error("Failed to write reference page: " + err.message);
       } else {
         console.log(
