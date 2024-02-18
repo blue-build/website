@@ -43,7 +43,7 @@ The shiny new brand and website is probably what you'll notice first, but that i
 
 The recipe compiler turns your recipe into a Containerfile, freeing us from the restrictions that having the entire build system being based on a shell script ran during the image build caused. For example, it will now be possible to include Containerfile snippets from the recipe directly. The compiler lives as part of the [blue-build/cli](https://github.com/blue-build/cli) program, which is written in Rust, and also offers other features including building images and rebasing to them locally.
 
-Our new re-usable GitHub Action and template repository use the compiler by default, so new users will get the benefits instantly. The new template requires less maintenance, as important parts of the build system have been moved to other repositories.
+Our new re-usable [GitHub Action](https://github.com/blue-build/github-action) and [template repository](https://github.com/blue-build/template) use the compiler by default, so new users will get the benefits instantly. The new template requires less maintenance, as important parts of the build system have been moved to other repositories.
 
 ### OIDC
 
