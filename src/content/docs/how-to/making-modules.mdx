@@ -3,7 +3,7 @@ title: How to make a custom module
 description: If you want to extend your image with custom functionality that requires configuration, you should create a module.
 ---
 
-If you want to extend your image with custom functionality that requires configuration, you should create a [module](/reference/module/). 
+If you want to extend your image with custom functionality that requires configuration, you should create a [module](/reference/module/).
 
 ## Creating a new module
 
@@ -24,6 +24,7 @@ If you want to extend your image with custom functionality that requires configu
 This guide only includes the bare minimum information to get you started on your coding adventure. Check out the [module reference](/reference/module/) for more technical information about modules.
 
 When being launched, your module receives its configuration as a JSON string as the first argument. It can be read from in bash using `jq` or `yq` like this:
+
 ```bash title="modules/<name-of-your-module>/<name-of-your-module>.sh"
 #!/usr/bin/env bash
 set -euo pipefail
@@ -44,22 +45,13 @@ In addition to the module's own configuration, each module has access to a set o
 
 Though bash is the recommended language to write modules, they can technically be written in any language as long as the `.sh` is used to launch them while passing the configuration.
 
-## Style guidelines for official modules
+## Using your module
 
-These are general guidelines for writing official modules and their documentation to follow to keep a consistent style. Not all of these are to be mindlessly followed, especially the ones about grammar and writing style, but it's good to keep these in mind if you intend to contribute back upstream, so that your module doesn't feel out of place.
+Your custom modules are available by default in custom images built in the same repository. There is no need to specify the source, you can just use them the same way you can use default modules. If the name of your custom module is the same as a default module's name, the custom module will always be used instead.
 
-### Bash
-
-- Echo what you're doing on each step and on errors to help debugging.
-- Don't echo blocks using "===", that is reserved for the code launching the modules.
-- Use `snake_case` for functions and variables changed by the code.
-- Use `SCREAMING_SNAKE_CASE` for variables that are set once and stay unchanged.
-
-### `module.yml` (not implemented) (will replace READMEs)
-
-Each public module should also include a `module.yml` with the following keys: (TODO, not planned yet).
-
-#### `description:`
-
-- At the start of each paragraph, refer to the module using its name or with "the module", not "it" or "the script"
-- Use passive grammar when talking about the user, ie. "should be used", "can be configured", preferring references to what the module does, ie. "This module downloads the answer to the question of life, the universe and everything..."
+```yml
+# recipe.yml
+modules:
+    - type: <name-of-your-module>
+      option: true
+```

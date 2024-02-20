@@ -1,19 +1,39 @@
 ---
-const id = Astro.props.id
+const id = Astro.props.id;
 ---
 
-<a href="/" class={`dark:text-gray-300 text-gray-700 hover:underline hidden sm:block ${id === "index.mdx" ? "underline" : "no-underline"}`}>
+<a
+    href="/"
+    class={`dark:text-gray-300 text-gray-700 hover:underline ${id.includes("index") ? "underline" : "no-underline"}`}
+>
     Home
 </a>
-<a href="/learn/getting-started/" class={`dark:text-gray-300 text-gray-700 hover:underline ${id.includes("learn") || id.includes("how-to") || id.includes("reference") ? "underline" : "no-underline"}`}>
+<a
+    href="/learn/getting-started/"
+    class={`dark:text-gray-300 text-gray-700 hover:underline ${id.includes("learn") || id.includes("how-to") || id.includes("reference") ? "underline" : "no-underline"}`}
+>
     Docs
 </a>
-<a href="/blog/" class={`dark:text-gray-300 text-gray-700 hover:underline ${id.includes("blog") ? "underline" : "no-underline"}`}>
-    Blog
-</a>
-<a href="/community" class={`dark:text-gray-300 text-gray-700 hover:underline ${id.includes("community") ? "underline" : "no-underline"}`}>
-    Community
-</a>
-<a href="https://github.com/blue-build/" class="no-underline dark:text-gray-300 text-gray-700 hover:underline">
-    GitHub
+<a
+    href="/community"
+    class={`dark:text-gray-300 text-gray-700 hover:underline ${id.includes("community") ? "underline" : "no-underline"}`}
+>
+    <a
+        href="/blog/"
+        class={`dark:text-gray-300 text-gray-700 hover:underline ${id.includes("blog") ? "underline" : "no-underline"}`}
+    >
+        Blog
+    </a>
+    <a
+        href="/community"
+        class={`dark:text-gray-300 text-gray-700 hover:underline ${id.includes("community") ? "underline" : "no-underline"}`}
+    >
+        Community
+    </a>
+    <a
+        href="https://github.com/blue-build/"
+        class="text-gray-700 no-underline hover:underline dark:text-gray-300"
+    >
+        GitHub
+    </a>
 </a>
