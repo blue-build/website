@@ -45,9 +45,11 @@ The recipe compiler turns your recipe into a Containerfile, freeing us from the 
 
 Our new re-usable [GitHub Action](https://github.com/blue-build/github-action) and [template repository](https://github.com/blue-build/template) use the compiler by default, so new users will get the benefits instantly. The new template requires less maintenance, as important parts of the build system have been moved to other repositories.
 
-### Keyless signing with OIDC
+### [Keyless signing with OIDC and Sigstore](https://docs.sigstore.dev/signing/overview/)
 
-TODO
+The keyless signing support with OIDC will make new repository setup easier and more straightforward by making the generation of a cosign / sigstore keypair optional. When signing without keys, the verification will be based on ephemeral keys bound to an OIDC identity from GitHub, making it possible to verify that the image you are using came from the specific GitHub Action, _without specifying a public key_. This will also shorten the first-time rebase process to one command, going directly onto the signed image, and eliminating the need to trust the registry on the first rebase.
+
+New users should be able to take advantage of this right away, but for users with existing cosign keys who wish to migrate, a guide will be provided soon.
 
 ### other?
 
