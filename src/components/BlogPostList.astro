@@ -5,7 +5,7 @@ const blogPosts = await Astro.glob("../content/docs/blog/*.mdx");
 <div class="flex flex-col gap-4 pr-3 pt-6">
     {
         blogPosts
-            .filter((p) => !p.url.includes("index"))
+            .filter((p) => !p.url?.includes("index"))
             .sort(
                 (a, b) =>
                     new Date(b.frontmatter.date).getTime() -
@@ -14,8 +14,8 @@ const blogPosts = await Astro.glob("../content/docs/blog/*.mdx");
             .map((p) => (
                 <a
                     href={p.url
-                        .replace("src/content/docs", "")
-                        .replace(".mdx", "")}
+                        ?.replace("src/content/docs", "")
+                        ?.replace(".mdx", "")}
                     class="no-underline"
                 >
                     <article class="p-4 outline outline-1 outline-gray-900 hover:outline-4 dark:outline-gray-200">
