@@ -16,7 +16,7 @@ Per a mutual decision, [Universal Blue](https://universal-blue.org/)'s old custo
 
 We've been working on BlueBuild for a month now to provide you a smooth [migration](#how-to-migrate) and exciting [new features](#whats-new), so don't worry, _this change is positive_.
 
-To briefly summarize, this desire to split stemmed from a difference in philosophy and scope between the main Universal Blue maintainers and the developers of 'startingpoint'. Since most Universal Blue project's build systems use classic cloud methodologies like Containerfiles and GitHub Actions directly to build their images, the abstraction introduced with [recipes](/reference/recipe/) in 'startingpoint' might have seemed unnecessary. Additionally, I felt that as a subproject of Universal Blue, this project couldn't really achieve its full potential.
+To briefly summarize, this desire to split stemmed from a difference in philosophy and scope between the main Universal Blue maintainers and the developers of 'startingpoint'. Since most of the Universal Blue project's build systems use classic cloud methodologies like Containerfiles and GitHub Actions directly to build their images, the abstraction introduced with [recipes](/reference/recipe/) in 'startingpoint' might have seemed unnecessary. Additionally, I felt that as a subproject of Universal Blue, this project couldn't really achieve its full potential.
 
 The repositories affected by this transition are:
 
@@ -32,7 +32,7 @@ When the [Universal Blue](https://universal-blue.org/) organization was starting
 
 A while after, [ublue-os/base](https://github.com/ublue-os/base/tree/785b8f0d8adb8513bbe94b8918bfc0033ee0ca45) was deprecated in favor of [ublue-os/main](https://github.com/ublue-os/main). I got to keep working on the `recipe.yml`-based repository as [ublue-os/startingpoint](https://github.com/ublue-os/startingpoint), which would now only serve the part of a template. Eventually it became possible to build a full image only by editing the recipe, with no need to delve into Containerfiles or GitHub Actions.
 
-The `recipe.yml` format was still quite different than today, but after the [rewrite](https://github.com/ublue-os/startingpoint/pull/135) in September 2023, the current modular system was established, and we started utilizing the [ublue-os/bling](https://github.com/ublue-os/bling) repository as a source of modules instead of including them all in the template. This change made the project way more maintainable and extensible, and more abstract.
+The `recipe.yml` format was still quite different than today, but after the [rewrite](https://github.com/ublue-os/startingpoint/pull/135) in September 2023, the current modular system was established, and we started utilizing the [ublue-os/bling](https://github.com/ublue-os/bling) repository as a source of modules instead of including them all in the template. This change made the project way more maintainable and extensible, and more abstracted.
 
 The BlueBuild project is a direct continuation of this lineage, aiming to be an accessible way of building custom images of Linux distributions.
 
