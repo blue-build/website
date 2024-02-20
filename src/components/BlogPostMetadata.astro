@@ -1,24 +1,35 @@
 ---
-const blogPosts = await Astro.glob("../content/docs/blog/*.mdx")
-const p = blogPosts.find(
-    (p) => Astro.url.pathname.includes(
-        p.url.replace("src/content/docs", "").replace(".mdx", "")
-    )
-)
+const blogPosts = await Astro.glob("../content/docs/blog/*.mdx");
+const p = blogPosts.find((p) =>
+    Astro.url.pathname.includes(
+        p.url.replace("src/content/docs", "").replace(".mdx", ""),
+    ),
+);
 ---
 
-<hr class="mb-2 pt-4">
+<hr class="mb-2 pt-4" />
 Published on {new Date(p.frontmatter.date).toISOString().substring(0, 10)}.
-<br>
+<br />
 Authors:
-<div class="pt-4 flex flex-col gap-8">
-    {p.frontmatter.authors.map((a) => 
-        <a href={"https://github.com/"+a.github} class="ml-4 mr-2 outline-gray-900 dark:outline-gray-200 outline outline-1 flex flex-row gap-2 no-underline group">
-            <img src={a.img} class="w-24 -translate-x-4 -translate-y-4 outline-gray-900 dark:outline-gray-200 outline outline-1"/>
-            <div class="flex flex-col dark:text-gray-200 text-gray-800"> 
-                {a.name}<br>
-                <span class="dark:group-hover:text-gray-400 group-hover:text-gray-700 group-hover:underline group-active:underline group-focus:underline    ">@{a.github}</span>
-            </div>
-        </a>
-    )}    
+<div class="flex flex-col gap-8 pt-4">
+    {
+        p.frontmatter.authors.map((a) => (
+            <a
+                href={"https://github.com/" + a.github}
+                class="group ml-4 mr-2 flex flex-row gap-2 no-underline outline outline-1 outline-gray-900 dark:outline-gray-200"
+            >
+                <img
+                    src={a.img}
+                    class="w-24 -translate-x-4 -translate-y-4 outline outline-1 outline-gray-900 dark:outline-gray-200"
+                />
+                <div class="flex flex-col text-gray-800 dark:text-gray-200">
+                    {a.name}
+                    <br />
+                    <span class="group-hover:text-gray-700 group-hover:underline group-focus:underline group-active:underline dark:group-hover:text-gray-400    ">
+                        @{a.github}
+                    </span>
+                </div>
+            </a>
+        ))
+    }
 </div>

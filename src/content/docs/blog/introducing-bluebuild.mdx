@@ -19,9 +19,10 @@ We've been working on BlueBuild for a month now, to provide you a smooth [migrat
 To briefly summarize, this desire to split stemmed from a difference in philosophy and scope between the main Universal Blue maintainers and the developers of 'startingpoint'. Since most Universal Blue project's build systems use classic cloud methologies like Containerfiles and GitHub Actions directly to build their images, the abstraction introduced with [recipes](/reference/recipe/) in 'startingpoint' might have seemed unnecessary. Additionally, I felt that as a subproject of Universal Blue this project couldn't really achieve its full potential.
 
 The repositories affected by this transition are:
-- [ublue-os/startingpoint](https://github.com/ublue-os/startingpoint) (transferred to [blue-build/legacy-template](https://github.com/blue-build/legacy-template))
-- [ublue-os/bling](https://github.com/ublue-os/bling) (transferred to [blue-build/modules](https://github.com/blue-build/modules))
-- [ublue-os/images-website](https://github.com/ublue-os/images-website) (transferred to [blue-build/images-website](https://github.com/blue-build/images-website))
+
+-   [ublue-os/startingpoint](https://github.com/ublue-os/startingpoint) (transferred to [blue-build/legacy-template](https://github.com/blue-build/legacy-template))
+-   [ublue-os/bling](https://github.com/ublue-os/bling) (transferred to [blue-build/modules](https://github.com/blue-build/modules))
+-   [ublue-os/images-website](https://github.com/ublue-os/images-website) (transferred to [blue-build/images-website](https://github.com/blue-build/images-website))
 
 ## History lesson...
 
@@ -32,7 +33,7 @@ When the [Universal Blue](https://universal-blue.org/) organization was starting
 A while after, [ublue-os/base](https://github.com/ublue-os/base/tree/785b8f0d8adb8513bbe94b8918bfc0033ee0ca45) was deprecated in favor of [ublue-os/main](https://github.com/ublue-os/main). I got to keep working on the `recipe.yml`-based repository as [ublue-os/startingpoint](https://github.com/ublue-os/startingpoint), which would now only serve the part of a template. Eventually it became possible to build a full image only by editing the recipe, with no need to delve into Containerfiles or GitHub Actions.
 
 The `recipe.yml` format was still quite different than today, but after the [rewrite](https://github.com/ublue-os/startingpoint/pull/135) in September 2023, the current modular system was established, and we started utilizing the [ublue-os/bling](https://github.com/ublue-os/bling) repository as a source of modules instead of including them all in the template. This change made the project way more maintainable and extensible, and more abstract.
- 
+
 The BlueBuild project is a direct continuation of this lineage, aiming to be an accessible way of building custom images of Linux distributions.
 
 ## What's new?
@@ -68,10 +69,10 @@ With the important repositories having been moved, it is unfortunately required 
 1. Temporarily [clone](https://git-scm.com/docs/git-clone) the [new template repository](https://github.com/blue-build/template) to your computer.
 2. Overwrite your old `.github/` folder with the `.github/` folder from the new template.
     - **If you're building multiple images,** remember to copy your matrix of recipes from the old `build.yml` to the new `build.yml`.
-    - **If you've made changes to `build.yml`**, those have to be ported manually. 
+    - **If you've made changes to `build.yml`**, those have to be ported manually.
 3. Remove irrelevant files from your repository.
     - The `Containerfile` and `build.sh` are not used by the recipe compiler -based build system. If you've made any changes to those files, they have to be manually ported over.
-    - You might want to add "`/Containerfile`" to the `.gitignore` file, because the recipe compiler generates a Containerfile when run locally. 
+    - You might want to add "`/Containerfile`" to the `.gitignore` file, because the recipe compiler generates a Containerfile when run locally.
     - It is also recommended to clean out files that are related to Universal Blue community management (`CODE_OF_CONDUCT.md` and `CONTRIBUTING.md`), if you haven't changed them to contain information relevant to your custom image project.
 4. Detach your custom image repository, which is mostly likely a fork of the upstream template.
     - While this step isn't strictly required, it should still be done because your repository is no longer related to its old upstream template and it now functions exactly as though it was generated from the new template.
@@ -95,17 +96,17 @@ With the important repositories having been moved, it is unfortunately required 
 3. Copy relevant parts from your old repository to the new one.
     - **Everyone should copy at least the `config/` directory,** but you can also copy `README.md` and `modules/`, if you've made any changes to those.
     - **If you're building multiple images,** remember to copy your matrix of recipes from the old `build.yml` to the new `build.yml`.
-    - **If you've made changes to `build.sh`, `build.yml`, or the `Containerfile`**, those have to be ported manually. 
+    - **If you've made changes to `build.sh`, `build.yml`, or the `Containerfile`**, those have to be ported manually.
 4. Add a message to the README of your old repository pointing to the new one, disable the workflows (either in the GitHub UI or by removing `build.yml`), and archive it.
 5. Fix `ghcr.io: denied: permission_denied: write_package` errors in your new repo.
     - If you're trying to build an image with the same name from a new repository, you might get this error.
     - To fix this issue:
-      1. Go to the "Packages" tab on your GitHub profile.
-      2. Choose the package you are trying to build.
-      3. Open "Package settings".
-      4. Under "Manage Actions access", add your new repository and give it the "Admin" role.
-      5. Manually retrigger build.
-5. You should be all set now! Try starting your builds if you haven't already.
+        1. Go to the "Packages" tab on your GitHub profile.
+        2. Choose the package you are trying to build.
+        3. Open "Package settings".
+        4. Under "Manage Actions access", add your new repository and give it the "Admin" role.
+        5. Manually retrigger build.
+6. You should be all set now! Try starting your builds if you haven't already.
 
 ### Do nothing
 
