@@ -15,25 +15,20 @@ const id = Astro.props.id;
     Docs
 </a>
 <a
+    href="/blog/"
+    class={`dark:text-gray-300 text-gray-700 hover:underline ${id.includes("blog") ? "underline" : "no-underline"}`}
+>
+    Blog
+</a>
+<a
     href="/community"
     class={`dark:text-gray-300 text-gray-700 hover:underline ${id.includes("community") ? "underline" : "no-underline"}`}
 >
-    <a
-        href="/blog/"
-        class={`dark:text-gray-300 text-gray-700 hover:underline ${id.includes("blog") ? "underline" : "no-underline"}`}
-    >
-        Blog
-    </a>
-    <a
-        href="/community"
-        class={`dark:text-gray-300 text-gray-700 hover:underline ${id.includes("community") ? "underline" : "no-underline"}`}
-    >
-        Community
-    </a>
-    <a
-        href="https://github.com/blue-build/"
-        class="text-gray-700 no-underline hover:underline dark:text-gray-300"
-    >
-        GitHub
-    </a>
+    Community
+</a>
+<a
+    href="https://github.com/blue-build/"
+    class="text-gray-700 no-underline hover:underline dark:text-gray-300"
+>
+    GitHub
 </a>
