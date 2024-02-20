@@ -8,15 +8,15 @@ If you want to extend your image with custom functionality that requires configu
 ## Creating a new module
 
 1. Open your repository and create a new directory inside the `modules/` directory. The name of this directory should be the name of your module.
-   - This name will be used as the `type:` when launching your module.
-   - If this name has multiple parts, they should be separated with a dash `-`.
-   - As a guideline for (to be) official modules, the name should be a short and sweet noun or modifier-noun combination, without a `-installer` or `-setup` suffix being recommended.
+    - This name will be used as the `type:` when launching your module.
+    - If this name has multiple parts, they should be separated with a dash `-`.
+    - As a guideline for (to be) official modules, the name should be a short and sweet noun or modifier-noun combination, without a `-installer` or `-setup` suffix being recommended.
 2. Inside your newly created directory, create a file called `<name-of-your-module>.sh` and paste the following code into it:
-   ```bash title="modules/<name-of-your-module>/<name-of-your-module>.sh"
-   #!/usr/bin/env bash
-   set -euo pipefail
-   ```
-   - This makes sure the correct shell is used and errors in your module cause the build to fail.
+    ```bash title="modules/<name-of-your-module>/<name-of-your-module>.sh"
+    #!/usr/bin/env bash
+    set -euo pipefail
+    ```
+    - This makes sure the correct shell is used and errors in your module cause the build to fail.
 3. You have now created an empty module and can proceed to coding it.
 
 ## Coding your module
@@ -52,6 +52,6 @@ Your custom modules are available by default in custom images built in the same 
 ```yml
 # recipe.yml
 modules:
-   - type: <name-of-your-module>
-     option: true
+    - type: <name-of-your-module>
+      option: true
 ```

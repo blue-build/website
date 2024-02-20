@@ -1,10 +1,10 @@
 {
-  "eslint.validate": [
-    "javascript",
-    "typescript" // Enable .ts
-  ],
-  "prettier.documentSelectors": ["**/*.astro"],
-  "[astro]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+    "eslint.validate": [
+        "javascript",
+        "typescript" // Enable .ts
+    ],
+    "prettier.documentSelectors": ["**/*.astro"],
+    "[astro]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
 }

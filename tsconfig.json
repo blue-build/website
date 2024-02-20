@@ -1,12 +1,12 @@
 {
-  "extends": "astro/tsconfigs/strict",
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@components/*": ["src/components/*"],
-      "@assets/*": ["src/assets/*"]
-    }
-  },
-  "include": ["./.eslintrc.cjs", "./src"],
-  "allowJs": true
+    "extends": "astro/tsconfigs/strict",
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "@components/*": ["src/components/*"],
+            "@assets/*": ["src/assets/*"]
+        }
+    },
+    "include": ["./.eslintrc.cjs", "./src"],
+    "allowJs": true
 }

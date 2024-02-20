@@ -3,75 +3,75 @@ import LogoDark from "@assets/logo-round-dark.svg";
 import LogoLight from "@assets/logo-round-light.svg";
 import { Icon } from "astro-icon/components";
 const hero = Astro.props.entry.data.hero as {
-  title: string;
-  tagline: string;
-  actions: Array<any>;
+    title: string;
+    tagline: string;
+    actions: Array<any>;
 };
 ---
 
 <section
-  id="herosection"
-  class="grid min-h-[75vh] grid-cols-1 gap-4 lg:grid-cols-[1fr_26rem]"
+    id="herosection"
+    class="grid min-h-[75vh] grid-cols-1 gap-4 lg:grid-cols-[1fr_26rem]"
 >
-  <div class="flex items-center justify-center lg:order-1 lg:-scale-x-100">
-    <!-- W&H are 384 because 24rem = 384px. The values are included to minimize CLS. -->
-    <img
-      class="hidden w-[24rem] p-2 transition dark:block lg:rotate-[15deg] lg:hover:rotate-[20deg]"
-      src={LogoDark.src}
-      width="384"
-      height="384"
-      alt="A minimal logo with a blue-billed duck holding a golden wrench in its beak."
-    />
-    <img
-      class="block w-[24rem] p-2 transition dark:hidden lg:rotate-[15deg] lg:hover:rotate-[20deg]"
-      src={LogoLight.src}
-      width="384"
-      height="384"
-      alt="A minimal logo with a blue-billed duck holding a golden wrench in its beak."
-    />
-    <div
-      class="invisible absolute -z-10 block h-[312px] w-[312px] translate-x-12 translate-y-24 rounded-full bg-accent-100 opacity-5 blur-[128px] dark:visible"
-    >
+    <div class="flex items-center justify-center lg:order-1 lg:-scale-x-100">
+        <!-- W&H are 384 because 24rem = 384px. The values are included to minimize CLS. -->
+        <img
+            class="hidden w-[24rem] p-2 transition dark:block lg:rotate-[15deg] lg:hover:rotate-[20deg]"
+            src={LogoDark.src}
+            width="384"
+            height="384"
+            alt="A minimal logo with a blue-billed duck holding a golden wrench in its beak."
+        />
+        <img
+            class="block w-[24rem] p-2 transition dark:hidden lg:rotate-[15deg] lg:hover:rotate-[20deg]"
+            src={LogoLight.src}
+            width="384"
+            height="384"
+            alt="A minimal logo with a blue-billed duck holding a golden wrench in its beak."
+        />
+        <div
+            class="invisible absolute -z-10 block h-[312px] w-[312px] translate-x-12 translate-y-24 rounded-full bg-accent-100 opacity-5 blur-[128px] dark:visible"
+        >
+        </div>
     </div>
-  </div>
-  <div class="flex flex-col justify-center gap-8">
-    <h1
-      class="font-display text-5xl font-medium text-gray-900 dark:text-white"
-      set:html={hero.title}
-    />
-    <p class="text-2xl" set:html={hero.tagline} />
-    <div
-      class="invisible absolute -z-10 block h-[468px] w-[468px] -translate-x-24 -translate-y-[128px] rounded-full bg-highlight-200 opacity-10 blur-[128px] dark:visible"
-    >
+    <div class="flex flex-col justify-center gap-8">
+        <h1
+            class="font-display text-5xl font-medium text-gray-900 dark:text-white"
+            set:html={hero.title}
+        />
+        <p class="text-2xl" set:html={hero.tagline} />
+        <div
+            class="invisible absolute -z-10 block h-[468px] w-[468px] -translate-x-24 -translate-y-[128px] rounded-full bg-highlight-200 opacity-10 blur-[128px] dark:visible"
+        >
+        </div>
+        <div class="flex flex-row flex-wrap gap-4">
+            {
+                hero.actions.map((a) => (
+                    <a
+                        href={a.link}
+                        class:list={[
+                            "p-4 px-8 text-xl text-gray-800 no-underline hover:underline dark:text-gray-200",
+                            "flex flex-row gap-2",
+                            {
+                                "bg-gradient-to-b from-gray-300 to-gray-200 outline outline-1                          outline-gray-900 hover:outline-2                          dark:from-gray-900 dark:to-gray-800 dark:shadow-glow dark:outline-0 dark:hover:shadow-glow-active":
+                                    a.variant === "primary",
+                            },
+                            // unused {"": a.variant === "secondary"},
+                            { "": a.variant === "minimal" },
+                        ]}
+                    >
+                        {a.text}
+                        {a.icon && (
+                            // Astro uses some "clever" validation to make sure only valid icons are used.
+                            // Now that the property is hijacked, this ugly workaround is required instead.
+                            <Icon
+                                name={a.icon.html.replace("<svg ", "")}
+                                class="self-center"
+                            />
+                        )}
+                    </a>
+                ))
+            }
+        </div>
     </div>
-    <div class="flex flex-row flex-wrap gap-4">
-      {
-        hero.actions.map((a) => (
-          <a
-            href={a.link}
-            class:list={[
-              "p-4 px-8 text-xl text-gray-800 no-underline hover:underline dark:text-gray-200",
-              "flex flex-row gap-2",
-              {
-                "bg-gradient-to-b from-gray-300 to-gray-200 outline outline-1                          outline-gray-900 hover:outline-2                          dark:from-gray-900 dark:to-gray-800 dark:shadow-glow dark:outline-0 dark:hover:shadow-glow-active":
-                  a.variant === "primary",
-              },
-              // unused {"": a.variant === "secondary"},
-              { "": a.variant === "minimal" },
-            ]}
-          >
-            {a.text}
-            {a.icon && (
-              // Astro uses some "clever" validation to make sure only valid icons are used.
-              // Now that the property is hijacked, this ugly workaround is required instead.
-              <Icon
-                name={a.icon.html.replace("<svg ", "")}
-                class="self-center"
-              />
-            )}
-          </a>
-        ))
-      }
-    </div>
-  </div>
 </section>

@@ -60,9 +60,9 @@ Each item in this list should have at least a `type:` or be specified to be incl
 ```yaml
 # config/recipe.yml
 modules:
-  - type: rpm-ostree
-    # rest of the module config...
-  - from-file: common-packages.yml
+    - type: rpm-ostree
+      # rest of the module config...
+    - from-file: common-packages.yml
 ```
 
 The included file can have one or multiple modules:
@@ -78,8 +78,8 @@ type: rpm-ostree
 # config/common-packages.yml
 # multiple modules
 modules:
-  - type: script
-    # rest of the module config...
-  - type: rpm-ostree
-    # rest of the module config...
+    - type: script
+      # rest of the module config...
+    - type: rpm-ostree
+      # rest of the module config...
 ```
