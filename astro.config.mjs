@@ -86,7 +86,7 @@ export default defineConfig({
                 moduleReferencePlugin({
                     moduleSources: [
                         {
-                            source: "https://raw.githubusercontent.com/ublue-os/bling/main/modules.json",
+                            source: "https://raw.githubusercontent.com/blue-build/modules/main/modules.json",
                             path: "reference/modules/",
                         },
                     ],
