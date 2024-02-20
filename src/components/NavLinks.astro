@@ -4,7 +4,7 @@ const id = Astro.props.id;
 
 <a
     href="/"
-    class={`dark:text-gray-300 text-gray-700 hover:underline ${id.includes("index") ? "underline" : "no-underline"}`}
+    class={`dark:text-gray-300 text-gray-700 hover:underline ${id === "index.mdx" ? "underline" : "no-underline"}`}
 >
     Home
 </a>

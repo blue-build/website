@@ -105,6 +105,8 @@ export default defineConfig({
                 Footer: "./src/components/Footer.astro",
                 Head: "./src/components/Head.astro",
                 Search: "./src/components/Search.astro",
+                Sidebar: "./src/components/Sidebar.astro",
+                MarkdownContent: "./src/components/MarkdownContent.astro",
             },
             head: [
                 {
