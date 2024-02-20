@@ -45,7 +45,7 @@ The recipe compiler turns your recipe into a Containerfile, freeing us from the 
 
 Our new re-usable [GitHub Action](https://github.com/blue-build/github-action) and [template repository](https://github.com/blue-build/template) use the compiler by default, so new users will get the benefits instantly. The new template requires less maintenance, as important parts of the build system have been moved to other repositories.
 
-### OIDC
+### Keyless signing with OIDC
 
 TODO
 
@@ -73,6 +73,7 @@ With the important repositories having been moved, it is unfortunately required 
     - **If you've made changes to `build.yml`**, those have to be ported manually. 
 3. Remove irrelevant files from your repository.
     - The `Containerfile` and `build.sh` are not used by the recipe compiler -based build system. If you've made any changes to those files, they have to be manually ported over.
+    - You might want to add "`/Containerfile`" to the `.gitignore` file, because the recipe compiler generates a Containerfile when run locally. 
     - It is also recommended to clean out files that are related to Universal Blue community management (`CODE_OF_CONDUCT.md` and `CONTRIBUTING.md`), if you haven't changed them to contain information relevant to your custom image project.
 4. Detach your custom image repository, which is mostly likely a fork of the upstream template.
     - While this step isn't strictly required, it should still be done because your repository is no longer related to its old upstream template and it now functions exactly as though it was generated from the new template.
