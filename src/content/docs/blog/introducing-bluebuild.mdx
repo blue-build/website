@@ -72,14 +72,19 @@ With the important repositories having been moved, it is unfortunately required 
     - **If you've made changes to `build.yml`**, those have to be ported manually.
 3. Remove irrelevant files from your repository.
     - The `Containerfile` and `build.sh` are not used by the recipe compiler -based build system. If you've made any changes to those files, they have to be manually ported over.
-    - You might want to add "`/Containerfile`" to the `.gitignore` file, because the recipe compiler generates a Containerfile when run locally.
+    - You might also want to add "`/Containerfile`" to the `.gitignore` file, because the recipe compiler generates a Containerfile when run locally.
     - It is also recommended to clean out files that are related to Universal Blue community management (`CODE_OF_CONDUCT.md` and `CONTRIBUTING.md`), if you haven't changed them to contain information relevant to your custom image project.
-4. Detach your custom image repository, which is most likely a fork of the upstream template.
+4. Clean up your configuration.
+    - During the last month some changes to the template defaults have been made in preparation for the migration, which make the template more minimal, and should be adopted by both old and new users.
+    - **Remove the old `signing.sh` in favor of the [`signing` module](/reference/modules/signing/),** which is essentially the same, but requires less maintenance from custom image creators. `signing.sh` is deprecated, and won't be supported any longer.
+    - **If you use just,** remove `100-bling.just` and the import for it from `60-custom.just`. The bling justfiles have been removed due to lack of maintenance, and all their features being covered by the justfiles included by default with Universal Blue images.
+    - **If you don't use just,** you can remove the whole `config/files/usr/share/ublue-os/just/` folder from your repository. This is unneeded and no longer included in the templates by default. 
+5. Detach your custom image repository, which is most likely a fork of the upstream template.
     - While this step isn't strictly required, it should still be done because your repository is no longer related to its old upstream template, and it now functions as though it was generated from the new template.
-    - This can be done through the [GitHub Virtual Support Assistant](https://support.github.com/contact?tags=rr-forks&subject=Detach%20Fork&flow=detach_fork).
-5. Clean up the git branch structure by removing the `template` branch and renaming `live` to `main`.
+    - **This can be done through the [GitHub Virtual Support Assistant](https://support.github.com/contact?tags=rr-forks&subject=Detach%20Fork&flow=detach_fork).**
+6. Clean up the git branch structure by removing the `template` branch and renaming `live` to `main`.
     - This step is optional, but recommended. The existing branch structure will continue to work as expected, but migration will make it more straightforward and syncing with the upstream template easier.
-6. You should be all set now! Try starting your builds if you haven't already.
+7. You should be all set now! Try starting your builds if you haven't already.
 
 ### Create a new repository (not recommended)
 
@@ -99,14 +104,19 @@ With the important repositories having been moved, it is unfortunately required 
     - **Everyone should copy at least the `config/` directory,** but you can also copy `README.md` and `modules/`, if you've made any changes to those.
     - **If you're building multiple images,** remember to copy your matrix of recipes from the old `build.yml` to the new `build.yml`.
     - **If you've made changes to `build.sh`, `build.yml`, or the `Containerfile`**, those have to be ported manually.
-4. Add a message to the README of your old repository pointing to the new one, disable the workflows (either in the GitHub UI or by removing `build.yml`), and archive it.
-5. Fix `ghcr.io: denied: permission_denied: write_package` errors in your new repo.
+4. Clean up your configuration in the new repository.
+    - During the last month some changes to the template defaults have been made in preparation for the migration, which make the template more minimal, and should be adopted by both old and new users.
+    - **Remove the old `signing.sh` in favor of the [`signing` module](/reference/modules/signing/),** which is essentially the same, but requires less maintenance from custom image creators. `signing.sh` is deprecated, and won't be supported any longer.
+    - **If you use just,** remove `100-bling.just` and the import for it from `60-custom.just`. The bling justfiles have been removed due to lack of maintenance, and all their features being covered by the justfiles included by default with Universal Blue images.
+    - **If you don't use just,** you can remove the whole `config/files/usr/share/ublue-os/just/` folder from your repository. This is unneeded and no longer included in the templates by default. 
+5. Add a message to the README of your old repository pointing to the new one, disable the workflows (either in the GitHub UI or by removing `build.yml`), and archive it.
+6. Fix `ghcr.io: denied: permission_denied: write_package` errors in your new repo.
     - See the [troubleshooting](/learn/troubleshooting#ghcr.io:-denied:-permission_denied:-write_package) page.
-6. You should be all set now! Try starting your builds if you haven't already.
+7. You should be all set now! Try starting your builds if you haven't already.
 
 ### Do nothing
 
-It is also possible to keep building a custom image based on the legacy template / build system as it will be supported for the foreseeable future. A quick migration process is still needed to prevent your custom image builds from breaking after 90 days time (from 2024-02-25), when GitHub will clean up the old module repository image from the `ublue-os` GitHub organization.
+It is also possible to keep building a custom image based on the legacy template / build system as it will be supported for the foreseeable future. A quick migration process is still needed to prevent your custom image builds from breaking after 90 days (from 2024-02-25), when GitHub cleans up the old module repository image from the `ublue-os` GitHub organization.
 
 #### Pros/cons
 
@@ -118,4 +128,9 @@ It is also possible to keep building a custom image based on the legacy template
 
 1. Either sync up with the upstream template or manually change the occurrences of `ublue-os/bling` in the Containerfile to `blue-build/modules`.
     - On the latest version of the template, there should be just one on line 31.
-2. Migration complete! You can now resume chilling.
+2. Clean up your configuration (optional, recommended).
+    - During the last month some changes to the template defaults have been made in preparation for the migration, which make the template more minimal, and should be adopted by both old and new users.
+    - **Remove the old `signing.sh` in favor of the [`signing` module](/reference/modules/signing/),** which is essentially the same, but requires less maintenance from custom image creators. `signing.sh` is deprecated, and won't be supported any longer.
+    - **If you use just,** remove `100-bling.just` and the import for it from `60-custom.just`. The bling justfiles have been removed due to lack of maintenance, and all their features being covered by the justfiles included by default with Universal Blue images.
+    - **If you don't use just,** you can remove the whole `config/files/usr/share/ublue-os/just/` folder from your repository. This is unneeded and no longer included in the templates by default. 
+3. Migration complete! You can now resume chilling.
