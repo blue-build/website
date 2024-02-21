@@ -3,7 +3,7 @@
         "javascript",
         "typescript" // Enable .ts
     ],
-    "prettier.documentSelectors": ["**/*.astro"],
+    "prettier.documentSelectors": ["**/*.astro", "**/*.mdx"],
     "[astro]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     }
