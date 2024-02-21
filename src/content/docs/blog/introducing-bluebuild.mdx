@@ -74,10 +74,12 @@ With the important repositories having been moved, it is unfortunately required 
     - The `Containerfile` and `build.sh` are not used by the recipe compiler -based build system. If you've made any changes to those files, they have to be manually ported over.
     - You might want to add "`/Containerfile`" to the `.gitignore` file, because the recipe compiler generates a Containerfile when run locally.
     - It is also recommended to clean out files that are related to Universal Blue community management (`CODE_OF_CONDUCT.md` and `CONTRIBUTING.md`), if you haven't changed them to contain information relevant to your custom image project.
-4. Detach your custom image repository, which is mostly likely a fork of the upstream template.
+4. Detach your custom image repository, which is most likely a fork of the upstream template.
     - While this step isn't strictly required, it should still be done because your repository is no longer related to its old upstream template, and it now functions as though it was generated from the new template.
     - This can be done through the [GitHub Virtual Support Assistant](https://support.github.com/contact?tags=rr-forks&subject=Detach%20Fork&flow=detach_fork).
-5. You should be all set now! Try starting your builds if you haven't already.
+5. Clean up the git branch structure by removing the `template` branch and renaming `live` to `main`.
+    - This step is optional, but recommended. The existing branch structure will continue to work as expected, but migration will make it more straightforward and syncing with the upstream template easier.
+6. You should be all set now! Try starting your builds if you haven't already.
 
 ### Create a new repository (not recommended)
 
