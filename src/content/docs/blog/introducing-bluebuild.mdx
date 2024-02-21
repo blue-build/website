@@ -101,13 +101,7 @@ With the important repositories having been moved, it is unfortunately required 
     - **If you've made changes to `build.sh`, `build.yml`, or the `Containerfile`**, those have to be ported manually.
 4. Add a message to the README of your old repository pointing to the new one, disable the workflows (either in the GitHub UI or by removing `build.yml`), and archive it.
 5. Fix `ghcr.io: denied: permission_denied: write_package` errors in your new repo.
-    - If you're trying to build an image with the same name from a new repository, you might get this error.
-    - To fix this issue:
-        1. Go to the "Packages" tab on your GitHub profile.
-        2. Choose the package you are trying to build.
-        3. Open "Package settings".
-        4. Under "Manage Actions access", add your new repository and give it the "Admin" role.
-        5. Manually re-trigger build.
+    - See the [troubleshooting](/learn/troubleshooting#ghcr.io:-denied:-permission_denied:-write_package) page.
 6. You should be all set now! Try starting your builds if you haven't already.
 
 ### Do nothing
