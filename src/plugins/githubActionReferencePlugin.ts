@@ -35,7 +35,7 @@ export default function githubActionReferencePlugin(
                 let inputs = "";
                 for (const [name, input] of Object.entries(actionYml.inputs)) {
                     inputs += `
-### \`${name}\` ${input.required === true ? "(required)" : "(optional)"}
+### \`${name}:\` ${input.required === true ? "(required)" : "(optional)"}
 ${input.description}
 
 ${input.default !== undefined ? `Default: \`'${input.default}'\`` : ""}
