@@ -38,7 +38,7 @@ export default function githubActionReferencePlugin(
 ### \`${name}:\` ${input.required === true ? "(required)" : "(optional)"}
 ${input.description}
 
-${input.default !== undefined ? `Default: \`'${input.default}'\`` : ""}
+${input.default !== undefined ? `Default: \`${input.default}\`` : ""}
                     `;
                 }
 
