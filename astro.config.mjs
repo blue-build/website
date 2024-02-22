@@ -3,6 +3,7 @@ import starlight from "@astrojs/starlight";
 import tailwind from "@astrojs/tailwind";
 import icon from "astro-icon";
 import moduleReferencePlugin from "./src/plugins/moduleReferencePlugin";
+import githubActionReferencePlugin from "./src/plugins/githubActionReferencePlugin";
 
 // https://astro.build/config
 export default defineConfig({
@@ -70,6 +71,10 @@ export default defineConfig({
                             link: "/reference/recipe/",
                         },
                         {
+                            label: "blue-build/github-action",
+                            link: "/reference/github-action/",
+                        },
+                        {
                             label: "Module",
                             link: "/reference/module/",
                         },
@@ -90,6 +95,10 @@ export default defineConfig({
                             path: "reference/modules/",
                         },
                     ],
+                }),
+                githubActionReferencePlugin({
+                    source: "https://raw.githubusercontent.com/blue-build/github-action/main/action.yml",
+                    path: "reference/github-action.md",
                 }),
             ],
             customCss: [
