@@ -22,3 +22,7 @@ h6 {
     --sl-color-bg-sidebar: var(--sl-color-bg);
     --sl-color-hairline-shade: var(--sl-color-gray-6);
 }
+
+.sl-markdown-content code:not(:where(.not-content *)) {
+    color: var(--sl-color-gray-1);
+}
