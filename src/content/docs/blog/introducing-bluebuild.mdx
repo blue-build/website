@@ -50,7 +50,7 @@ Our new re-usable [GitHub Action](https://github.com/blue-build/github-action) a
 
 The keyless signing support with OIDC will make new repository setup easier and more straightforward by making the generation of a cosign / sigstore keypair optional. When signing without keys, the verification will be based on ephemeral keys bound to an OIDC identity from GitHub, making it possible to verify that the image you are using came from the specific GitHub Action, _without specifying a public key_. This will also shorten the first-time rebase process to one command, going directly onto the signed image, and eliminating the need to trust the registry on the first rebase.
 
-New users should be able to take advantage of this right away, but for users with existing cosign keys who wish to migrate, a guide will be provided soon.
+New users and existing users alike should be able to take advantage of this soon. Once this feature is fully ready, a guide will be provided.
 
 ## How to migrate?
 
@@ -78,7 +78,7 @@ With the important repositories having been moved, it is unfortunately required 
     - During the last month some changes to the template defaults have been made in preparation for the migration, which make the template more minimal, and should be adopted by both old and new users.
     - **Remove the old `signing.sh` in favor of the [`signing` module](/reference/modules/signing/),** which is essentially the same, but requires less maintenance from custom image creators. `signing.sh` is deprecated, and won't be supported any longer.
     - **If you use just,** remove `100-bling.just` and the import for it from `60-custom.just`. The bling justfiles have been removed due to lack of maintenance, and all their features being covered by the justfiles included by default with Universal Blue images.
-    - **If you don't use just,** you can remove the whole `config/files/usr/share/ublue-os/just/` folder from your repository. This is unneeded and no longer included in the templates by default. 
+    - **If you don't use just,** you can remove the whole `config/files/usr/share/ublue-os/just/` folder from your repository. This is unneeded and no longer included in the templates by default.
 5. Detach your custom image repository, which is most likely a fork of the upstream template.
     - While this step isn't strictly required, it should still be done because your repository is no longer related to its old upstream template, and it now functions as though it was generated from the new template.
     - **This can be done through the [GitHub Virtual Support Assistant](https://support.github.com/contact?tags=rr-forks&subject=Detach%20Fork&flow=detach_fork).**
@@ -108,7 +108,7 @@ With the important repositories having been moved, it is unfortunately required 
     - During the last month some changes to the template defaults have been made in preparation for the migration, which make the template more minimal, and should be adopted by both old and new users.
     - **Remove the old `signing.sh` in favor of the [`signing` module](/reference/modules/signing/),** which is essentially the same, but requires less maintenance from custom image creators. `signing.sh` is deprecated, and won't be supported any longer.
     - **If you use just,** remove `100-bling.just` and the import for it from `60-custom.just`. The bling justfiles have been removed due to lack of maintenance, and all their features being covered by the justfiles included by default with Universal Blue images.
-    - **If you don't use just,** you can remove the whole `config/files/usr/share/ublue-os/just/` folder from your repository. This is unneeded and no longer included in the templates by default. 
+    - **If you don't use just,** you can remove the whole `config/files/usr/share/ublue-os/just/` folder from your repository. This is unneeded and no longer included in the templates by default.
 5. Add a message to the README of your old repository pointing to the new one, disable the workflows (either in the GitHub UI or by removing `build.yml`), and archive it.
 6. Fix `ghcr.io: denied: permission_denied: write_package` errors in your new repo.
     - See the [troubleshooting](/learn/troubleshooting#ghcr.io:-denied:-permission_denied:-write_package) page.
@@ -132,5 +132,11 @@ It is also possible to keep building a custom image based on the legacy template
     - During the last month some changes to the template defaults have been made in preparation for the migration, which make the template more minimal, and should be adopted by both old and new users.
     - **Remove the old `signing.sh` in favor of the [`signing` module](/reference/modules/signing/),** which is essentially the same, but requires less maintenance from custom image creators. `signing.sh` is deprecated, and won't be supported any longer.
     - **If you use just,** remove `100-bling.just` and the import for it from `60-custom.just`. The bling justfiles have been removed due to lack of maintenance, and all their features being covered by the justfiles included by default with Universal Blue images.
-    - **If you don't use just,** you can remove the whole `config/files/usr/share/ublue-os/just/` folder from your repository. This is unneeded and no longer included in the templates by default. 
+    - **If you don't use just,** you can remove the whole `config/files/usr/share/ublue-os/just/` folder from your repository. This is unneeded and no longer included in the templates by default.
 3. Migration complete! You can now resume chilling.
+
+## Discussion
+
+This post can be discussed on GitHub Discussions: https://github.com/orgs/blue-build/discussions/10
+
+This change was also announced over on the Universal Blue forums: https://universal-blue.discourse.group/t/universal-blues-old-custom-image-tooling-has-been-migrated-to-bluebuild/669
