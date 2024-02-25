@@ -94,6 +94,10 @@ export default defineConfig({
                             source: "https://raw.githubusercontent.com/ublue-os/bling/main/modules.json",
                             path: "reference/modules/",
                         },
+                        {
+                            source: "https://raw.githubusercontent.com/blue-build/cli/main/modules.json",
+                            path: "reference/modules/",
+                        },
                     ],
                 }),
                 githubActionReferencePlugin({
