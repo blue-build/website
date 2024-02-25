@@ -1,0 +1,17 @@
+---
+import Default from "@astrojs/starlight/components/MarkdownContent.astro";
+import type { StarlightRouteData } from "node_modules/@astrojs/starlight/utils/route-data";
+import BlogPostMetadata from "./BlogPostMetadata.astro";
+
+const isBlogPost =
+    Astro.props.id.includes("blog") && !Astro.props.id.includes("index");
+---
+
+<Default {...Astro.props as StarlightRouteData}>
+    <slot />
+    {
+        isBlogPost && (
+            <BlogPostMetadata {...(Astro.props as StarlightRouteData)} />
+        )
+    }
+</Default>

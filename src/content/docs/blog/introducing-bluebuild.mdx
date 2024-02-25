@@ -1,0 +1,136 @@
+---
+title: Introducing BlueBuild
+description: Per a mutual decision, Universal Blue's old custom image tooling has now been transferred to the BlueBuild org. Here's what you should know.
+date: 2024-02-25
+authors:
+    - name: xyny
+      img: https://avatars.githubusercontent.com/u/60004820
+      github: xynydev
+---
+
+:::note
+If you're not totally sure what this is about, check out the [front page](/).
+:::
+
+Per a mutual decision, [Universal Blue](https://universal-blue.org/)'s old custom image tooling has now been transferred to the BlueBuild org and development will be continuing under the BlueBuild project with basically the same team of maintainers and developers as before. The issue was discussed extensively in [ublue-os/startingpoint#223](https://github.com/ublue-os/startingpoint/issues/223) and eventually voted for in [ublue-os/main#476](https://github.com/ublue-os/main/issues/476).
+
+We've been working on BlueBuild for a month now to provide you a smooth [migration](#how-to-migrate) and exciting [new features](#whats-new), so don't worry, _this change is positive_.
+
+To briefly summarize, this desire to split stemmed from a difference in philosophy and scope between the main Universal Blue maintainers and the developers of 'startingpoint'. Since most of the Universal Blue project's build systems use classic cloud methodologies like Containerfiles and GitHub Actions directly to build their images, the abstraction introduced with [recipes](/reference/recipe/) in 'startingpoint' might have seemed unnecessary. Additionally, I felt that as a subproject of Universal Blue, this project couldn't really achieve its full potential.
+
+The repositories affected by this transition are:
+
+-   [ublue-os/startingpoint](https://github.com/ublue-os/startingpoint) (transferred to [blue-build/legacy-template](https://github.com/blue-build/legacy-template))
+-   [ublue-os/bling](https://github.com/ublue-os/bling) (transferred to [blue-build/modules](https://github.com/blue-build/modules))
+-   [ublue-os/images-website](https://github.com/ublue-os/images-website) (transferred to [blue-build/images-website](https://github.com/blue-build/images-website))
+
+## History lesson...
+
+_This section gives a bigger picture of the developments in the history of this project from [my](https://github.com/xynydev) perspective. Jump to the [What's new?](#whats-new) section to jump straight to the important stuff._
+
+When the [Universal Blue](https://universal-blue.org/) organization was starting out, the base was just a single repository: [ublue-os/base](https://github.com/ublue-os/base/tree/785b8f0d8adb8513bbe94b8918bfc0033ee0ca45). This repository never built more than a single Silverblue image, and was easily forked into a new image by a tinkerer wishing to use a different base image or set of packages. The repository also had a script for installing Flatpaks after the first boot, and in [my first PR](https://github.com/ublue-os/base/pull/79) I added in a `recipe.yml` file for easier customization of the Flatpaks and RPM-packages by people tinkering the images. This was in February 2023, so a few months before the [first commit](https://github.com/Vanilla-OS/Vib/commit/8041d630cbe5fa51dc4d19080a3bbc958ab9e214) to [VanillaOS' Vib](https://vib.vanillaos.org/), which is a similar project that uses a slightly different `recipe.yml` format.
+
+A while after, [ublue-os/base](https://github.com/ublue-os/base/tree/785b8f0d8adb8513bbe94b8918bfc0033ee0ca45) was deprecated in favor of [ublue-os/main](https://github.com/ublue-os/main). I got to keep working on the `recipe.yml`-based repository as [ublue-os/startingpoint](https://github.com/ublue-os/startingpoint), which would now only serve the part of a template. Eventually it became possible to build a full image only by editing the recipe, with no need to delve into Containerfiles or GitHub Actions.
+
+The `recipe.yml` format was still quite different than today, but after the [rewrite](https://github.com/ublue-os/startingpoint/pull/135) in September 2023, the current modular system was established, and we started utilizing the [ublue-os/bling](https://github.com/ublue-os/bling) repository as a source of modules instead of including them all in the template. This change made the project way more maintainable and extensible, and more abstracted.
+
+The BlueBuild project is a direct continuation of this lineage, aiming to be an accessible way of building custom images of Linux distributions.
+
+## What's new?
+
+The shiny new brand and website is probably what you'll notice first, but that isn't the only new thing to be excited about!
+
+### Recipe compiler
+
+The recipe compiler turns your recipe into a Containerfile, freeing us from the restrictions that having the entire build system being based on a shell script ran during the image build caused. For example, it will now be possible to include Containerfile snippets from the recipe directly. The compiler lives as part of the [blue-build/cli](https://github.com/blue-build/cli) program, which is written in Rust, and also offers other features including building images and rebasing to them locally.
+
+Our new re-usable [GitHub Action](https://github.com/blue-build/github-action) and [template repository](https://github.com/blue-build/template) use the compiler by default, so new users will get the benefits instantly. The new template requires less maintenance, as important parts of the build system have been moved to other repositories.
+
+### [Keyless signing with OIDC and Sigstore](https://docs.sigstore.dev/signing/overview/)
+
+The keyless signing support with OIDC will make new repository setup easier and more straightforward by making the generation of a cosign / sigstore keypair optional. When signing without keys, the verification will be based on ephemeral keys bound to an OIDC identity from GitHub, making it possible to verify that the image you are using came from the specific GitHub Action, _without specifying a public key_. This will also shorten the first-time rebase process to one command, going directly onto the signed image, and eliminating the need to trust the registry on the first rebase.
+
+New users should be able to take advantage of this right away, but for users with existing cosign keys who wish to migrate, a guide will be provided soon.
+
+## How to migrate?
+
+With the important repositories having been moved, it is unfortunately required to do [_at least some_](#do-nothing) migration. It is also possible to migrate to your old custom image to be built using the new recipe compiler, allowing you to make use of new and upcoming features. From the list below, choose your preferred migration path.
+
+### Upgrade your current repository (recommended)
+
+#### Pros/cons
+
+`+` Keep git history and repository  
+`+` Keep your existing configuration  
+`-` Requires some copy-pasting of workflow files
+
+#### Instructions
+
+1. Temporarily [clone](https://git-scm.com/docs/git-clone) the [new template repository](https://github.com/blue-build/template) to your computer.
+2. Overwrite your old `.github/` folder with the `.github/` folder from the new template.
+    - **If you're building multiple images,** remember to copy your matrix of recipes from the old `build.yml` to the new `build.yml`.
+    - **If you've made changes to `build.yml`**, those have to be ported manually.
+3. Remove irrelevant files from your repository.
+    - The `Containerfile` and `build.sh` are not used by the recipe compiler -based build system. If you've made any changes to those files, they have to be manually ported over.
+    - You might also want to add "`/Containerfile`" to the `.gitignore` file, because the recipe compiler generates a Containerfile when run locally.
+    - It is also recommended to clean out files that are related to Universal Blue community management (`CODE_OF_CONDUCT.md` and `CONTRIBUTING.md`), if you haven't changed them to contain information relevant to your custom image project.
+4. Clean up your configuration.
+    - During the last month some changes to the template defaults have been made in preparation for the migration, which make the template more minimal, and should be adopted by both old and new users.
+    - **Remove the old `signing.sh` in favor of the [`signing` module](/reference/modules/signing/),** which is essentially the same, but requires less maintenance from custom image creators. `signing.sh` is deprecated, and won't be supported any longer.
+    - **If you use just,** remove `100-bling.just` and the import for it from `60-custom.just`. The bling justfiles have been removed due to lack of maintenance, and all their features being covered by the justfiles included by default with Universal Blue images.
+    - **If you don't use just,** you can remove the whole `config/files/usr/share/ublue-os/just/` folder from your repository. This is unneeded and no longer included in the templates by default. 
+5. Detach your custom image repository, which is most likely a fork of the upstream template.
+    - While this step isn't strictly required, it should still be done because your repository is no longer related to its old upstream template, and it now functions as though it was generated from the new template.
+    - **This can be done through the [GitHub Virtual Support Assistant](https://support.github.com/contact?tags=rr-forks&subject=Detach%20Fork&flow=detach_fork).**
+6. Clean up the git branch structure by removing the `template` branch and renaming `live` to `main`.
+    - This step is optional, but recommended. The existing branch structure will continue to work as expected, but migration will make it more straightforward and syncing with the upstream template easier.
+7. You should be all set now! Try starting your builds if you haven't already.
+
+### Create a new repository (not recommended)
+
+#### Pros/cons
+
+`+` Accidental breakage unlikely  
+`+` Keep your existing configuration  
+`-` Lose git history  
+`-` Will change cosign keys  
+`-` You'll have two repositories
+
+#### Instructions
+
+1. Set up a new repository using the [guide](/how-to/setup/).
+2. Make sure both your old and new repositories are [cloned](https://git-scm.com/docs/git-clone) locally.
+3. Copy relevant parts from your old repository to the new one.
+    - **Everyone should copy at least the `config/` directory,** but you can also copy `README.md` and `modules/`, if you've made any changes to those.
+    - **If you're building multiple images,** remember to copy your matrix of recipes from the old `build.yml` to the new `build.yml`.
+    - **If you've made changes to `build.sh`, `build.yml`, or the `Containerfile`**, those have to be ported manually.
+4. Clean up your configuration in the new repository.
+    - During the last month some changes to the template defaults have been made in preparation for the migration, which make the template more minimal, and should be adopted by both old and new users.
+    - **Remove the old `signing.sh` in favor of the [`signing` module](/reference/modules/signing/),** which is essentially the same, but requires less maintenance from custom image creators. `signing.sh` is deprecated, and won't be supported any longer.
+    - **If you use just,** remove `100-bling.just` and the import for it from `60-custom.just`. The bling justfiles have been removed due to lack of maintenance, and all their features being covered by the justfiles included by default with Universal Blue images.
+    - **If you don't use just,** you can remove the whole `config/files/usr/share/ublue-os/just/` folder from your repository. This is unneeded and no longer included in the templates by default. 
+5. Add a message to the README of your old repository pointing to the new one, disable the workflows (either in the GitHub UI or by removing `build.yml`), and archive it.
+6. Fix `ghcr.io: denied: permission_denied: write_package` errors in your new repo.
+    - See the [troubleshooting](/learn/troubleshooting#ghcr.io:-denied:-permission_denied:-write_package) page.
+7. You should be all set now! Try starting your builds if you haven't already.
+
+### Do nothing
+
+It is also possible to keep building a custom image based on the legacy template / build system as it will be supported for the foreseeable future. A quick migration process is still needed to prevent your custom image builds from breaking after 90 days (from 2024-02-25), when GitHub cleans up the old module repository image from the `ublue-os` GitHub organization.
+
+#### Pros/cons
+
+`+` Keep your existing configuration and whatever customizations you might have made to the build system  
+`+` Only a quick migration process needed to keep receiving updates to modules  
+`-` You won't get new features that depend on the recipe compiler
+
+#### Instructions
+
+1. Either sync up with the upstream template or manually change the occurrences of `ublue-os/bling` in the Containerfile to `blue-build/modules`.
+    - On the latest version of the template, there should be just one on line 31.
+2. Clean up your configuration (optional, recommended).
+    - During the last month some changes to the template defaults have been made in preparation for the migration, which make the template more minimal, and should be adopted by both old and new users.
+    - **Remove the old `signing.sh` in favor of the [`signing` module](/reference/modules/signing/),** which is essentially the same, but requires less maintenance from custom image creators. `signing.sh` is deprecated, and won't be supported any longer.
+    - **If you use just,** remove `100-bling.just` and the import for it from `60-custom.just`. The bling justfiles have been removed due to lack of maintenance, and all their features being covered by the justfiles included by default with Universal Blue images.
+    - **If you don't use just,** you can remove the whole `config/files/usr/share/ublue-os/just/` folder from your repository. This is unneeded and no longer included in the templates by default. 
+3. Migration complete! You can now resume chilling.

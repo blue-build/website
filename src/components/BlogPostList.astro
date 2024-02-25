@@ -1,0 +1,35 @@
+---
+const blogPosts = await Astro.glob("../content/docs/blog/*.mdx");
+---
+
+<div class="flex flex-col gap-4 pr-3 pt-6">
+    {
+        blogPosts
+            .filter((p) => !p.url?.includes("index"))
+            .sort(
+                (a, b) =>
+                    new Date(b.frontmatter.date).getTime() -
+                    new Date(a.frontmatter.date).getTime(),
+            )
+            .map((p) => (
+                <a
+                    href={p.url
+                        ?.replace("src/content/docs", "")
+                        ?.replace(".mdx", "")}
+                    class="no-underline"
+                >
+                    <article class="p-4 outline outline-1 outline-gray-900 hover:outline-4 dark:outline-gray-200">
+                        <div class="flex flex-row flex-wrap items-baseline gap-2">
+                            <h2>{p.frontmatter.title}</h2>
+                            {new Date(p.frontmatter.date)
+                                .toISOString()
+                                .substring(0, 10)}
+                        </div>
+                        <p class="text-gray-900 dark:text-gray-200">
+                            {p.frontmatter.description}
+                        </p>
+                    </article>
+                </a>
+            ))
+    }
+</div>

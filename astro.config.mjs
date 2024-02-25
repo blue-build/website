@@ -91,7 +91,7 @@ export default defineConfig({
                 moduleReferencePlugin({
                     moduleSources: [
                         {
-                            source: "https://raw.githubusercontent.com/ublue-os/bling/main/modules.json",
+                            source: "https://raw.githubusercontent.com/blue-build/modules/main/modules.json",
                             path: "reference/modules/",
                         },
                         {
@@ -118,6 +118,8 @@ export default defineConfig({
                 Footer: "./src/components/Footer.astro",
                 Head: "./src/components/Head.astro",
                 Search: "./src/components/Search.astro",
+                Sidebar: "./src/components/Sidebar.astro",
+                MarkdownContent: "./src/components/MarkdownContent.astro",
             },
             head: [
                 {

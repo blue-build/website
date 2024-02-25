@@ -4,7 +4,7 @@ const id = Astro.props.id;
 
 <a
     href="/"
-    class={`dark:text-gray-300 text-gray-700 hover:underline ${id.includes("index") ? "underline" : "no-underline"}`}
+    class={`dark:text-gray-300 text-gray-700 hover:underline ${id === "index.mdx" ? "underline" : "no-underline"}`}
 >
     Home
 </a>
@@ -13,6 +13,12 @@ const id = Astro.props.id;
     class={`dark:text-gray-300 text-gray-700 hover:underline ${id.includes("learn") || id.includes("how-to") || id.includes("reference") ? "underline" : "no-underline"}`}
 >
     Docs
+</a>
+<a
+    href="/blog/"
+    class={`dark:text-gray-300 text-gray-700 hover:underline ${id.includes("blog") ? "underline" : "no-underline"}`}
+>
+    Blog
 </a>
 <a
     href="/community"

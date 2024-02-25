@@ -7,6 +7,6 @@
             "@assets/*": ["src/assets/*"]
         }
     },
-    "include": ["./.eslintrc.cjs", "./src"],
+    "include": ["./.eslintrc.cjs", "./src", "astro.config.mjs"],
     "allowJs": true
 }
