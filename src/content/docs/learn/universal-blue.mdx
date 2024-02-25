@@ -3,15 +3,137 @@ title: Building on Universal Blue
 description: A guide in my new Starlight docs site.
 ---
 
-:::caution
-This page is a draft, so contents are unfinished or nonexistent.
+[Universal Blue](https://universal-blue.org/) is a community project that builds custom images based on [atomic Fedora desktops](https://fedoraproject.org/atomic-desktops/). In addition to their more end-user focused images, the project offers a vast selection of base images with different desktop environments and support for different hardware. **Universal Blue base images are the default/recommended base images for custom images built with BlueBuild.**
+
+Universal Blue's base images contain small improvements over the standard Fedora base images, like hardware acceleration, codecs, and including [`distrobox`](https://distrobox.it/) in addition to [`toolbx`](https://containertoolbx.org/) (see list of all packages [here](https://github.com/ublue-os/main/blob/main/packages.json)). The images also contain some [default configuration](https://github.com/ublue-os/config) for enabling automatic updates, [udev](https://en.wikipedia.org/wiki/Udev) rules for extended periphreal support, and a set of handy [`just`](https://just.systems/) recipes for system management accessible using the `ujust` command.
+
+-   View the full list of Universal Blue's images on [GitHub](https://github.com/orgs/ublue-os/packages).
+-   Read Universal Blue's documentation on [the website](https://universal-blue.org/introduction/) and [the documentation section on the forums](https://universal-blue.discourse.group/docs).
+-   Interact with the Universal Blue community on [the forums](https://universal-blue.discourse.group/) or [the Discord](https://discord.gg/WEu6BdFEtp).
+-   Read the upstream documentation for [Fedora Silverblue](https://docs.fedoraproject.org/en-US/fedora-silverblue/), [Fedora Kinoite](https://docs.fedoraproject.org/en-US/fedora-kinoite/), and [rpm-ostree](https://coreos.github.io/rpm-ostree/).
+
+## Installing an image based on Universal Blue
+
+:::note
+The examples in this section assume the use of a bash-compatible shell. Temporarily switch tp bash or adapt these to your preferred shell if necessary.
 :::
 
-https://diataxis.fr/explanation/
+:::caution
+[The native container support for Fedora atomic is considered unstable by Fedora](https://www.fedoraproject.org/wiki/Changes/OstreeNativeContainerStable). Follow these steps at your own discretion.
+:::
 
--   this is the default
--   what ublue is
--   what features does ublue provide
--   ublue docs & community links
--   how to install an image based on ublue (rpm-ostree)
--   essential modules (rpm-ostree, signing)
+### Fresh install from an ISO
+
+You can use Universal Blue's [isogenerator](https://github.com/ublue-os/isogenerator) to generate an ISO of your image locally. See the [customization documentation](https://github.com/ublue-os/isogenerator?tab=readme-ov-file#customizing) for information about isogenerator's inputs. This procedure only requires either `docker` ~~or `podman`~~ be installed.
+
+1.  Generate the ISO:
+
+    -   With `docker`:
+
+        ```bash
+        # example image details:
+        IMAGE_REPO=ghcr.io/octocat
+        IMAGE_NAME=weird-os
+        IMAGE_TAG=latest
+        IMAGE_VARIANT=Silverblue # should match the variant your image is based on
+        # example installer details:
+        INSTALLER_VERSION=39
+        # iso command:
+        sudo docker run --rm --privileged --volume .:/isogenerator/output \
+        -e IMAGE_REPO="$IMAGE_REPO" -e IMAGE_NAME="$IMAGE_NAME" -e IMAGE_TAG="$IMAGE_TAG" -e VARIANT="$IMAGE_VARIANT" \
+        ghcr.io/ublue-os/isogenerator:$INSTALLER_VERSION
+        ```
+
+        -   If you hit an error with `losetup`, try running the `docker` command again. This might fix the problem. Tracking issue: [ublue-os/isogenerator#22](https://github.com/ublue-os/isogenerator/issues/22).
+
+    -   ~~With `podman`:~~ Podman is currently unsupported for building ISOs. See [ublue-os/isogenerator#36](https://github.com/ublue-os/isogenerator/issues/36).
+
+        ```bash
+        # example image details:
+        IMAGE_REPO=ghcr.io/octocat
+        IMAGE_NAME=weird-os
+        IMAGE_TAG=latest
+        IMAGE_VARIANT=Silverblue # should match the variant your image is based on
+        # example installer details:
+        INSTALLER_VERSION=39
+        # iso command:
+        podman run --rm --privileged --volume .:/isogenerator/output --security-opt label=disable --pull=newer \
+        -e IMAGE_REPO="$IMAGE_REPO" -e IMAGE_NAME="$IMAGE_NAME" -e IMAGE_TAG="$IMAGE_TAG" -e VARIANT="$IMAGE_VARIANT" \
+        ghcr.io/ublue-os/isogenerator:$INSTALLER_VERSION
+        ```
+
+2.  Flash the ISO onto a USB drive ([Fedora Media Writer](https://www.fedoraproject.org/en/workstation/download) is recommended) and boot it, or boot it directly with a virtual machine.
+
+        - The ISO file should be in your working directory and called something like `weird-os-latest.iso`.
+
+        - Once booted, you should be presented with a screen similar to this:
+
+            ![](./ublue-iso.png)
+
+3.  Complete the installation by completing all steps and following the installer's instructions.
+
+    -   Dual booting is only possible when using separate disks or doing [manual partitioning](https://docs.fedoraproject.org/en-US/fedora-silverblue/installation/#manual-partition) (unsupported).
+
+### By rebasing from an existing installation of Fedora atomic (or a derivative)
+
+If you have already installed an atomic Fedora version or something derivative such as an Universal Blue image, it is possible to switch to another image such as your custom image by just running the commands below:
+
+1. Rebase to an unsigned image to get the proper signing keys and policies installed:
+
+    ```bash
+    # example image details:
+    IMAGE_PATH=ghcr.io/octocat/weird-os
+    IMAGE_TAG=latest
+    # rebase command:
+    rpm-ostree rebase ostree-unverified-registry:$IMAGE_PATH:$IMAGE_TAG
+    # reboot to complete the rebase:
+    systemctl reboot
+    ```
+
+2. Rebase to a signed image to complete the installation:
+
+    ```bash
+    # example image details:
+    IMAGE_PATH=ghcr.io/octocat/weird-os
+    IMAGE_TAG=latest
+    # rebase command:
+    rpm-ostree rebase ostree-image-signed:docker://$IMAGE_PATH:$IMAGE_TAG
+    # reboot to complete the rebase:
+    systemctl reboot
+    ```
+
+## Essential modules
+
+-   To install packages, use [`rpm-ostree`](/reference/modules/rpm-ostree/).
+
+## Custom [`just`](https://just.systems/) recipes
+
+Universal Blue provides a set of handy [`just`](https://just.systems/) recipes for system management accessible using the `ujust` command. It is possible for a custom image maintainer to extend this set of recipes for the purposes of their image.
+
+To get started, create the file `/usr/share/ublue-os/just/60-custom.just`.
+
+-   This file will contain your custom just recipes.
+-   You can copy this file in place with the [`files`](/reference/modules/files/) module, either by directly copying only the file or by copying the whole `usr` directory.
+
+You should read the [`just manual`](https://just.systems/man/en/chapter_20.html) for instructions on writing justfiles.
+
+-   The overall syntax should be very straightforward. Here's an example:
+
+    ```justfile
+    # 60-custom.just
+    recipename:
+        echo "This is my recipe"
+        echo "I can run commands here"
+    ```
+
+-   By default, each line is run separately. To run a recipe like a script, add standard the script starting shebang lines at the start of your recipe like this:
+    ```justfile
+    # 60-custom.just
+    scriptrecipe:
+        #!/usr/bin/env bash
+        set -euxo pipefail
+        VAR="Hello, world!"
+        echo $VAR # Hello, world!
+    ```
+
+Many of Universal Blue's default recipes use dialogs to confirm or select the specific changes to be done. Universal Blue uses a wrapper on top of [`gum`](https://github.com/charmbracelet/gum) and some other tools called [`ugum`](https://github.com/ublue-os/config/blob/main/build/ublue-os-just/ugum) as the main way to display these dialogs. It is recommended to add [`gum`](https://github.com/charmbracelet/gum) to your image and just use it directly, if you want to add dialogs to your custom recipes.
