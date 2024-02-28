@@ -13,9 +13,9 @@ Modules themselves differ on what configuration options they use and require, an
 
 The name of the module to run.
 
-### `source:` (optional) (not implemented)
+### `source:` (optional)
 
-The URL of the module repository (an OCI image) to pull the module from. If left unspecified, sources used are both the default module repository at `ghcr.io/blue-build/modules` and the custom modules in the local `modules/` directory.
+The URL of the module repository (an OCI image) to pull the module from. If left unspecified, the source use is a hybrid the default module repository at `ghcr.io/blue-build/modules` and the custom modules in the local `modules/` directory, where custom modules overwrite the default modules.
 
 :::caution
 A module can execute arbitrary code both in the image build and consequently on your booted system, so make sure you trust the source you specify.
