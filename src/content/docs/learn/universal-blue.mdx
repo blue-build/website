@@ -24,9 +24,25 @@ The examples in this section assume the use of a bash-compatible shell. Temporar
 
 ### Fresh install from an ISO
 
-You can use Universal Blue's [isogenerator](https://github.com/ublue-os/isogenerator) to generate an ISO of your image locally. See the [customization documentation](https://github.com/ublue-os/isogenerator?tab=readme-ov-file#customizing) for information about isogenerator's inputs. This procedure only requires either `docker` ~~or `podman`~~ be installed. Docker is part of the [`moby-engine`](https://packages.fedoraproject.org/pkgs/moby-engine/moby-engine/)-package on Fedora.
+You can use Universal Blue's [isogenerator](https://github.com/ublue-os/isogenerator) to generate an ISO of your image locally. See the [customization documentation](https://github.com/ublue-os/isogenerator?tab=readme-ov-file#customizing) for more information about isogenerator's inputs. This procedure only requires either `podman` or `docker` be installed. Docker is part of the [`moby-engine`](https://packages.fedoraproject.org/pkgs/moby-engine/moby-engine/)-package on Fedora.
 
 1.  Generate the ISO:
+
+    -   With `podman`:
+
+        ```bash
+        # example image details:
+        IMAGE_REPO=ghcr.io/octocat
+        IMAGE_NAME=weird-os
+        IMAGE_TAG=latest
+        IMAGE_VARIANT=Silverblue # should match the variant your image is based on
+        # example installer details:
+        INSTALLER_VERSION=39
+        # iso command:
+        sudo podman run --rm --privileged --volume .:/isogenerator/output --security-opt label=disable --pull=newer \
+        -e IMAGE_REPO="$IMAGE_REPO" -e IMAGE_NAME="$IMAGE_NAME" -e IMAGE_TAG="$IMAGE_TAG" -e VARIANT="$IMAGE_VARIANT" \
+        ghcr.io/ublue-os/isogenerator:$INSTALLER_VERSION
+        ```
 
     -   With `docker`:
 
@@ -40,24 +56,6 @@ You can use Universal Blue's [isogenerator](https://github.com/ublue-os/isogener
         INSTALLER_VERSION=39
         # iso command:
         sudo docker run --rm --privileged --volume .:/isogenerator/output \
-        -e IMAGE_REPO="$IMAGE_REPO" -e IMAGE_NAME="$IMAGE_NAME" -e IMAGE_TAG="$IMAGE_TAG" -e VARIANT="$IMAGE_VARIANT" \
-        ghcr.io/ublue-os/isogenerator:$INSTALLER_VERSION
-        ```
-
-        -   If you hit an error with `losetup`, try running the `docker` command again. This might fix the problem. Tracking issue: [ublue-os/isogenerator#22](https://github.com/ublue-os/isogenerator/issues/22).
-
-    -   ~~With `podman`:~~ Podman is currently unsupported for building ISOs. See [ublue-os/isogenerator#36](https://github.com/ublue-os/isogenerator/issues/36).
-
-        ```bash
-        # example image details:
-        IMAGE_REPO=ghcr.io/octocat
-        IMAGE_NAME=weird-os
-        IMAGE_TAG=latest
-        IMAGE_VARIANT=Silverblue # should match the variant your image is based on
-        # example installer details:
-        INSTALLER_VERSION=39
-        # iso command:
-        podman run --rm --privileged --volume .:/isogenerator/output --security-opt label=disable --pull=newer \
         -e IMAGE_REPO="$IMAGE_REPO" -e IMAGE_NAME="$IMAGE_NAME" -e IMAGE_TAG="$IMAGE_TAG" -e VARIANT="$IMAGE_VARIANT" \
         ghcr.io/ublue-os/isogenerator:$INSTALLER_VERSION
         ```
