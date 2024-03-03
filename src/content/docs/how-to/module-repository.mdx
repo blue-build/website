@@ -1,0 +1,36 @@
+---
+title: How to set up a custom module repository
+description: If you want to create custom modules for public consumption, you should set up a custom module repository.
+---
+
+If you want to [create custom modules](/how-to/making-modules/) for public consumption, you should set up a custom module repository. This is also useful when contributing to the official module repository.
+
+A module repository is a small OCI image where the root path `/modules/` contains each module as a subdirectory with the necessary files inside the subdirectory.
+
+## Setting up the repository
+
+1. Fork [blue-build/modules](https://github.com/blue-build/modules/).
+    - This enables you to contribute back to the official repository easily, and get up and running with the proper workflows quickly.
+2. Set up container signing with help of the [signing guide](/how-to/cosign/).
+3. Enable GitHub Actions from the Actions tab of the repository.
+    - These actions will build the OCI image and push it to `ghcr.io/<username>/modules`. The name of the resulting OCI image can be changed in the `.github/build.yml`.
+
+## Making modules
+
+Instructions for making modules are in the [separate guide](/how-to/making-modules/). Public modules should additionally have a `README.md` and [`module.yml`](reference/module/#moduleyml). Modules meant to be contributed back upstream should follow the style guidelines in the modules repo's README.
+
+## Using your custom modules
+
+Modules from custom module repositories can be used by specifying the [`source:`](/reference/module/#source-optional). For example:
+
+```yml {5}
+# recipe.yml
+modules:
+    - type: <name-of-your-module>
+      # supports using tags like `:latest` too
+      source: ghcr.io/octocat/bluebuild-modules
+      list:
+          - gec
+          - gec
+          - gec
+```
