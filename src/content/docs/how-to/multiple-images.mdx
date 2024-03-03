@@ -8,9 +8,47 @@ When your needs grow beyond just one user on one machine, you might want to buil
 1. Create a new recipe file.
     - To make this easier, you might want to just duplicate and rename your other recipe file.
     - Make sure to name your recipe files accordingly, for example: `recipe-gnome.yml` for a GNOME version of your image and `recipe-kde.yml` for a KDE version of your image.
-2. Edit your new recipe file. You should _at least_ change the name of the image to prevent collision with your other image, but other changes can also made at this point.
+2. Edit your new recipe file. You should _at least_ change the name of the image to prevent collision with your other images, but other changes can also made at this point.
+
+    - Example:
+
+        ```yml
+        # recipe-gnome.yml
+        name: weird-gnome
+        description: This is the GNOME version of my personal OS image.
+        base-image: ghcr.io/ublue-os/silverblue-main
+        # ...
+        ```
+
+        ```yml
+        # recipe-kde.yml
+        name: weird-kde
+        description: This is the LDE Plasma version of my personal OS image.
+        base-image: ghcr.io/ublue-os/kinoite-main
+        # ...
+        ```
+
 3. Open the build workflow file in `.github/workflows/build.yml` and edit the list of recipe files under `jobs: bluebuild: strategy: matrix: recipe:` to contain all the recipes you want to build.
-    - The list simply consists of paths under the `config/` folder in your git repository. For example, if you have many recipes and want to store them all in a subdirectory like `config/recipes/`, you can use them in `build.yml` by specifying the subdirector; `recipes/recipe.yml`.
+
+    - The list simply consists of paths under the `config/` folder in your git repository. For example, if you have many recipes and want to store them all in a subdirectory like `config/recipes/`, you can use them in `build.yml` by specifying the subdirectory.
     - After this step, all versions of your custom images should start building.
+
+    - Example:
+
+        ```yml
+        # build.yml
+        # ...
+        jobs:
+            bluebuild:
+                strategy:
+                    matrix:
+                        recipe:
+                            - recipe-gnome.yml
+                            - recipe-kde.yml
+                            # or like this if you want to have the recipes in their own directory:
+                            # - recipes/gnome.yml
+                            # - recipes/kde.yml
+        # ...
+        ```
 
 If you want to share parts of configuration between your different image, check out ["How to split configuration into multiple files"](/how-to/multiple-files).
