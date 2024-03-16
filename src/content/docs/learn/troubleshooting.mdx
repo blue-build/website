@@ -9,16 +9,26 @@ This page is a draft, so contents are unfinished or nonexistent.
 
 ## Common issues
 
+### `error: Creating importer: Failed to invoke skopeo proxy method OpenImage: remote error: unable to retrieve auth token: invalid username/password: unauthorized`
+
+This error happens when the image you are trying to rebase to is private. If this is your own image, you can fix this easily. This issue is sadly common, as it is caused by a recent change in GitHub and related bugs. [This issue has been reported to GitHub.](https://github.com/orgs/community/discussions/110670)
+
+1. Go to the "Packages" tab on your GitHub profile.
+2. Choose the package you are trying to build.
+3. Open "Package settings".
+4. Under "Danger Zone", change the package visibility to "Public".
+5. Manually re-trigger the build.
+
 ### `ghcr.io: denied: permission_denied: write_package`
 
-If you're trying to build an image with the same name as something you've already built from a new repository, you might get this GitHub permission error. This happens because the GitHub package entry was created by the other repository, which is now attached to it.   
+If you're trying to build an image with the same name as something you've already built from a new repository, you might get this GitHub permission error. This happens because the GitHub package entry was created by the other repository, which is now attached to it.  
 To fix this issue:
 
 1. Go to the "Packages" tab on your GitHub profile.
 2. Choose the package you are trying to build.
 3. Open "Package settings".
 4. Under "Manage Actions access", add your new repository and give it the "Admin" role.
-5. Manually re-trigger build.
+5. Manually re-trigger the build.
 
 ---
 
