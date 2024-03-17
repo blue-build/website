@@ -1,13 +1,31 @@
 ---
 title: How to sync your repository up with the template
-description: A guide in my new Starlight docs site.
+description: Keep your git repository up-to-date!
 ---
 
-:::caution
-This page is a draft, so contents are unfinished or nonexistent.
-:::
+This guide shows you how to sync your custom image git repository to be up-to-date with [blue-build/template](https://github.com/blue-build/template/). This procedure shouldn't ever be required to keep your repository functional, but might be useful if the template has gained new features since you generated your repository.
 
-https://diataxis.fr/how-to-guides/
+0. Open your repository folder on the command line on a machine with `git`.
+1. Run the command below to add the template as a Git remote.
 
--   shouldn't be needed that often with most of the code moved out of the template
--   mirrors https://github.com/ublue-os/website/pull/688
+    ```bash
+    git remote add template https://github.com/blue-build/template.git
+    ```
+
+2. Run the command below to fetch the latest commits from both your repository and the template.
+
+    ```bash
+    git fetch --all
+    ```
+
+3. Run the command below to merge the changes from the template onto the current branch of your repository. You can do this with the main branch checked out, or another branch, if you want to make sure the changes work before committing to the main branch.
+
+    ```bash
+    git merge template/main --allow-unrelated-histories
+    ```
+
+4. Fix merge conflicts in a merge editor. At least Visual Studio Code supports this feature by default, and other tools might do too, so use what you're most comfortable with.
+
+    - You can totally ignore changes in the `config/` and `modules/` directories, the `README.md` and the `cosign.pub`, so that your customizations are not overwritten. Otherwise use your own discretion.
+
+5. Commit the merge and push the changes to your repository.
