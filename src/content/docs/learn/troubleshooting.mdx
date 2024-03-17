@@ -1,11 +1,17 @@
 ---
-title: Troubleshooting and common errors
+title: Troubleshooting, getting help, and reporting bugs
 description: What to do when builds are failing
 ---
 
 :::caution
 This page is a draft, so contents are unfinished or nonexistent.
 :::
+
+When encountering build errors, it is important to know how to approach fixing them. In this tutorial, we will explore practical ways to troubleshoot issues in custom image builds, ask for help with issues, and report bugs with BlueBuild to the maintainers.
+
+If the issue happened during the build in GitHub Actions, the first step is always to look at the build logs. We can find the logs in the "Actions"-tab of the GitHub repository by pressing the failing build, and opening a specific failing build from the job matrix. 99% of errors will happen under the "Build Custom Image" step of the job, which has a long and verbose log of the pre-build set up and the image build itself. The builds stop at any error, so to find the error from the long log file, we can utilize the scroll bar to quickly get to the bottom of the log.
+
+For a faster feedback loop, we can utilize [local builds](/how-to/local/).
 
 ## Common issues
 
@@ -36,6 +42,7 @@ https://diataxis.fr/tutorials/
 
 -   opening logs
 -   interacting with community
+-   reporting bugs
 -   what sorts of clues to look for in logs
 -   common issues
     -   `ghcr.io: denied: permission_denied: write_package`
