@@ -15,6 +15,6 @@ Also remember that these systems are atomic, you don't need to manually clean up
 
 ## What is and isn't possible
 
-When making a custom image, it isn't possible do things that require a booted system, like creating user accounts and groups or writing to `/var/` where the user's files are stored. Instead, you should write to system directories like `/usr/bin/` and `/usr/etc/`, which is the proper place for default system configuration that is applied to the `/etc/` directory when the image is booted.
+When making a custom image, it isn't possible to do things that require a booted system, like creating user accounts and groups or writing to `/var/` where the user's files are stored. Instead, you should write to system directories like `/usr/bin/` and `/usr/etc/`, which is the proper place for default system configuration that is applied to the `/etc/` directory when the image is booted.
 
 Some RPM packages might have issues because they try to create users or user groups. The easiest workaround in these cases is to manually layer them on the booted image.
