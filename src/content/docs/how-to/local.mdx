@@ -1,12 +1,171 @@
 ---
 title: How to build and test locally
-description: A guide in my new Starlight docs site.
+description: This guide shows you how to use the Bluebuild CLI tool to test images in your local development environment before pushing them to GitHub.
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+[bluebuild-cli-repo]: https://github.com/blue-build/cli
+[bluebuild-cli-readme]: https://github.com/blue-build/cli?tab=readme-ov-file
+[bluebuild-cli-readme-howtouse]: https://github.com/blue-build/cli?tab=readme-ov-file#how-to-use
+[bluebuild-cli-ghaction]: https://github.com/blue-build/github-action/
+[bluebuild-cli-ghaction-build]: https://github.com/blue-build/github-action/blob/main/action.yml#L89-L99
+[sample-bug-report]: https://github.com/blue-build/cli/issues/145
+
+[refactor-discussion]: https://github.com/blue-build/cli/issues/65
+
+If you want to do any of the following things locally, without depending on the [BlueBuild GitHub Action][bluebuild-cli-ghaction]:
+
+- preview the `Containerfile` generated your `recipe.yml` locally;
+- test your `recipe.yml` build process locally before pushing to GitHub;
+- install a locally built image onto a virtual machine;
+- rebase your currently running operating system onto a locally built image;
+
+This guide shows you how to use [Bluebuild CLI][bluebuild-cli-repo] to do so.
+
+## Installing BlueBuild CLI
+
+There are several methods available for installing the BlueBuild CLI tool, documented in the the [BlueBuild CLI README][bluebuild-cli-readme].
+
+## Using BlueBuild CLI
+
+The [repository README][bluebuild-cli-readme-howtouse] has general instructions for using the `bluebuild` CLI tool.
+
+There is also a `help` command:
+
+```bash
+$ bluebuild help
+A CLI tool built for creating Containerfile templates based on the Ublue Community Project
+
+Usage: bluebuild [OPTIONS] <COMMAND>
+
+Commands:
+  build        Build an image from a recipe
+  template     Generate a Containerfile from a recipe
+  upgrade      Upgrade your current OS with the local image saved at `/etc/bluebuild/` [aliases: update]
+  rebase       Rebase your current OS onto the image being built
+  bug-report   Create a pre-populated GitHub issue with information about your configuration
+  completions  Generate shell completions for your shell to stdout
+  help         Print this message or the help of the given subcommand(s)
+
+Options:
+  -v, --verbose...  Increase logging verbosity
+  -q, --quiet...    Decrease logging verbosity
+  -h, --help        Print help
+  -V, --version     Print version
+```
+
+Example use cases for some of the commands follow in the sections below.
+
+### Completions
+
+By default, the `bluebuild` commands must be typed by hand. The `bluebuild completions` command generates shell completions for your shell, printing them to stdout.
+
+To generate completions for your shell environment:
+
+<Tabs>
+    <TabItem label="bash">
+    ```bash
+    $ bluebuild completions bash > ~/.local/share/bash-completion/completions/bluebuild
+    ```
+  </TabItem>
+  <TabItem label="fish">
+    ```bash
+    $ bluebuild completions fish > ~/.config/fish/completions/bluebuild
+    ```
+  </TabItem>
+  <TabItem label="other">
+    Currently, `zsh`, `elvish` and `powershell` completions are also supported by `bluebuild`. See the respective shell documentation for more information about how to configure shell autocompletions.
+  </TabItem>
+</Tabs>
+
+Subsequent invocations of `bluebuild` will respond to `<Tab>` autocompletions, even when run from a distrobox:
+
+```bash
+$ bluebuild # press <Tab>
+-v           -V           --help       template     bug-report
+-q           --verbose    --version    upgrade      completions
+-h           --quiet      build        rebase       help
+```
+
+### Template
+
 :::caution
-This page is a draft, so contents are unfinished or nonexistent.
+This section is a draft, so contents are unfinished or nonexistent. The CLI interface may be refactored in the future; see [here][refactor-discussion] for more information.
 :::
 
-https://diataxis.fr/how-to-guides/
 
--   `bb build --rebase` (or whatever the correct command is)
+### Build
+
+The `build` command builds an image from a recipe; you can use this command to test your recipe locally before pushing the recipe to GitHub:
+
+```bash
+bluebuild build ./config/recipe.yml
+```
+
+You can see that the BlueBuild GitHub Action [uses the same `build` command][bluebuild-cli-ghaction-build], with additional `--push` and `--registry` options for pushing successful build to `ghcr.io` or similar image repositories.
+
+You can see the complete list of available options using `bluebuild build help`:
+
+```bash
+bluebuild build [OPTIONS] [RECIPE]
+
+Build an image from a recipe
+
+Usage: bluebuild build [OPTIONS] [RECIPE]
+
+Arguments:
+  [RECIPE]  The recipe file to build an image
+
+Options:
+  -p, --push
+          Push the image with all the tags
+  -r, --retry-push
+          Allow `bluebuild` to retry pushing images if it fails
+      --retry-count <RETRY_COUNT>
+          The number of times to retry pushing the image [default: 1]
+  -f, --force
+          Allow `bluebuild` to overwrite an existing Containerfile without confirmation
+  -a, --archive <ARCHIVE>
+          Archives the built image into a tarfile in the specified directory
+      --registry <REGISTRY>
+          The registry domain name
+      --registry-namespace <REGISTRY_NAMESPACE>
+          The url path to your base project images [aliases: registry-path]
+  -v, --verbose...
+          Increase logging verbosity
+  -q, --quiet...
+          Decrease logging verbosity
+  -U, --username <USERNAME>
+          The username to login to the container registry
+  -P, --password <PASSWORD>
+          The password to login to the container registry
+  -c, --connection <CONNECTION>
+          The connection string used to connect to a remote podman socket
+  -h, --help
+          Print help (see more with '--help')
+```
+
+### Upgrade
+
+:::caution
+This section is a draft, so contents are unfinished or nonexistent. The CLI interface may be refactored in the future; see [here][refactor-discussion] for more information.
+:::
+
+
+### Rebase
+
+:::caution
+This section is a draft, so contents are unfinished or nonexistent. The CLI interface may be refactored in the future; see [here][refactor-discussion] for more information.
+:::
+
+
+### Bug-Report: Getting Help
+
+You can autogenerate a GitHub Issue with OS/environment/version metadata using the `bug-report` command:
+
+```bash
+$ bluebuild bug-report
+```
+
+The command will ask for recipe information and will present a confirmation dialog before generating a draft issue. You can see an example of an issue generated using this command [here][sample-bug-report].
