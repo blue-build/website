@@ -1,5 +1,5 @@
 ---
-title: Troubleshooting, getting help, and reporting bugs
+title: Troubleshooting, reporting bugs, and common issues
 description: What to do when builds are failing
 ---
 
@@ -7,11 +7,21 @@ description: What to do when builds are failing
 This page is a draft, so contents are unfinished or nonexistent.
 :::
 
+## Tutorial
+
 When encountering build errors, it is important to know how to approach fixing them. In this tutorial, we will explore practical ways to troubleshoot issues in custom image builds, ask for help with issues, and report bugs with BlueBuild to the maintainers.
+
+### Logs
 
 If the issue happened during the build in GitHub Actions, the first step is always to look at the build logs. We can find the logs in the "Actions"-tab of the GitHub repository by pressing the failing build, and opening a specific failing build from the job matrix. 99% of errors will happen under the "Build Custom Image" step of the job, which has a long and verbose log of the pre-build set up and the image build itself. The builds stop at any error, so to find the error from the long log file, we can utilize the scroll bar to quickly get to the bottom of the log.
 
-For a faster feedback loop, we can utilize [local builds](/how-to/local/).
+For a faster feedback loop when iterating on bugs, we can utilize [local builds](/how-to/local/).
+
+### Getting help
+
+If the problem is something we cannot figure out on our own, the BlueBuild community is here to help. See the [community page](/community) for links to join the communities and some ground rules to follow. The most effective page to ask for help is the [support category](https://github.com/orgs/blue-build/discussions/categories/support) in the GitHub Discussions, as problems posted there show up on search engines. We might even find a fix to our problem there!
+
+To Be Continued...
 
 ## Common issues
 

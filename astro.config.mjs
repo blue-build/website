@@ -44,7 +44,7 @@ export default defineConfig({
                             link: "/learn/how/",
                         },
                         {
-                            label: "Troubleshooting and common errors",
+                            label: "Troubleshooting, reporting bugs, and common issues",
                             link: "/learn/troubleshooting/",
                         },
                         {
