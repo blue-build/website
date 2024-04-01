@@ -1,12 +1,58 @@
 ---
 title: How to build and test locally
-description: A guide in my new Starlight docs site.
+description: This guide shows you how to use the Bluebuild CLI tool to test images in your local development environment before pushing them to GitHub.
 ---
 
+[bluebuild-cli-repo]: https://github.com/blue-build/cli
+[bluebuild-cli-readme]: https://github.com/blue-build/cli?tab=readme-ov-file
+[bluebuild-cli-readme-howtouse]: https://github.com/blue-build/cli?tab=readme-ov-file#how-to-use
+[bluebuild-cli-ghaction]: https://github.com/blue-build/github-action/
+[bluebuild-cli-ghaction-build]: https://github.com/blue-build/github-action/blob/main/action.yml#L89-L99
+[refactor-discussion]: https://github.com/blue-build/cli/issues/65
+
+This guide shows you how to use [Bluebuild CLI][bluebuild-cli-repo] to do the following things locally, without depending on the [BlueBuild GitHub Action][bluebuild-cli-ghaction]:
+
+- preview the `Containerfile` generated your `recipe.yml` locally;
+- test your `recipe.yml` build process locally before pushing to GitHub;
+- install a locally built image onto a virtual machine;
+- rebase your currently running operating system onto a locally built image;
+
+## Installing BlueBuild CLI
+
+The BlueBuild CLI tool is installed by default on images built using BlueBuild. There are also several methods available for installing the BlueBuild CLI tool, documented in the the [BlueBuild CLI README][bluebuild-cli-readme].
+
+## Using BlueBuild CLI
+
+The [repository README][bluebuild-cli-readme-howtouse] has general instructions for using the `bluebuild` CLI tool. Example use cases for some of the commands follow in the sections below.
+
+### Template
+
 :::caution
-This page is a draft, so contents are unfinished or nonexistent.
+This section is a draft, so contents are unfinished or nonexistent. The CLI interface may be refactored in the future; see [here][refactor-discussion] for more information.
 :::
 
-https://diataxis.fr/how-to-guides/
 
--   `bb build --rebase` (or whatever the correct command is)
+### Build
+
+The `build` command builds an image from a recipe; you can use this command to test your recipe locally before pushing the recipe to GitHub:
+
+```bash
+bluebuild build ./config/recipe.yml
+```
+
+You can see that the BlueBuild GitHub Action [uses the same `build` command][bluebuild-cli-ghaction-build], with additional `--push` and `--registry` options for pushing successful build to `ghcr.io` or similar image repositories.
+
+You can see the complete list of available options using `bluebuild build help`.
+
+### Upgrade
+
+:::caution
+This section is a draft, so contents are unfinished or nonexistent. The CLI interface may be refactored in the future; see [here][refactor-discussion] for more information.
+:::
+
+
+### Rebase
+
+:::caution
+This section is a draft, so contents are unfinished or nonexistent. The CLI interface may be refactored in the future; see [here][refactor-discussion] for more information.
+:::
