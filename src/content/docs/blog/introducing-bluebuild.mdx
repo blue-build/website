@@ -24,6 +24,11 @@ The repositories affected by this transition are:
 -   [ublue-os/bling](https://github.com/ublue-os/bling) (transferred to [blue-build/modules](https://github.com/blue-build/modules))
 -   [ublue-os/images-website](https://github.com/ublue-os/images-website) (transferred to [blue-build/images-website](https://github.com/blue-build/images-website))
 
+:::note
+BlueBuild is based on the idea of [recipes](/reference/recipe/) as abstractions for the image build. Universal Blue might in the future provide official documentation for custom image creation using Containerfiles directly.
+See the [FAQ](https://blue-build.org/#faq) to learn more about the difference.
+:::
+
 ## History lesson...
 
 _This section gives a bigger picture of the developments in the history of this project from [my](https://github.com/xynydev) perspective. Jump to the [What's new?](#whats-new) section to jump straight to the important stuff._
@@ -47,6 +52,10 @@ The recipe compiler turns your recipe into a Containerfile, freeing us from the 
 Our new re-usable [GitHub Action](https://github.com/blue-build/github-action) and [template repository](https://github.com/blue-build/template) use the compiler by default, so new users will get the benefits instantly. The new template requires less maintenance, as important parts of the build system have been moved to other repositories.
 
 ### [Keyless signing with OIDC and Sigstore](https://docs.sigstore.dev/signing/overview/)
+
+:::note
+This feature has currently been delayed due to lacking verification support in upstream projects. See [blue-build/cli#84](https://github.com/blue-build/cli/issues/84).
+:::
 
 The keyless signing support with OIDC will make new repository setup easier and more straightforward by making the generation of a cosign / sigstore keypair optional. When signing without keys, the verification will be based on ephemeral keys bound to an OIDC identity from GitHub, making it possible to verify that the image you are using came from the specific GitHub Action, _without specifying a public key_. This will also shorten the first-time rebase process to one command, going directly onto the signed image, and eliminating the need to trust the registry on the first rebase.
 
