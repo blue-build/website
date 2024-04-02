@@ -41,7 +41,7 @@ This section contains short how-tos for fixing common issues.
 
 ### `error: Creating importer: Failed to invoke skopeo proxy method OpenImage: remote error: unable to retrieve auth token: invalid username/password: unauthorized`
 
-This error happens when the image you are trying to rebase to is private. If this is your own image, you can fix this easily. This issue is sadly common, as it is caused by a recent change in GitHub and related bugs. [This issue has been reported to GitHub.](https://github.com/orgs/community/discussions/110670)
+This error happens when the image you are trying to rebase to is private. This is currently the default state of a newly created package on GitHub. This is the result of a recent change, and the issue [has been reported to GitHub](https://github.com/orgs/community/discussions/110670). If this is your own image, you can fix this easily with the steps below.
 
 1. Go to the "Packages" tab on your GitHub profile.
 2. Choose the package you are trying to build.
