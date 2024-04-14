@@ -24,7 +24,7 @@ The examples in this section assume the use of a bash-compatible shell. Temporar
 
 ### Fresh install from an ISO
 
-You can use Universal Blue's [isogenerator](https://github.com/ublue-os/isogenerator) to generate an offline ISO of your image locally. See the [customization documentation](https://github.com/ublue-os/isogenerator?tab=readme-ov-file#customizing) for more information about isogenerator's inputs. This procedure only requires either `podman` or `docker` be installed. Docker is part of the [`moby-engine`](https://packages.fedoraproject.org/pkgs/moby-engine/moby-engine/)-package on Fedora.
+You can use JasonN3's [build-container-installer](https://github.com/JasonN3/build-container-installer) to generate an offline ISO of your image locally. See the project's README for more information it and its configuration. This procedure only requires either `podman` or `docker` be installed.
 
 1.  Generate the ISO:
 
@@ -36,12 +36,11 @@ You can use Universal Blue's [isogenerator](https://github.com/ublue-os/isogener
         IMAGE_NAME=weird-os
         IMAGE_TAG=latest
         IMAGE_VARIANT=Silverblue # should match the variant your image is based on
-        # example installer details:
-        INSTALLER_VERSION=39
         # iso command:
-        sudo podman run --rm --privileged --volume .:/isogenerator/output --security-opt label=disable --pull=newer \
+        mkdir ./"$IMAGE_NAME"_iso
+        sudo podman run --rm --privileged --volume ./"$IMAGE_NAME"_iso:/build-container-installer/build --security-opt label=disable --pull=newer \
         -e IMAGE_REPO="$IMAGE_REPO" -e IMAGE_NAME="$IMAGE_NAME" -e IMAGE_TAG="$IMAGE_TAG" -e VARIANT="$IMAGE_VARIANT" \
-        ghcr.io/ublue-os/isogenerator:$INSTALLER_VERSION
+        ghcr.io/jasonn3/build-container-installer:latest
         ```
 
     -   With `docker`:
@@ -52,17 +51,16 @@ You can use Universal Blue's [isogenerator](https://github.com/ublue-os/isogener
         IMAGE_NAME=weird-os
         IMAGE_TAG=latest
         IMAGE_VARIANT=Silverblue # should match the variant your image is based on
-        # example installer details:
-        INSTALLER_VERSION=39
         # iso command:
-        sudo docker run --rm --privileged --volume .:/isogenerator/output \
+        mkdir ./"$IMAGE_NAME"_iso
+        sudo docker run --rm --privileged --volume ./"$IMAGE_NAME"_iso:/build-container-installer/build \
         -e IMAGE_REPO="$IMAGE_REPO" -e IMAGE_NAME="$IMAGE_NAME" -e IMAGE_TAG="$IMAGE_TAG" -e VARIANT="$IMAGE_VARIANT" \
-        ghcr.io/ublue-os/isogenerator:$INSTALLER_VERSION
+        ghcr.io/jasonn3/build-container-installer:latest
         ```
 
 2.  Flash the ISO onto a USB drive ([Fedora Media Writer](https://www.fedoraproject.org/en/workstation/download) is recommended) and boot it, or boot it directly with a virtual machine.
 
-        - The ISO file should be in your working directory and called something like `weird-os-latest.iso`.
+        - The ISO file should be in a directory named after your `IMAGE_NAME` inside your working directory and called something like `deploy.iso`.
 
         - Once booted, you should be presented with a screen similar to this:
 
