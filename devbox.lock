@@ -23,7 +23,6 @@
     },
     "nodejs@latest": {
       "last_modified": "2024-01-17T15:31:30Z",
-      "plugin_version": "0.0.2",
       "resolved": "github:NixOS/nixpkgs/f36047a5a4b5631f75210859abac7f97ba1ba7a7#nodejs_21",
       "source": "devbox-search",
       "version": "21.6.0",
