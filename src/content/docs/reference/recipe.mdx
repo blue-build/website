@@ -12,7 +12,7 @@ The image name. Used when publishing to GHCR as `ghcr.io/<user>/<name>`.
 #### Example:
 
 ```yaml
-# config/recipe.yml
+# recipes/recipe.yml
 name: weird-os
 ```
 
@@ -23,7 +23,7 @@ The image description. Published to GHCR in the image metadata.
 #### Example:
 
 ```yaml
-# config/recipe.yml
+# recipes/recipe.yml
 description: This is my personal OS image.
 ```
 
@@ -34,7 +34,7 @@ The [OCI](https://opencontainers.org/) image to base your custom image on. Only 
 #### Example:
 
 ```yaml
-# config/recipe.yml
+# recipes/recipe.yml
 base-image: ghcr.io/ublue-os/silverblue-main
 ```
 
@@ -45,7 +45,7 @@ The tag of the base image to build on. Used to select a version explicitly (`39`
 #### Example:
 
 ```yaml
-# config/recipe.yml
+# recipes/recipe.yml
 image-version: 39
 ```
 
@@ -53,12 +53,12 @@ image-version: 39
 
 A list of [modules](/reference/module/) that is executed in order. Multiple of the same module can be included.
 
-Each item in this list should have at least a `type:` or be specified to be included from an external file in the `config/` directory with `from-file:`.
+Each item in this list should have at least a `type:` or be specified to be included from an external file in the `recipes/` directory with `from-file:`.
 
 #### Example:
 
 ```yaml
-# config/recipe.yml
+# recipes/recipe.yml
 modules:
     - type: rpm-ostree
       # rest of the module config...
@@ -68,14 +68,14 @@ modules:
 The included file can have one or multiple modules:
 
 ```yaml
-# config/common-packages.yml
+# recipes/common-packages.yml
 # one module
 type: rpm-ostree
 # rest of the module config...
 ```
 
 ```yaml
-# config/common-packages.yml
+# recipes/common-packages.yml
 # multiple modules
 modules:
     - type: script

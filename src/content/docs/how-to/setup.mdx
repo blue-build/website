@@ -21,7 +21,7 @@ The current web interface is a placeholder and will be rewritten. No new feature
 6. Log in with GitHub. The GitHub API will be used to create a new repository for you and modify it contents.
 7. Press "Create repo". A log box will pop up below the button. It might say "repo creation failed" while succeeding, this is a harmless known issue.
 8. Scroll down to the container signing step and follow instructions, then press "Submit". Setting up container signing is important for security, and builds will fail without a proper signing setup.
-9. You're done! You can now open `config/recipe.yml` and start customizing! The [reference section](/reference/recipe/) of the documentation is your friend here.
+9. You're done! You can now open `recipes/recipe.yml` and start customizing! The [reference section](/reference/recipe/) of the documentation is your friend here.
 10. Once the first image is built, make it public by following the steps [here]. You wont be able to rebase to your image without doing this.
 
 ## Manual setup with git and cosign
@@ -31,8 +31,8 @@ The manual setup is useful if the other methods aren't working correctly or if y
 1. Open [blue-build/template](https://github.com/blue-build/template).
 2. Press "Use this template" and create a new repository.
 3. [Set up container signing](/how-to/cosign/), then come back to this guide.
-4. Change the `name:` in `config/recipe.yml` and commit your changes. You can also apply some initial customizations here.
+4. Change the `name:` in `recipes/recipe.yml` and commit your changes. You can also apply some initial customizations here.
 5. Open the Actions tab of your repository and make sure GitHub Actions are enabled.
 6. Change all references to `blue-build/template` in the `README.md` to the details of your repository or custom image and commit your changes. You should also change the title and the short description below it so that people stumbling on your repository know what they are looking at.
-7. You're done! You can now open `config/recipe.yml` and start customizing! The [reference section](/reference/recipe/) of the documentation is your friend here.
+7. You're done! You can now open `recipes/recipe.yml` and start customizing! The [reference section](/reference/recipe/) of the documentation is your friend here.
 8. Once the first image is built, make it public by following the steps [here](/learn/troubleshooting/#error-creating-importer-failed-to-invoke-skopeo-proxy-method-openimage-remote-error-unable-to-retrieve-auth-token-invalid-usernamepassword-unauthorized). You wont be able to rebase to your image without doing this.
