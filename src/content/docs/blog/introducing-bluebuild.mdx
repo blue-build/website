@@ -84,7 +84,7 @@ With the important repositories having been moved, it is unfortunately required 
     - You might also want to add "`/Containerfile`" to the `.gitignore` file, because the recipe compiler generates a Containerfile when run locally.
     - It is also recommended to clean out files that are related to Universal Blue community management (`CODE_OF_CONDUCT.md` and `CONTRIBUTING.md`), if you haven't changed them to contain information relevant to your custom image project.
 4. Clean up your configuration.
-    - Some changes to the template defaults have been made in preparation for the migration, which make the template more minimal, and should be adopted by both old and new users.
+    - During the last month some changes to the template defaults have been made in preparation for the migration, which make the template more minimal, and should be adopted by both old and new users.
     - **Remove the old `signing.sh` in favor of the [`signing` module](/reference/modules/signing/),** which is essentially the same, but requires less maintenance from custom image creators. `signing.sh` is deprecated, and won't be supported any longer.
     - **If you use just,** remove `100-bling.just` and the import for it from `60-custom.just`. The bling justfiles have been removed due to lack of maintenance, and all their features being covered by the justfiles included by default with Universal Blue images.
     - **If you don't use just,** you can remove the whole `config/files/usr/share/ublue-os/just/` folder from your repository. This is unneeded and no longer included in the templates by default.
@@ -93,12 +93,7 @@ With the important repositories having been moved, it is unfortunately required 
     - **This can be done through the [GitHub Virtual Support Assistant](https://support.github.com/contact?tags=rr-forks&subject=Detach%20Fork&flow=detach_fork).**
 6. Clean up the git branch structure by removing the `template` branch and renaming `live` to `main`.
     - This step is optional, but recommended. The existing branch structure will continue to work as expected, but migration will make it more straightforward and syncing with the upstream template easier.
-7. Move your recipe files into `./recipes/`. 
-    - Doing so will allow your builds to cache layers with the new system.
-    - The `./recipes/` directory will never be copied into the build context which allows changes to your recipe to only be reflected in the changed `Containerfile`. This way docker will only build starting at the layer that changed.
-    - Cached builds will only work if your base image hasn't updated yet, otherwise it will have to rebuild from the start.
-    - This is great for making tweaks to your recipe and testing it as your computer will only have to download the new layers.
-8. You should be all set now! Try starting your builds if you haven't already.
+7. You should be all set now! Try starting your builds if you haven't already.
 
 ### Create a new repository (not recommended)
 
@@ -115,7 +110,7 @@ With the important repositories having been moved, it is unfortunately required 
 1. Set up a new repository using the [guide](/how-to/setup/).
 2. Make sure both your old and new repositories are [cloned](https://git-scm.com/docs/git-clone) locally.
 3. Copy relevant parts from your old repository to the new one.
-    - **Everyone should copy at least the `config/` and `recipes/` directories,** but you can also copy `README.md` and `modules/`, if you've made any changes to those.
+    - **Everyone should copy at least the `config/` directory,** but you can also copy `README.md` and `modules/`, if you've made any changes to those.
     - **If you're building multiple images,** remember to copy your matrix of recipes from the old `build.yml` to the new `build.yml`.
     - **If you've made changes to `build.sh`, `build.yml`, or the `Containerfile`**, those have to be ported manually.
 4. Clean up your configuration in the new repository.
