@@ -16,3 +16,9 @@ const ogImageUrl = new URL(
 <!-- Render the <meta/> tags for the Open Graph images. -->
 <meta property="og:image" content={ogImageUrl} />
 <meta name="twitter:image" content={ogImageUrl} />
+<link
+    rel="alternate"
+    type="application/rss+xml"
+    title="BlueBuild Blog Feed"
+    href={`${Astro.site}feed.xml`}
+/>

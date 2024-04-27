@@ -12,6 +12,7 @@
     },
     "dependencies": {
         "@astrojs/check": "^0.4.1",
+        "@astrojs/rss": "^4.0.5",
         "@astrojs/starlight": "^0.16.0",
         "@astrojs/starlight-tailwind": "^2.0.1",
         "@astrojs/tailwind": "^5.1.0",
@@ -31,6 +32,8 @@
         "yaml": "^2.3.4"
     },
     "devDependencies": {
+        "@types/markdown-it": "^14.0.1",
+        "@types/sanitize-html": "^2.11.0",
         "@typescript-eslint/eslint-plugin": "^6.4.0",
         "@typescript-eslint/parser": "^7.0.1",
         "eslint": "^8.56.0",
@@ -42,9 +45,11 @@
         "eslint-plugin-mdx": "^3.1.5",
         "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
         "eslint-plugin-promise": "^6.0.0",
+        "markdown-it": "^14.1.0",
         "prettier": "3.2.5",
         "prettier-plugin-astro": "^0.13.0",
         "prettier-plugin-tailwindcss": "^0.5.11",
+        "sanitize-html": "^2.13.0",
         "typescript": "^5.3.3"
     }
 }

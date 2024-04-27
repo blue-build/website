@@ -1,10 +1,21 @@
 ---
 title: BlueBuild blog
-description: This is where the BlueBuild team publishes large announcements and writeups. Enjoy!
+description: This is where the BlueBuild team publishes announcements and writeups. Enjoy!
 ---
 
 import BlogPostList from "@components/BlogPostList.astro";
 
 This is where the BlueBuild team publishes large announcements and writeups. Enjoy!
+
+<a
+    href="/feed.xml"
+    class:list={[
+        "p-3 px-6 mt-4 text-lg !text-gray-800 no-underline hover:underline dark:!text-gray-200",
+        "flex flex-row gap-2 max-w-max",
+        "outline outline-1 outline-gray-900 hover:outline-2",
+    ]}
+>
+    RSS Feed
+</a>
 
 <BlogPostList />
