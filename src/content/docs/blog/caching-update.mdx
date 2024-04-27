@@ -22,7 +22,7 @@ The problem was that the recipe files were being stored in `./config/` which als
 
 ## How does this update solve the cache problem?
 
-The recipe file should only be seen as a way to define how to create the `Containerfile` and the parameters that are passed into the module. It shouldn't be `COPY`'d into the build. By moving the recipe files into `./recipes/` it removes the build's dependency on file changes in `./config/` from recipe updates and will now only change the `Containerfile` itself allowing the builder to only run the instructions changed.
+The recipe file should only be seen as a way to define how to create the `Containerfile` and the parameters that are passed into the module. It shouldn't be `COPY`'d into the build. By moving the recipe files into `./recipes/` it removes the build's dependency on file changes in `./config/` from recipe updates and will now only change the `Containerfile` itself allowing the builder to only run the instructions that changed.
 
 ## How does this cache persist in a GitHub Action runner?
 
