@@ -8,7 +8,7 @@ authors:
       github: gmpinder
 ---
 
-Hello! I'm Jerry and I'm the creator and maintainer of the Rust-based `bluebuild` CLI tool. I started creating this tool as a way to extend the work that [Xyny](https://github.com/xynydev) did with the recipe standard, but make it so that I didn't have to manage the `Containerfile` directly.
+Hello! I'm Jerry and I'm the creator and maintainer of the Rust-based `bluebuild` CLI tool. I started creating this tool as a way to extend the work that [XYNY](https://github.com/xynydev) did with the recipe standard, but make it so that I didn't have to manage the `Containerfile` directly. The tool is an integral part of the project that handles Containerfile generation from the recipe, the building of container images, and pushing them to the registry.
 
 For the past month or so, we've been working on trying to make the building experience better for our users. One of the biggest concerns brought up was the size of updates when using `rpm-ostree upgrade` to pull your new changes. The size of the updates would end up being bigger than the original single `RUN build.sh` instruction that was used. While this was really great for the time, more advanced uses of the legacy `startingpoint` repo required users to know how to manage a `Containerfile`. This can be really intimidating to less-technical users. One of the `bluebuild` CLI's goals is to perform most of the optimizations for the user so they don't have to worry about setting that up. 
 
