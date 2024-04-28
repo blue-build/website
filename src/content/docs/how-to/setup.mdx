@@ -7,22 +7,20 @@ sidebar:
 
 This guide shows you how to set up a new repository for building custom images based on [blue-build/template](https://github.com/blue-build/template), which provides a minimal example configuration along with GitHub Actions to build your image and a netinstall ISO of it. Updates to BlueBuild in your repository will be handled by the [Pull](https://github.com/wei/pull) and [Dependabot](https://github.com/dependabot) apps, which are set up in the template.
 
-## Automatic setup using the web interface
+## Automatic setup using the BlueBuild Workshop
 
-The automatic setup will apply some default configuration based on your preferences. This approach currently requires running a [`podman`](https://podman.io/) command locally, so make sure you have the program installed before proceeding.
+The automatic setup will apply some default configuration and set up cosign for you.
 
-The current web interface is a placeholder and will be rewritten. No new features will be added for the time being, but bugs will be fixed if reported. The GitHub repository is [blue-build/images-website](https://github.com/blue-build/images-website).
+The Workshop is a currently work-in-progress part of BlueBuild that allows managing custom image repositories using a web interface. Report issues in the GitHub repository: [blue-build/workshop](https://github.com/blue-build/workshop).
 
-1. Open https://ublue-images-demo.netlify.app/.
-2. Press "Pick or create an image".
-3. Pick your preferred desktop environment and whether you want Nvidia drivers.
-4. On the next screen, press "Continue to creating your own".
-5. Choose a name and description for your image. These details can be changed later.
-6. Log in with GitHub. The GitHub API will be used to create a new repository for you and modify it contents.
-7. Press "Create repo". A log box will pop up below the button. It might say "repo creation failed" while succeeding, this is a harmless known issue.
-8. Scroll down to the container signing step and follow instructions, then press "Submit". Setting up container signing is important for security, and builds will fail without a proper signing setup.
-9. You're done! You can now open `config/recipe.yml` and start customizing! The [reference section](/reference/recipe/) of the documentation is your friend here.
-10. Once the first image is built, make it public by following the steps [here]. You wont be able to rebase to your image without doing this.
+1. Open https://workshop.blue-build.org/.
+2. Press "Log in with GitHub".
+3. Press "New custom image repository".
+4. Choose a name for your repository and press "Create repository".
+    - This name should not contain spaces, slashes, or other special non-ascii characters. Using a dash (`-`) for deliminating words is recommended.
+5. When prompted with setting up container signing, it is recommended to do it **automatically**.
+    - If you have security concerns, skipping is an option too. Read more about this in the wizard.
+6. After that step is completed, you're done! You can now clone your repository, open `config/recipe.yml` and start customizing! The [reference section](/reference/recipe/) of the documentation is your friend here.
 
 ## Manual setup with git and cosign
 
@@ -35,4 +33,3 @@ The manual setup is useful if the other methods aren't working correctly or if y
 5. Open the Actions tab of your repository and make sure GitHub Actions are enabled.
 6. Change all references to `blue-build/template` in the `README.md` to the details of your repository or custom image and commit your changes. You should also change the title and the short description below it so that people stumbling on your repository know what they are looking at.
 7. You're done! You can now open `config/recipe.yml` and start customizing! The [reference section](/reference/recipe/) of the documentation is your friend here.
-8. Once the first image is built, make it public by following the steps [here](/learn/troubleshooting/#error-creating-importer-failed-to-invoke-skopeo-proxy-method-openimage-remote-error-unable-to-retrieve-auth-token-invalid-usernamepassword-unauthorized). You wont be able to rebase to your image without doing this.
