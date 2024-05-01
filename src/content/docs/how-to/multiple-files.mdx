@@ -5,11 +5,11 @@ description: This guide shows you how to include module configuration into your 
 
 This guide shows you how to include module configuration into your recipe from an external file. This is useful if you're [building multiple images](/how-to/multiple-images) or your recipe file is just getting cluttered.
 
-1. Create a new YAML file for your module(s) inside the `config/` directory.
+1. Create a new YAML file for your module(s) inside the `recipes/` directory.
 2. Add your module configuration into the file.
     - The file can configure just one module like this:
         ```yaml
-        # config/common-flatpaks.yml
+        # recipes/common-flatpaks.yml
         type: default-flatpaks
         system:
             install:
@@ -17,7 +17,7 @@ This guide shows you how to include module configuration into your recipe from a
         ```
     - Or it can configure multiple modules by declaring them under `modules:`:
         ```yaml
-        # config/common-modules.yml
+        # recipes/common-modules.yml
         modules:
             - type: signing
             - type: files

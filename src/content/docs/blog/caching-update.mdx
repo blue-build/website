@@ -1,0 +1,155 @@
+---
+title: The Caching Update
+description: A recent BlueBuild CLI update makes builds and updates much faster. Learn how to take advantage of the improvements.
+date: 2024-05-01
+authors:
+    - name: Gerald (Jerry) Pinder
+      img: https://avatars.githubusercontent.com/u/4626052
+      github: gmpinder
+---
+:::tip[TLDR]
+A recent BlueBuild CLI update makes builds and updates much faster. [What do I need to do to take advantage?](#migration)
+:::
+
+Hello! I'm Jerry and I'm the creator and maintainer of the Rust-based `bluebuild` CLI tool. I started creating this tool as a way to extend the work that [XYNY](https://github.com/xynydev) did with the recipe standard, but make it so that I didn't have to manage the `Containerfile` directly. The tool is an integral part of the project that handles Containerfile generation from the recipe, the building of container images, and pushing them to the registry.
+
+For the past month or so, we've been working on trying to make the building experience better for our users. One of the biggest concerns brought up was the size of updates when using `rpm-ostree upgrade` to pull your new changes. The size of the updates would end up being bigger than the original single `RUN build.sh` instruction that was used. While this was really great for the time, more advanced uses of the legacy `startingpoint` repo required users to know how to manage a `Containerfile`. This can be really intimidating to less-technical users. One of the `bluebuild` CLI's goals is to perform most of the optimizations for the user so they don't have to worry about setting that up. 
+
+## Migration
+
+I'm happy to announce that we have now released `v0.8.4` of `bluebuild` CLI (and the accompanying v1.4.0 of the GitHub Action) which completes the last set of changes needed to allow users to quickly iterate on changes to their build to try new changes without having to wait for long build times or large downloads. The change is as simple as:
+
+1. Moving all of your recipe files into the `./recipes/` directory in the root of your repo instead of `./config/`.
+2. It's also suggested to move the `./config/containerfiles/` directory into the root of your repo too.
+     - You can see the docs for the `containerfile` module [here](https://blue-build.org/reference/modules/containerfile/).
+
+## Wait, what's wrong with how it is now?
+
+When you build an image with `docker`, `buildah`, or `podman` the layers in your `Containerfile` are kept on your system to be re-used by other images or when you rebuild the image so that you don't have to rebuild layers that did not change. BlueBuild interfaces with these tools to build your images. BlueBuild takes in your recipe file and translates that into `Containerfile` instructions. The instructions are created in the order you define in your recipe. Assuming your base image hasn't pushed an update, when you make a change to an instruction in your `Containerfile`, the image will only be built from the changed instruction forward. If you're using `COPY` to copy files into your image, any changes to those `COPY`'d files in your repo will cause the build to start re-building from that point.
+
+The problem was that the recipe files were being stored in `./config/` which also happened to contain all of your other build files which may or may not have changed. This means that when you made a change to your recipe file, it would end up marking `./config/` (which is copied into a stage and [mounted on each `RUN` instruction](https://docs.docker.com/reference/dockerfile/#run---mounttypebind)) as changed as well as updating the corresponding `RUN` instructions in the `Containerfile`. The mount indicates to the builder that it is dependant on the new changes found in `./config/` and so every single instruction is run again on that change.
+
+## How does this update solve the cache problem?
+
+The recipe file should only be seen as a way to define how to create the `Containerfile` and the parameters that are passed into the module. It shouldn't be `COPY`'d into the build. By moving the recipe files into `./recipes/` it removes the build's dependency on file changes in `./config/` from recipe updates and will now only change the `Containerfile` itself allowing the builder to only run the instructions that changed.
+
+## How does this cache persist in a GitHub Action runner?
+
+Docker has an [experimental feature](https://docs.docker.com/build/cache/backends/gha/) that allows builds to interface directly with the GitHub Action cache system. We've setup our `docker` driver in BlueBuild and our GHA to make use of this feature. This means that BlueBuild will handle this for you.
+
+## This sounds great, but I need to see numbers
+
+During my testing and work on this feature in the CLI, I attempted testing this out by making a change on the second to last module I defined in my recipe. Theoretically, this would mean the only layers that would need to be built would be those last ones.
+
+Here's a snippet of my recipe before the change.
+
+```yml
+name: jp-laptop
+description: The image of Wunker OS for JP's Laptop.
+base_image: ghcr.io/ublue-os/bazzite
+image_version: '39'
+modules:
+# ...
+- type: script
+  scripts:
+  - setup-selinux-dockersock.sh
+- type: script
+  scripts:
+  - setup-kubectl.sh
+- type: rpm-ostree
+  repos:
+  - https://pkg.earthly.dev/earthly.repo
+  - https://cli.github.com/packages/rpm/gh-cli.repo
+  install:
+  - earthly
+  - neovim
+  - helix
+  - alacritty
+  - gh
+- type: script
+  scripts:
+  - install-mkcert.sh
+  - install-codelldb.sh
+```
+
+And here's the change. I'm removing `neovim` cause I'm a filthy `helix` user.
+
+```yml
+name: jp-laptop
+description: The image of Wunker OS for JP's Laptop.
+base_image: ghcr.io/ublue-os/bazzite
+image_version: '39'
+modules:
+# ...
+- type: script
+  scripts:
+  - setup-selinux-dockersock.sh
+- type: script
+  scripts:
+  - setup-kubectl.sh
+- type: rpm-ostree
+  repos:
+  - https://pkg.earthly.dev/earthly.repo
+  - https://cli.github.com/packages/rpm/gh-cli.repo
+  install:
+  - earthly
+  - helix
+  - alacritty
+  - gh
+- type: script
+  scripts:
+  - install-mkcert.sh
+  - install-codelldb.sh
+```
+
+So we re-run the build.
+
+```
+ => CACHED [stage-config 1/1] COPY ./config /config                                                                                                       0.0s
+ => CACHED [stage-modules 1/2] COPY --from=ghcr.io/blue-build/modules:latest /modules /modules                                                            0.0s
+ => CACHED [stage-modules 2/2] COPY ./modules /modules                                                                                                    0.0s
+ => CACHED [stage-keys 1/1] COPY cosign.pub /keys/jp-desktop-gaming.pub                                                                                   0.0s
+ => CACHED [stage-4  2/16] RUN --mount=type=bind,from=stage-keys,src=/keys,dst=/tmp/keys   mkdir -p /usr/etc/pki/containers/   && cp /tmp/keys/* /usr/et  0.0s
+ => CACHED [stage-bins 1/3] COPY --from=gcr.io/projectsigstore/cosign /ko-app/cosign /bins/cosign                                                         0.0s
+ => CACHED [stage-bins 2/3] COPY --from=docker.io/mikefarah/yq /usr/bin/yq /bins/yq                                                                       0.0s
+ => CACHED [stage-bins 3/3] COPY --from=ghcr.io/blue-build/cli:main-installer /out/bluebuild /bins/bluebuild                                              0.0s
+ => CACHED [stage-4  3/16] RUN --mount=type=bind,from=stage-bins,src=/bins,dst=/tmp/bins   mkdir -p /usr/bin/   && cp /tmp/bins/* /usr/bin/   && ostree   0.0s
+ => CACHED [stage-4  4/16] RUN   --mount=type=tmpfs,target=/var   --mount=type=bind,from=stage-config,src=/config,dst=/tmp/config,rw   --mount=type=bind  0.0s
+ => CACHED [stage-4  5/16] RUN   --mount=type=tmpfs,target=/var   --mount=type=bind,from=stage-config,src=/config,dst=/tmp/config,rw   --mount=type=bind  0.0s
+ => CACHED [stage-4  6/16] RUN   --mount=type=tmpfs,target=/var   --mount=type=bind,from=stage-config,src=/config,dst=/tmp/config,rw   --mount=type=bind  0.0s
+ => CACHED [stage-4  7/16] RUN   --mount=type=tmpfs,target=/var   --mount=type=bind,from=stage-config,src=/config,dst=/tmp/config,rw   --mount=type=bind  0.0s
+ => CACHED [stage-4  8/16] RUN   --mount=type=tmpfs,target=/var   --mount=type=bind,from=stage-config,src=/config,dst=/tmp/config,rw   --mount=type=bind  0.0s
+ => CACHED [stage-4  9/16] RUN   --mount=type=tmpfs,target=/var   --mount=type=bind,from=stage-config,src=/config,dst=/tmp/config,rw   --mount=type=bind  0.0s
+ => CACHED [stage-4 10/16] RUN   --mount=type=tmpfs,target=/var   --mount=type=bind,from=stage-config,src=/config,dst=/tmp/config,rw   --mount=type=bind  0.0s
+ => CACHED [stage-4 11/16] RUN   --mount=type=tmpfs,target=/var   --mount=type=bind,from=stage-config,src=/config,dst=/tmp/config,rw   --mount=type=bind  0.0s
+ => CACHED [stage-4 12/16] RUN   --mount=type=tmpfs,target=/var   --mount=type=bind,from=stage-config,src=/config,dst=/tmp/config,rw   --mount=type=bind  0.0s
+ => CACHED [stage-4 13/16] RUN   --mount=type=tmpfs,target=/var   --mount=type=bind,from=stage-config,src=/config,dst=/tmp/config,rw   --mount=type=bind  0.0s
+ => CACHED [stage-4 14/16] RUN   --mount=type=tmpfs,target=/var   --mount=type=bind,from=stage-config,src=/config,dst=/tmp/config,rw   --mount=type=bind  0.0s
+ => [stage-4 15/16] RUN   --mount=type=tmpfs,target=/var   --mount=type=bind,from=stage-config,src=/config,dst=/tmp/config,rw   --mount=type=bind,from=  33.4s
+ => [stage-4 16/16] RUN   --mount=type=tmpfs,target=/var   --mount=type=bind,from=stage-config,src=/config,dst=/tmp/config,rw   --mount=type=bind,from=s  0.7s
+```
+
+As you can see above, all preceding layers are cached and the last 2 layers are re-built. Performing an upgrade for this ends up only pulling these last layers.
+
+```
+$> rpm-ostree upgrade
+Pulling manifest: ostree-image-signed:docker://registry.gitlab.com/wunker-bunker/wunker-os/jp-laptop
+Importing: ostree-image-signed:docker://registry.gitlab.com/wunker-bunker/wunker-os/jp-laptop (digest: sha256:01073d98adf4041f3b91840af1135b15aee97db90de6bc3a3846d67c07345e6a)
+ostree chunk layers already present: 65
+custom layers already present: 16
+custom layers needed: 2 (255.0 MB)
+```
+
+## So all I need to do is move my recipe files?
+
+Yes. The vast majority of the work to get these benefits are done on our end. All you need to do is move those files.
+
+## Do I HAVE to make this change right now?
+
+No you don't. We will continue to support the legacy method for the time being.
+
+## Final words
+
+Hopefully I was able to explain how these changes will help you in your building ventures. We'll be working more on creating useful features as well as optimizing your building experience. 
+
+Happy building!

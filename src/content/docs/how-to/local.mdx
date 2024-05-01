@@ -37,7 +37,7 @@ This section is a draft, so contents are unfinished or nonexistent. The CLI inte
 The `build` command builds an image from a recipe; you can use this command to test your recipe locally before pushing the recipe to GitHub:
 
 ```bash
-bluebuild build ./config/recipe.yml
+bluebuild build ./recipes/recipe.yml
 ```
 
 You can see that the BlueBuild GitHub Action [uses the same `build` command][bluebuild-cli-ghaction-build], with additional `--push` and `--registry` options for pushing successful build to `ghcr.io` or similar image repositories.
