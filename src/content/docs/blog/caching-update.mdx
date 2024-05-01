@@ -1,14 +1,14 @@
 ---
 title: The Caching Update
-description: A recent BlueBuild CLI update makes builds and updates much faster.
-date: 2024-04-29
+description: A recent BlueBuild CLI update makes builds and updates much faster. Learn how to take advantage of the improvements.
+date: 2024-05-01
 authors:
     - name: Gerald (Jerry) Pinder
       img: https://avatars.githubusercontent.com/u/4626052
       github: gmpinder
 ---
 :::tip[TLDR]
-A recent BlueBuild CLI update makes builds and updates much faster. [What do I need to do to get it?](#migration)
+A recent BlueBuild CLI update makes builds and updates much faster. [What do I need to do to take advantage?](#migration)
 :::
 
 Hello! I'm Jerry and I'm the creator and maintainer of the Rust-based `bluebuild` CLI tool. I started creating this tool as a way to extend the work that [XYNY](https://github.com/xynydev) did with the recipe standard, but make it so that I didn't have to manage the `Containerfile` directly. The tool is an integral part of the project that handles Containerfile generation from the recipe, the building of container images, and pushing them to the registry.
@@ -17,11 +17,11 @@ For the past month or so, we've been working on trying to make the building expe
 
 ## Migration
 
-I'm happy to announce today that we have now released `v0.8.4` of `bluebuild` CLI which completes the last set of changes needed to allow users to quickly iterate on changes to their build to try new changes without having to wait for long build times or large downloads. The change is as simple as:
+I'm happy to announce that we have now released `v0.8.4` of `bluebuild` CLI (and the accompanying v1.4.0 of the GitHub Action) which completes the last set of changes needed to allow users to quickly iterate on changes to their build to try new changes without having to wait for long build times or large downloads. The change is as simple as:
 
 1. Moving all of your recipe files into the `./recipes/` directory in the root of your repo instead of `./config/`.
 2. It's also suggested to move the `./config/containerfiles/` directory into the root of your repo too.
-  - You can see the docs for the `containerfile` module [here](https://blue-build.org/reference/modules/containerfile/).
+     - You can see the docs for the `containerfile` module [here](https://blue-build.org/reference/modules/containerfile/).
 
 ## Wait, what's wrong with how it is now?
 
