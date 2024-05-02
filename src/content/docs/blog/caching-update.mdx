@@ -17,11 +17,46 @@ For the past month or so, we've been working on trying to make the building expe
 
 ## Migration
 
-I'm happy to announce that we have now released `v0.8.4` of `bluebuild` CLI (and the accompanying v1.4.0 of the GitHub Action) which completes the last set of changes needed to allow users to quickly iterate on changes to their build to try new changes without having to wait for long build times or large downloads. The change is as simple as:
+I'm happy to announce that we have now released `v0.8.4` of `bluebuild` CLI (and the accompanying v1.4.0 of the GitHub Action) which completes the last set of changes needed to allow users to quickly iterate on changes to their build to try new changes without having to wait for long build times or large downloads. The change requires:
 
 1. Moving all of your recipe files into the `./recipes/` directory in the root of your repo instead of `./config/`.
+    - This does not include all the other files/directories in your `./config/` like `./config/scripts/` or `./config/files/`
+    - Any `.yml`/`.yaml` file that contains information for the modules to build your image are your recipe files.
+    - Be sure to update any use of `from-file:` to account for any changes in your directory structure
+      - For example if the recipes were in `./config/recipes/` and extended recipe files in `./config/recipes/image_configs/`.
+      - One of the recipes calls `from-file: recipes/image_configs/common.yml`.
+      ```
+      config
+      └─recipes
+        ├── image_configs
+        │   ├── common.yml
+        │   ├── gnome.yml
+        │   └── kde.yml
+        ├── recipe-gnome-nvidia.yml
+        ├── recipe-gnome.yml
+        ├── recipe-kde-nvidia.yml
+        └── recipe-kde.yml
+      ```
+      - You could move `recipes` up a level to be:
+      ```
+      config
+      recipes
+      ├── image_configs
+      │   ├── common.yml
+      │   ├── gnome.yml
+      │   └── kde.yml
+      ├── recipe-gnome-nvidia.yml
+      ├── recipe-gnome.yml
+      ├── recipe-kde-nvidia.yml
+      └── recipe-kde.yml
+      ```
+      - Then `from-file:` can have the path set to `image_configs/common.yml`
+    - Be sure to update your workflow file too
+      - If your `recipe.yml` was located in `./config/` and you moved it to `./recipes/`, the GHA will already take that into account
+      - The the thing to look out for is the recipe's relative location to the "root" of recipe locations
 2. It's also suggested to move the `./config/containerfiles/` directory into the root of your repo too.
-     - You can see the docs for the `containerfile` module [here](https://blue-build.org/reference/modules/containerfile/).
+    - You can see the docs for the `containerfile` module [here](https://blue-build.org/reference/modules/containerfile/).
+3. Update your GHA to be at least `v1.4`
 
 ## Wait, what's wrong with how it is now?
 
