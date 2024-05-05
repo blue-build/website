@@ -22,7 +22,9 @@ The tooling part of this site will be written in [`src/pages/creator/`](./src/pa
 
 ## Local development
 
-This project requires `node` and `npm` or [`pnpm`](https://pnpm.io/) for local development. A [Devbox](https://www.jetpack.io/devbox/) configuration is provided and can be activated by running `devbox shell` in the project directory (if Devbox is installed).
+This project requires `node` and `npm` or [`pnpm`](https://pnpm.io/) for local development.
+- A [Mise](https://mise.jdx.dev/) configuration is provided and works out-of-the-box in a Mise-activated shell.
+- A [Devbox](https://www.jetpack.io/devbox/) configuration is provided and can be activated by running `devbox shell` in the project directory (if Devbox is installed).
 
 To get started with local development install the dependencies:
 
