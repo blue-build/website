@@ -23,3 +23,18 @@ const isFrontPage = Astro.url.pathname === "/";
         <Default {...(Astro.props as StarlightRouteData)} />
     )
 }
+
+<style is:inline>
+    @media screen and (max-width: 400px) {
+        footer div {
+            --tw-translate-x: 0 !important;
+            --tw-translate-y: 0 !important;
+            flex-wrap: wrap;
+            padding-right: 6rem !important;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            height: min-content !important;
+            line-height: 1.2;
+        }
+    }
+</style>
