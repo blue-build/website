@@ -27,6 +27,18 @@ The image description. Published to GHCR in the image metadata.
 description: This is my personal OS image.
 ```
 
+### `alt-tags:`
+
+Allows setting custom tags on the recipe's final image. Adding tags to this property will override the `latest` and timestamp tags.
+
+#### Example:
+
+```yaml
+alt-tags:
+  - gts
+  - stable
+```
+
 ### `base-image:`
 
 The [OCI](https://opencontainers.org/) image to base your custom image on. Only atomic Fedora images and those based on them are officially supported. Universal Blue is recommended. A list of uBlue images can be found on the [uBlue website](https://universal-blue.org/images/). BlueBuild-built images can be used as well.
@@ -49,6 +61,23 @@ The tag of the base image to build on. Used to select a version explicitly (`40`
 image-version: 40
 ```
 
+### `stages:`
+
+A list of [stages](/references/stages/) that is executed outside of the final image. This is useful for compiling programs from source without polluting the final bootable image.
+
+#### Example:
+
+```yaml
+stages:
+  - name: bluebuild
+    from: rust
+    modules:
+      - type: script
+        no-cache: true
+        snippets:
+          - cargo install --locked --all-features blue-build
+```
+
 ### `modules:`
 
 A list of [modules](/reference/module/) that is executed in order. Multiple of the same module can be included.
@@ -60,9 +89,9 @@ Each item in this list should have at least a `type:` or be specified to be incl
 ```yaml
 # recipes/recipe.yml
 modules:
-    - type: rpm-ostree
-      # rest of the module config...
-    - from-file: common-packages.yml
+  - type: rpm-ostree
+    # rest of the module config...
+  - from-file: common-packages.yml
 ```
 
 The included file can have one or multiple modules:
@@ -78,8 +107,8 @@ type: rpm-ostree
 # recipes/common-packages.yml
 # multiple modules
 modules:
-    - type: script
-      # rest of the module config...
-    - type: rpm-ostree
-      # rest of the module config...
+  - type: script
+    # rest of the module config...
+  - type: rpm-ostree
+    # rest of the module config...
 ```
