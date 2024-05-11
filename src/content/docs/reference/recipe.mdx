@@ -71,7 +71,7 @@ A list of [stages](/references/stages/) that is executed outside of the final im
 stages:
   - name: bluebuild
     from: rust
-    modules:
+    modules: # same as the top-level modules key, but executed in the custom stage
       - type: script
         no-cache: true
         snippets:
