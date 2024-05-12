@@ -70,7 +70,7 @@ A list of [stages](/references/stages/) that are executed before the build of th
 ```yaml
 stages:
   - name: bluebuild
-    from: rust
+    from: rust:1.77
     modules: # same as the top-level modules key, but executed in the custom stage
       - type: script
         no-cache: true
