@@ -27,7 +27,7 @@ The image description. Published to GHCR in the image metadata.
 description: This is my personal OS image.
 ```
 
-### `alt-tags:`
+### `alt-tags:` (optional)
 
 Allows setting custom tags on the recipe's final image. Adding tags to this property will override the `latest` and timestamp tags.
 
@@ -61,7 +61,7 @@ The tag of the base image to build on. Used to select a version explicitly (`40`
 image-version: 40
 ```
 
-### `stages:`
+### `stages:` (optional)
 
 A list of [stages](/references/stages/) that are executed before the build of the final image. This is useful for compiling programs from source without polluting the final bootable image.
 

@@ -24,14 +24,23 @@ Contributions to increase the size of this list is [welcome](https://github.com/
 
 ## Syntax
 
-- **Required**
-  - `from` - The full image ref (image name + tag). This will be set in the `FROM` statement of the stage.
-  - `name` - The name of the stage. This is used when referencing the stage when using the `from:` property in the `copy` [module](/reference/modules/copy/).
-  - `modules` - The list of modules to execute. The exact same syntax used by the main recipe `modules:` property.
-- **Optional**
-  -  `shell` - Allows a user to pass in an array of strings that are passed directly into the [`SHELL` instruction](https://docs.docker.com/reference/dockerfile/#shell).
+### `from:`
 
-### Example
+The full image ref (image name + tag). This will be set in the `FROM` statement of the stage.
+
+### `name:`
+
+The name of the stage. This is used when referencing the stage when using the `from:` property in the `copy` [module](/reference/modules/copy/).
+
+### `modules:`
+
+The list of modules to execute. The exact same syntax used by the main recipe `modules:` property.
+
+### `shell:` (optional)
+
+Allows a user to pass in an array of strings that are passed directly into the [`SHELL` instruction](https://docs.docker.com/reference/dockerfile/#shell).
+
+## Example
 
 ```yaml
 stages:
