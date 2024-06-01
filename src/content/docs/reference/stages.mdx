@@ -34,7 +34,7 @@ The name of the stage. This is used when referencing the stage when using the `f
 
 ### `modules:`
 
-The list of modules to execute. The exact same syntax used by the main recipe `modules:` property.
+The list of modules to execute. The exact same syntax used by the main recipe [`modules:`](/reference/module/) property.
 
 ### `shell:` (optional)
 
@@ -43,22 +43,28 @@ Allows a user to pass in an array of strings that are passed directly into the [
 ## Example
 
 ```yaml
+name: custom-image
+base-image: ghcr.io/ublue-os/silverblue
+image-version: 40
+description: Stages example
 stages:
-- name: ubuntu-test
-  from: docker.io/library/ubuntu:22.04
-  modules:
-  - type: files
-    files:
-    - usr: /usr
-  - type: script
-    scripts:
-    - example.sh
-    snippets:
-    - echo "test" > /test.txt
-  - type: test-module
-  - type: containerfile
-    containerfiles:
-    - labels
-    snippets:
-    - RUN echo "This is a snippet"
+  - name: helix
+    from: docker.io/library/rust
+    modules:
+      - type: script
+        snippets:
+          - apt-get update && apt-get install -y git # Install git
+          - git clone https://github.com/helix-editor/helix.git # Clone the helix repo
+          - cd helix && RUSTFLAGS="-C target-feature=-crt-static" cargo install --path helix-term # Use cargo to install
+          - mkdir -p /out/ && mv $CARGO_HOME/bin/hx /out/hx && mv runtime /out/ # Move bin and runtime
+modules:
+  # Copy the bin and runtime from the `helix` stage
+  - type: copy
+    from: helix
+    src: /out/hx
+    dest: /usr/bin/
+  - type: copy
+    from: helix
+    src: /out/runtime
+    dest: /usr/lib64/helix/
 ```
