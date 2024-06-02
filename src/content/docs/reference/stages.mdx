@@ -1,0 +1,70 @@
+---
+title: Stages
+description: A stage is a separate image build flow executed in parallel with the main build.
+---
+
+:::note
+This feature is experimental and currently only available when using `use_unstable_cli` option in the [GitHub Action](/reference/github-action/) or using the `stages` feature when compiling.
+:::
+
+This property will allow users to define a list of Containerfile stages each with their own modules. Stages can be used to compile programs, perform parallel operations, and copy the results into the final image without contaminating the final image.
+
+## Module Support
+
+Currently the only modules that work out-of-the-box are `copy`, `script`, `files`, and `containerfile`. Other modules are dependent on the programs installed on the image. In order to better support some of our essential modules, a setup script is ran at the start of each stage that is not `scratch`. This script will install `curl`, `wget`, `bash`, and `grep` and use the package manager for the detected distributions.
+
+At this time, the following distributions are supported:
+
+- Debian
+- Ubuntu
+- Fedora
+- Alpine
+
+Other distributions can be used, but the necessary packages won't be installed automatically. Contributions to increase the size of this list is [welcome](https://github.com/blue-build/cli/blob/main/scripts/setup.sh)!
+
+## Syntax
+
+### `from:`
+
+The full image ref (image name + tag). This will be set in the `FROM` statement of the stage.
+
+### `name:`
+
+The name of the stage. This is used when referencing the stage when using the `from:` property in the `copy` [module](/reference/modules/copy/).
+
+### `modules:`
+
+The list of modules to execute. The exact same syntax used by the main recipe [`modules:`](/reference/module/) property.
+
+### `shell:` (optional)
+
+Allows a user to pass in an array of strings that are passed directly into the [`SHELL` instruction](https://docs.docker.com/reference/dockerfile/#shell).
+
+## Example
+
+```yaml
+name: custom-image
+base-image: ghcr.io/ublue-os/silverblue-main
+image-version: 40
+description: Stages example
+stages:
+  - name: helix
+    from: docker.io/library/rust
+    modules:
+      - type: script
+        snippets:
+          - apt-get update && apt-get install -y git # Install git
+          - git clone https://github.com/helix-editor/helix.git # Clone the helix repo
+          - cd helix && RUSTFLAGS="-C target-feature=-crt-static" cargo install --path helix-term # Use cargo to install
+          - mkdir -p /out/ && mv $CARGO_HOME/bin/hx /out/hx && mv runtime /out/ # Move bin and runtime
+modules:
+  # Copy the bin and runtime from the `helix` stage
+  - type: copy
+    from: helix
+    src: /out/hx
+    dest: /usr/bin/
+  - type: copy
+    from: helix
+    src: /out/runtime
+    dest: /usr/lib64/helix/
+```

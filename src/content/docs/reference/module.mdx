@@ -11,15 +11,19 @@ Modules themselves differ on what configuration options they use and require, an
 
 ### `type:`
 
-The name of the module to run.
+The name of the module to run. This corresponds to the name of the directory as well as the script's name in the module's directory. For example, using `test` would call the script in `$MODULE_DIRECTORY/test/test.sh`.
 
 ### `source:` (optional)
-
-The URL of the module repository (an OCI image) to pull the module from. If left unspecified, the source use is a hybrid the default module repository at `ghcr.io/blue-build/modules` and the custom modules in the local `modules/` directory, where custom modules overwrite the default modules.
 
 :::caution
 A module can execute arbitrary code both in the image build and consequently on your booted system, so make sure you trust the source you specify.
 :::
+
+The URL of the module repository (an OCI image) to pull the module from. If left unspecified, the source use is a hybrid the default module repository at `ghcr.io/blue-build/modules` and the custom modules in the local `modules/` directory, where custom modules overwrite the default modules.
+
+### `no-cache:` (optional)
+
+When set to `true`, the module is run regardless if previous layers in the build have been cached. This is useful in [stages](/reference/stages) where the goal is to build the latest version of a program from a git repository. Otherwise, the module wouldn't run again unless previous layers were also re-ran.
 
 ## How modules are launched
 

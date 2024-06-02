@@ -79,6 +79,10 @@ export default defineConfig({
                             link: "/reference/module/",
                         },
                         {
+                            label: "Stages",
+                            link: "/reference/stages/",
+                        },
+                        {
                             label: "Modules",
                             autogenerate: {
                                 directory: "reference/modules",
