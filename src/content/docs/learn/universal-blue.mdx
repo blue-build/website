@@ -120,7 +120,7 @@ You should read the [`just manual`](https://just.systems/man/en/chapter_20.html)
         echo "I can run commands here"
     ```
 
--   By default, each line is run separately. To run a recipe like a script, add standard the script starting shebang lines at the start of your recipe like this:
+-   By default, each line is run separately. To run a recipe like a script, add the shebang at the beginning of the script to run it with the right interpreter. Here's an example of a recipe that contains a multi-line bash script:
     ```justfile
     # 60-custom.just
     scriptrecipe:
