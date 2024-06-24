@@ -84,6 +84,12 @@ async function generateReferencePage(
     const readmeRes = await fetch(moduleYml.readme as URL);
     const readme = await readmeRes.text();
 
+    const schemaRes = await fetch(
+        `https://schema.blue-build.org/modules/${moduleYml.name}.json`,
+    );
+    const schema = await schemaRes.json().catch(() => {});
+    const optionReference = generateOptionReference(schema as object);
+
     const content = `\
 ---
 title: "${moduleYml.name}"
@@ -95,6 +101,7 @@ ${readme.replace(/^#{1}\s.*$/gm, "")}
 \`\`\`yaml
 ${moduleYml.example}
 \`\`\`
+${optionReference !== "" ? `## Configuration options\n ${optionReference}` : ""}
 `;
     fs.writeFile(
         path.join(outputPath, moduleYml.name + ".md"),
@@ -125,4 +132,51 @@ function rawUrlToEditUrl(url: string): string {
         .join("/");
     const refAndFilePath = url.split("/").slice(5).join("/");
     return `${baseURL}/edit/${refAndFilePath}`;
+}
+
+function generateOptionReference(schema: {
+    properties: object;
+    required: string[];
+}): string {
+    if (schema === undefined) return "";
+
+    let out = "";
+
+    function generatePropReferences(
+        properties: object,
+        headerLevel: string,
+    ): string {
+        let out = "";
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        for (const [key, value] of Object.entries(properties)) {
+            if (key === "type") continue;
+            const prop = value as {
+                type: string;
+                description?: string;
+                default?: string;
+                anyOf?: Array<{ type: string; const: string }>;
+                properties?: object;
+                items?: { anyOf: Array<{ type: string; const: string }> };
+            };
+            const required = schema.required?.includes(key)
+                ? "required"
+                : "optional";
+            const type =
+                prop.type ?? (value.anyOf !== undefined ? "enum" : "unknown");
+
+            out += `${headerLevel} \`${key}:\` (${required} ${type})
+${prop.description ?? "*No description provided...*"}
+
+${type === "object" ? generatePropReferences(prop.properties ?? {}, headerLevel + "#") : ""}
+${type === "array" && prop.items?.anyOf !== undefined ? "Possible values: " + prop.items.anyOf.map((v) => "`" + v.const + "`").join(", ") + "<br>" : ""}
+${type === "enum" ? "Possible values: " + prop.anyOf?.map((v) => "`" + v.const + "`").join(", ") + "<br>" : ""}
+${prop.default !== undefined ? `Default: \`${prop.default}\`` : ""}
+            \n`;
+        }
+        return out;
+    }
+
+    out += generatePropReferences(schema.properties, "###");
+
+    return out;
 }
