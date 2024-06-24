@@ -88,7 +88,9 @@ async function generateReferencePage(
         `https://schema.blue-build.org/modules/${moduleYml.name}.json`,
     );
     const schema = await schemaRes.json().catch(() => {});
-    const optionReference = generateOptionReference(schema as object);
+    const optionReference = generateOptionReference(
+        schema as { properties: object; required: string[] },
+    );
 
     const content = `\
 ---
