@@ -26,3 +26,19 @@ h6 {
 .sl-markdown-content code:not(:where(.not-content *)) {
     color: var(--sl-color-gray-1);
 }
+
+.sl-markdown-content h2::before {
+    content: "## ";
+    opacity: 0.5;
+    font-weight: normal;
+}
+.sl-markdown-content h3::before {
+    content: "### ";
+    opacity: 0.5;
+    font-weight: normal;
+}
+.sl-markdown-content h4::before {
+    content: "#### ";
+    opacity: 0.5;
+    font-weight: normal;
+}
