@@ -39,15 +39,13 @@ When asking for help with implementing a new thing, we should outline requiremen
 
 This section contains short how-tos for fixing common issues.
 
-### `error: Creating importer: Failed to invoke skopeo proxy method OpenImage: remote error: unable to retrieve auth token: invalid username/password: unauthorized`
+### `no space left on device`
 
-This error happens when the image you are trying to rebase to is private. This is currently the default state of a newly created package on GitHub. This is the result of a recent change, and the issue [has been reported to GitHub](https://github.com/orgs/community/discussions/110670). If this is your own image, you can fix this easily with the steps below.
+This error happens when the GitHub builder has ran out of space, and can surface during any operation that writes to the disk. Most commonly, the error will happen while committing the container. (`Error: committing container for step`, `writing blob: storing blob to file`, `no space left on device`)
 
-1. Go to the "Packages" tab on your GitHub profile.
-2. Choose the package you are trying to build.
-3. Open "Package settings".
-4. Under "Danger Zone", change the package visibility to "Public".
-5. Manually re-trigger the build.
+You are more likely to encounter this issue when building on an already heavy image like Bazzite.
+
+This issue can usually be fixed by setting `maximize_build_space: true` in the options of the BlueBuild GitHub Action, which is the default as of `blue-build/github-action@v1.6.1`. GitHub organizations on paid plans can also take advantage of GitHub's larger workflow runners.
 
 ### `ghcr.io: denied: permission_denied: write_package`
 
@@ -60,13 +58,15 @@ To fix this issue:
 4. Under "Manage Actions access", add your new repository and give it the "Admin" role.
 5. Manually re-trigger the build.
 
-### `no space left on device`
+### `error: Creating importer: Failed to invoke skopeo proxy method OpenImage: remote error: unable to retrieve auth token: invalid username/password: unauthorized`
 
-This error happens when the GitHub builder has ran out of space, and can surface during any operation that writes to the disk. Most commonly, the error will happen while committing the container. (`Error: committing container for step`, `writing blob: storing blob to file`, `no space left on device`)
+This error happens when the image you are trying to rebase to is private. If this is your own image, you can fix this easily with the steps below.
 
-You are more likely to encounter this issue when building on an already heavy image like Bazzite.
-
-This issue can usually be fixed by setting `maximize_build_space: true` in the options of the BlueBuild GitHub Action, which is the default as of `blue-build/github-action@v1.6.1`. GitHub organizations on paid plans can also take advantage of GitHub's larger workflow runners.
+1. Go to the "Packages" tab on your GitHub profile.
+2. Choose the package you are trying to build.
+3. Open "Package settings".
+4. Under "Danger Zone", change the package visibility to "Public".
+5. Manually re-trigger the build.
 
 ---
 
