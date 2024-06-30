@@ -60,6 +60,14 @@ To fix this issue:
 4. Under "Manage Actions access", add your new repository and give it the "Admin" role.
 5. Manually re-trigger the build.
 
+### `no space left on device`
+
+This error happens when the GitHub builder has ran out of space, and can surface during any operation that writes to the disk. Most commonly, the error will happen while committing the container. (`Error: committing container for step`, `writing blob: storing blob to file`, `no space left on device`)
+
+You are more likely to encounter this issue when building on an already heavy image like Bazzite.
+
+This issue can usually be fixed by setting `maximize_build_space: true` in the options of the BlueBuild GitHub Action, which is the default as of `blue-build/github-action@v1.6.1`. GitHub organizations on paid plans can also take advantage of GitHub's larger workflow runners.
+
 ---
 
 https://diataxis.fr/tutorials/
