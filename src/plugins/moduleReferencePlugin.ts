@@ -151,7 +151,7 @@ function generateOptionReference(schema: {
         let out = "";
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         for (const [key, value] of Object.entries(properties)) {
-            if (key === "type") continue;
+            if (key === "type" || key === "no-cache") continue;
             const prop = value as {
                 type: string;
                 description?: string;
