@@ -8,6 +8,7 @@ description: This guide shows you how to use the Bluebuild CLI tool to test imag
 [bluebuild-cli-readme-howtouse]: https://github.com/blue-build/cli?tab=readme-ov-file#how-to-use
 [bluebuild-cli-ghaction]: https://github.com/blue-build/github-action/
 [bluebuild-cli-ghaction-build]: https://github.com/blue-build/github-action/blob/main/action.yml#L89-L99
+[bluebuild-cli-from-file]: https://blue-build.org/how-to/multiple-files/
 [refactor-discussion]: https://github.com/blue-build/cli/issues/65
 
 This guide shows you how to use [Bluebuild CLI][bluebuild-cli-repo] to do the following things locally, without depending on the [BlueBuild GitHub Action][bluebuild-cli-ghaction]:
@@ -23,13 +24,21 @@ The BlueBuild CLI tool is installed by default on images built using BlueBuild. 
 
 ## Using BlueBuild CLI
 
-The [repository README][bluebuild-cli-readme-howtouse] has general instructions for using the `bluebuild` CLI tool. Example use cases for some of the commands follow in the sections below.
+The [repository README][bluebuild-cli-readme-howtouse] has general instructions for using the `bluebuild` CLI tool. Example use cases for some of the commands follow in the sections below. You can also view the help text for the commands using the `--help` argument on every subcommand.
 
-### Template
+### Generate
 
-:::caution
-This section is a draft, so contents are unfinished or nonexistent. The CLI interface may be refactored in the future; see [here][refactor-discussion] for more information.
-:::
+The `generate` command allows you to create the `Containerfile` used to build your recipe. It will print to stdout unless you use the `--output/-o <FILE_PATH>` argument:
+
+```bash
+bluebuild generate ./recipes/recipe.yml -o Containerfile
+```
+
+If your recipe makes use of the [`from-file:`][bluebuild-cli-from-file] syntax, it can sometimes get confusing to know the exact order of all the module calls in your recipe. You can make use of the `--display-full-recipe/-d` argument and it will generate your full `recipe.yml` file with all recipe snippets included:
+
+```bash
+bluebuild generate -d ./recipes/recipe.yml
+```
 
 
 ### Build
@@ -42,17 +51,18 @@ bluebuild build ./recipes/recipe.yml
 
 You can see that the BlueBuild GitHub Action [uses the same `build` command][bluebuild-cli-ghaction-build], with additional `--push` and `--registry` options for pushing successful build to `ghcr.io` or similar image repositories.
 
-You can see the complete list of available options using `bluebuild build help`.
+You can see the complete list of available options using `bluebuild build --help`.
 
-### Upgrade
-
-:::caution
-This section is a draft, so contents are unfinished or nonexistent. The CLI interface may be refactored in the future; see [here][refactor-discussion] for more information.
-:::
-
-
-### Rebase
+### Rebase/Upgrade
 
 :::caution
-This section is a draft, so contents are unfinished or nonexistent. The CLI interface may be refactored in the future; see [here][refactor-discussion] for more information.
+These commands will be replace by `switch` in `v0.9.0`. It will be aliased with `rebase` and `upgrade` so as to not break existing scripts. Right now, `upgrade` must be called when building the same image you called `rebase` on earlier. The `switch` command removes this ambiguity.
 :::
+
+The `rebase` command is a workflow command. It will build your image, export it to a `.tar.gz` file, and call `rpm-ostree rebase` with the file as the target instead of a OCI image:
+
+```bash
+bluebuild rebase ./recipes/recipe.yml
+```
+
+After you've rebased, you can use the `upgrade` command to do the same thing except call `rpm-ostree upgrade`. To trigger an immediate reboot for either command, you can pass in the `--reboot/-r` argument.
