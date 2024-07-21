@@ -10,7 +10,7 @@ authors:
 
 A [previous update](/blog/caching-update) split the original `config/` directory into two parts, `config/` and the newly created `recipes/`, because we realized that it did not make sense to include files that will be copied into the image and configuration files used for generating the Containerfile (the lower-level build-instructions) in the same directory anymore.
 
-This update left us at a weird state, though, because the directory that no longer contained image configuration, just files to be copied into the image, was called `config/`. We didn't want to just rename `config/` to `files/`, though, because that would have created the confusingly named directory `files/files/` used by the `files` module (very confusing).
+This update left us at a weird state, though, because the directory that no longer contained image configuration, just files to be copied into the image, was called `config/`. We didn't want to just rename `config/` to `files/`, though, because that would have created the weirdly named directory `files/files/` used by the `files` module (very confusing).
 
 What we opted to in addition to renaming `config/` to `files/` is giving the `files` module access to the entire `files/` directory. This keeps the convention of each module reading files from a folder named after itself, while unlocking better ways to organize files when using the `files` module.
 
