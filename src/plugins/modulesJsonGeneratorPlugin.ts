@@ -19,18 +19,27 @@ export default function modulesJsonGeneratorPlugin(
                     yml: string;
                 }> = [];
                 for (const moduleSource of options.moduleSources) {
-                    const modulesRes = await fetch(moduleSource.source);
+                    const modulesRes = await fetch(moduleSource.source, {
+                        headers: {
+                            Authorization: `Bearer ${process.env.GH_TOKEN}`,
+                        },
+                    });
                     const modulesJson = (await modulesRes.json()) as Array<{
                         name: string;
                         url: string;
                     }>;
                     for (const moduleJson of modulesJson) {
-                        const moduleFilesRes = await fetch(moduleJson.url);
-                        const moduleFilesJson =
-                            (await moduleFilesRes.json()) as Array<{
-                                name: string;
-                                download_url: string;
-                            }>;
+                        const moduleFilesRes = await fetch(moduleJson.url, {
+                            headers: {
+                                Authorization: `Bearer ${process.env.GH_TOKEN}`,
+                            },
+                        });
+                        const moduleFilesJson = await moduleFilesRes.json();
+                        if (!Array.isArray(moduleFilesJson)) continue;
+                        const moduleFiles = moduleFilesJson as Array<{
+                            name: string;
+                            download_url: string;
+                        }>;
                         const module: {
                             name: string;
                             readme: string;
@@ -44,7 +53,7 @@ export default function modulesJsonGeneratorPlugin(
                             tsp: "",
                             yml: "",
                         };
-                        for (const file of moduleFilesJson) {
+                        for (const file of moduleFiles) {
                             if (file.name === "README.md") {
                                 module.readme = file.download_url;
                             } else if (file.name === `${module.name}.sh`) {
