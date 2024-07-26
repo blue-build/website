@@ -168,7 +168,7 @@ ${prop.description ?? "*No description provided...*"}
 
 ${type === "object" ? generatePropReferences(prop.properties ?? {}, headerLevel + "#") : ""}
 ${type === "array" && prop.items?.anyOf !== undefined ? "Possible values: " + prop.items.anyOf.map((v) => "`" + v.const + "`").join(", ") + "<br>" : ""}
-${type === "enum" ? "Possible values: " + prop.anyOf?.map((v) => "`" + v.const + "`").join(", ") + "<br>" : ""}
+${type === "enum" ? "Possible values: " + prop.anyOf?.map((v) => "`" + parseEnumValue(v) + "`").join(", ") + "<br>" : ""}
 ${prop.default !== undefined ? `Default: \`${prop.default}\`` : ""}
             \n`;
         }
@@ -178,4 +178,20 @@ ${prop.default !== undefined ? `Default: \`${prop.default}\`` : ""}
     out += generatePropReferences(schema.properties, "###");
 
     return out;
+}
+
+function parseEnumValue(v: any): string {
+    if (v.const !== undefined) return v.const;
+
+    if (v.items !== undefined) {
+        if (v.items.$ref === "#/$defs/RecordString") return "string: string";
+        if (v.items.type === "object") {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+            return `{ ${Object.entries(v.items.properties)
+                .map((p) => `${p[0]}: ${(p[1] as { type: string }).type}`)
+                .join(", ")} }`;
+        }
+    }
+
+    return "Unknown type";
 }
