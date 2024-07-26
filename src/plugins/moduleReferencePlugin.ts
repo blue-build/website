@@ -6,82 +6,79 @@ import path from "node:path";
 import * as fs from "fs";
 import { parse } from "yaml";
 
-export default function moduleReferencePlugin(
-    options: ModuleReferencePluginOptions,
-): StarlightPlugin {
+export default function moduleReferencePlugin(): StarlightPlugin {
     return {
         name: "moduleReferencePlugin",
         hooks: {
             async setup() {
-                for (const moduleSource of options.moduleSources) {
-                    const outputPath = path.join(
-                        "src/content/docs",
-                        moduleSource.path,
-                    );
-                    if (fs.existsSync(outputPath)) {
-                        try {
-                            fs.rmSync(outputPath, { recursive: true });
-                            console.log(
-                                "Module reference directory cleared successfully before recreating: " +
-                                    outputPath,
-                            );
-                        } catch (err) {
-                            throw new Error(
-                                "Failed to clear module reference directory before recreating: " +
-                                    (err as Error).message,
-                            );
-                        }
+                const outputPath = "src/content/docs/reference/modules";
+                if (fs.existsSync(outputPath)) {
+                    try {
+                        fs.rmSync(outputPath, { recursive: true });
+                        console.log(
+                            "Module reference directory cleared successfully before recreating: " +
+                                outputPath,
+                        );
+                    } catch (err) {
+                        throw new Error(
+                            "Failed to clear module reference directory before recreating: " +
+                                (err as Error).message,
+                        );
                     }
-                    fs.mkdir(outputPath, { recursive: true }, (err) => {
-                        if (err != null) {
-                            throw new Error(
-                                "Failed to create module reference directory: " +
-                                    err.message,
-                            );
-                        } else {
-                            console.log(
-                                "Module reference directory created successfully: " +
-                                    outputPath,
-                            );
-                        }
+                }
+                fs.mkdir(outputPath, { recursive: true }, (err) => {
+                    if (err != null) {
+                        throw new Error(
+                            "Failed to create module reference directory: " +
+                                err.message,
+                        );
+                    } else {
+                        console.log(
+                            "Module reference directory created successfully: " +
+                                outputPath,
+                        );
+                    }
+                });
+
+                const modules = JSON.parse(
+                    fs.readFileSync("public/modules.json", "utf-8"),
+                ) as Array<{
+                    name: string;
+                    readme: string;
+                    sh: string;
+                    tsp: string;
+                    yml: string;
+                }>;
+
+                for (const module of modules) {
+                    generateReferencePage(module, outputPath).catch((err) => {
+                        throw new Error(
+                            "Failed to generate reference page: " + err.message,
+                        );
                     });
-                    const modulesRes = await fetch(moduleSource.source);
-                    const modules = await modulesRes.json();
-                    for (const module of modules) {
-                        generateReferencePage(
-                            module as string,
-                            outputPath,
-                        ).catch((err) => {
-                            throw new Error(
-                                "Failed to generate reference page: " +
-                                    err.message,
-                            );
-                        });
-                    }
                 }
             },
         },
     };
 }
 
-export interface ModuleReferencePluginOptions {
-    moduleSources: Array<{
-        source: string;
-        path: string;
-    }>;
-}
-
 async function generateReferencePage(
-    moduleYmlUrl: string,
+    module: {
+        name: string;
+        readme: string;
+        sh: string;
+        tsp: string;
+        yml: string;
+    },
     outputPath: string,
 ): Promise<void> {
-    console.log("Fetching: " + moduleYmlUrl);
-    const moduleYmlRes = await fetch(moduleYmlUrl);
+    console.log("Fetching: " + module.yml);
+    const moduleYmlRes = await fetch(module.yml);
     const moduleYmlStr = await moduleYmlRes.text();
     const moduleYml = parse(moduleYmlStr);
     console.log("Generating page for: " + moduleYml.name);
 
-    const readmeRes = await fetch(moduleYml.readme as URL);
+    const readmeRes = await fetch(module.readme);
     const readme = await readmeRes.text();
 
     const schemaRes = await fetch(
@@ -96,7 +93,7 @@ async function generateReferencePage(
 ---
 title: "${moduleYml.name}"
 description: ${moduleYml.shortdesc}
-editUrl: "${rawUrlToEditUrl(moduleYml.readme as string)}"
+editUrl: "${rawUrlToEditUrl(module.readme)}"
 ---
 ${readme.replace(/^#{1}\s.*$/gm, "")}
 ## Example configuration

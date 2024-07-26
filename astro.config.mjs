@@ -4,6 +4,7 @@ import tailwind from "@astrojs/tailwind";
 import icon from "astro-icon";
 import moduleReferencePlugin from "./src/plugins/moduleReferencePlugin";
 import githubActionReferencePlugin from "./src/plugins/githubActionReferencePlugin";
+import modulesJsonGeneratorPlugin from "./src/plugins/modulesJsonGeneratorPlugin";
 
 // https://astro.build/config
 export default defineConfig({
@@ -92,18 +93,17 @@ export default defineConfig({
                 },
             ],
             plugins: [
-                moduleReferencePlugin({
+                modulesJsonGeneratorPlugin({
                     moduleSources: [
                         {
-                            source: "https://raw.githubusercontent.com/blue-build/modules/main/modules.json",
-                            path: "reference/modules/",
+                            source: "https://api.github.com/repos/blue-build/modules/contents/modules",
                         },
                         {
-                            source: "https://raw.githubusercontent.com/blue-build/cli/main/modules.json",
-                            path: "reference/modules/",
+                            source: "https://api.github.com/repos/blue-build/cli/contents/template/templates/modules",
                         },
                     ],
                 }),
+                moduleReferencePlugin(),
                 githubActionReferencePlugin({
                     source: "https://raw.githubusercontent.com/blue-build/github-action/main/action.yml",
                     path: "reference/github-action.md",
