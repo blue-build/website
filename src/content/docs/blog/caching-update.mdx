@@ -53,7 +53,7 @@ I'm happy to announce that we have now released `v0.8.4` of `bluebuild` CLI (and
       - Then `from-file:` can have the path set to `image_configs/common.yml`
     - Be sure to update your workflow file too
       - If your `recipe.yml` was located in `./config/` and you moved it to `./recipes/`, the GHA will already take that into account
-      - The the thing to look out for is the recipe's relative location to the "root" of recipe locations
+      - The thing to look out for is the recipe's relative location to the "root" of recipe locations
 2. It's also suggested to move the `./config/containerfiles/` directory into the root of your repo too.
     - You can see the docs for the `containerfile` module [here](https://blue-build.org/reference/modules/containerfile/).
 3. Update your GHA to be at least `v1.4`
