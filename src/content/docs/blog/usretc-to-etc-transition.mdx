@@ -1,0 +1,44 @@
+---
+title: Transitioning from `/usr/etc/` to `/etc/` in build-time
+description: Why we're recommending the transition from /usr/etc/ to /etc/ in build-time & instructions to do it.
+date: 2024-08-08
+authors:
+    - name: fiftydinar
+      img: https://avatars.githubusercontent.com/u/65243233
+      github: fiftydinar
+---
+
+Hello BlueBuilders!
+
+In this blog post, it will be explained on why the usage of `/etc/` is recommended over `/usr/etc/` in build-time.
+
+It is often recommended in Fedora Atomic space that the system files should be placed in `/usr/etc/`, while files in `/etc/` are reserved for local-users to make edits.
+
+While this is true in run-time, this is technically not true in build-time (emphasis on technically).
+
+It is a recent discovery of [Universal Blue folks](https://github.com/ublue-os) & [Rechunk developer Antheas](https://github.com/antheas) that `ostree` has different behavior regarding `/usr/etc/` & `/etc/` relationship in build-time.  
+Also thanks to the [RedHat employee & `ostree` maintainer Colin Walters](https://github.com/cgwalters) who directly notified them of this.
+
+## Why to transition
+When files are placed directly to `/usr/etc/` in build-time, no issues are noted & everything works fine for now.
+
+However, it is still not the ideal thing to do, since we are relying on undefined `rpm-ostree` behavior in this case, which can stop working anytime.
+
+Quoting Antheas:  
+:::note
+When OSTree commits get converted to OCI, /usr/etc/ becomes /etc/.
+Then during deployment, new /etc/ files are silently moved to /usr/etc/.
+
+Relying on /usr/etc/ to place modified files in customized packages is a hack
+and relies on undefined behavior in the rpm-ostree source code that performs
+the path rewriting.
+:::
+
+As can be seen from the 1st paragraph of the note above, this is how `ostree` functions & this is why it's desired to transition to `/etc/`.
+`/etc/` files in build-time are copied to `/usr/etc/` during deployment, so image users will note no changes.
+
+## How to transition
+
+Copy any files that you have from `/usr/etc/` to `/etc/`.
+
+Profit!
