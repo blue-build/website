@@ -22,7 +22,7 @@ Thanks to the [RedHat employee & `ostree` maintainer Colin Walters](https://gith
 ## Why to transition
 When files are placed to `/usr/etc/` in build-time, currently there are no issues & everything works as expected *for now*. 
 
-However, it is still not the ideal thing to do, since we are relying on undefined `rpm-ostree` behavior in this case, which can stop working anytime.
+However, it is still not the ideal thing to do, since we are relying on undefined `rpm-ostree` behavior, which may stop working some time in the future.
 Take a note that we are utilizing an OCI image, so this part can be ignored: `When OSTree commits get converted to OCI, /usr/etc/ becomes /etc/.`
 
 Quoting Antheas:  
