@@ -31,7 +31,7 @@ Quoting Antheas:
 (Take a note that we are utilizing an OCI image, so this part can be ignored: `When OSTree commits get converted to OCI, /usr/etc/ becomes /etc/.`)
 
 As can be seen from the 1st paragraph of the note above, this is how `ostree` functions & this is why it's desired to transition to `/etc/`.
-`/etc/` files in build-time are copied to `/usr/etc/` during deployment, so local-users will note no changes.
+`/etc/` files in the image are copied to `/usr/etc/` during deployment, so local-users will experience no changes.
 
 ## How to transition
 
