@@ -23,17 +23,12 @@ Thanks to the [RedHat employee & `ostree` maintainer Colin Walters](https://gith
 When files are placed to `/usr/etc/` in build-time, currently there are no issues & everything works as expected *for now*. 
 
 However, it is still not the ideal thing to do, since we are relying on undefined `rpm-ostree` behavior, which may stop working some time in the future.
-Take a note that we are utilizing an OCI image, so this part can be ignored: `When OSTree commits get converted to OCI, /usr/etc/ becomes /etc/.`
-
 Quoting Antheas:  
-:::note
-When OSTree commits get converted to OCI, /usr/etc/ becomes /etc/.
-Then during deployment, new /etc/ files are silently moved to /usr/etc/.
+> When OSTree commits get converted to OCI, /usr/etc/ becomes /etc/. Then during deployment, new /etc/ files are silently moved to /usr/etc/.
+> 
+> Relying on /usr/etc/ to place modified files in customized packages is a hack and relies on undefined behavior in the rpm-ostree source code that performs the path rewriting.
 
-Relying on /usr/etc/ to place modified files in customized packages is a hack
-and relies on undefined behavior in the rpm-ostree source code that performs
-the path rewriting.
-:::
+(Take a note that we are utilizing an OCI image, so this part can be ignored: `When OSTree commits get converted to OCI, /usr/etc/ becomes /etc/.`)
 
 As can be seen from the 1st paragraph of the note above, this is how `ostree` functions & this is why it's desired to transition to `/etc/`.
 `/etc/` files in build-time are copied to `/usr/etc/` during deployment, so local-users will note no changes.
