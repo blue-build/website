@@ -36,8 +36,7 @@ As can be seen from the 1st paragraph of the note above, this is how `ostree` fu
 ## How to transition
 
 0. It is highly recommended that you follow & complete [The Caching Update](https://blue-build.org/blog/caching-update/) & [Updating the directory structure](https://blue-build.org/blog/config-files/) blog post updates
-1. If you're working with a 1-to-1 filetree mapping structure, where you copy files & folders to the `destination` root (`/`) folder, then do the following (source-folder is the folder defined in `source` key inside files module recipe entry):
-  - Copy files from `files/source-folder/usr/etc/` to `files/source-folder/etc/`
-2. If you copy files/folders outside of a 1-to-1 filetree mapping structure, then any files that go to `/usr/etc/` should be copied to go to `/etc/` according to your custom filetree mapping structure.
-3. If you use [`script` module](https://blue-build.org/reference/modules/script/) & have any scripts which modify or download files to `/usr/etc/`, modify them to point out to `/etc/` files instead.
-4. You're good to go! Commit your changes and wait to see that your custom image builds correctly.
+1. If you're working with a _1-to-1 filetree mapping_ structure, where you copy files & folders to the root (`/`) folder, then do the following (source-folder is the folder defined in `source` key inside files module recipe entry):
+  - Move files from `files/system/usr/etc/` to `files/system/etc/` (or replace `system` with the name of the specific directory)
+2. If you copy files to the image in other ways, then any files that go to `/usr/etc/` should be copied to go to `/etc/` according, including files copied by custom scripts.
+3. You're good to go! Commit your changes and wait to see that your custom image builds correctly.
