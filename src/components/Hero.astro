@@ -1,7 +1,7 @@
 ---
 import LogoDark from "@assets/logo-round-dark.svg";
 import LogoLight from "@assets/logo-round-light.svg";
-import { Icon } from "astro-icon/components";
+// import { Icon } from "astro-icon/components";
 const hero = Astro.props.entry.data.hero as {
     title: string;
     tagline: string;
@@ -61,14 +61,14 @@ const hero = Astro.props.entry.data.hero as {
                         ]}
                     >
                         {a.text}
-                        {a.icon && (
+                        {/* {a.icon && (
                             // Astro uses some "clever" validation to make sure only valid icons are used.
                             // Now that the property is hijacked, this ugly workaround is required instead.
-                            <Icon
-                                name={a.icon.html.replace("<svg ", "")}
-                                class="self-center"
-                            />
-                        )}
+                            // <Icon
+                            //     name={a.icon.html.replace("<svg ", "")}
+                            //     class="self-center"
+                            // />
+                        )} */}
                     </a>
                 ))
             }

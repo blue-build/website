@@ -1,7 +1,7 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 import tailwind from "@astrojs/tailwind";
-import icon from "astro-icon";
+// import icon from "astro-icon";
 import moduleReferencePlugin from "./src/plugins/moduleReferencePlugin";
 import githubActionReferencePlugin from "./src/plugins/githubActionReferencePlugin";
 import modulesJsonGeneratorPlugin from "./src/plugins/modulesJsonGeneratorPlugin";
@@ -140,6 +140,6 @@ export default defineConfig({
         tailwind({
             applyBaseStyles: false,
         }),
-        icon(),
+        // icon(),
     ],
 });
