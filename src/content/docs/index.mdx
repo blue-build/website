@@ -8,12 +8,11 @@ hero:
     actions:
         - text: Let's get started!
           link: /learn/getting-started/
-          # "<svg" is a required workaround, see Hero.astro
-          icon: "<svg material-symbols:book-5-rounded"
+          icon: document
           variant: primary
         - text: GitHub
           link: https://github.com/blue-build/
-          icon: "<svg ic:round-launch"
+          icon: external
           variant: minimal
 banner:
     content: |
@@ -27,46 +26,40 @@ import Card from "@components/Card.astro";
 
 <hr class="opacity-0" />
 <CardGrid stagger>
-    <Card
-        title="Easy configuration"
-        icon="material-symbols:edit-outline-rounded"
-    >
+    <Card title="Easy configuration" icon="pencil">
         The build process can be configured entirely in a straightforward YAML
         format called a [recipe](/reference/recipe/). When building, the recipe
         is transformed into a Containerfile by the BlueBuild cli tool.
     </Card>
-    <Card title="Totally extensible" icon="material-symbols:extension-rounded">
+    <Card title="Totally extensible" icon="puzzle">
         The modular build system [can easily be
         extended](/how-to/making-modules/) by just writing a shell script.
         Modules you create can be added into the official BlueBuild repository,
         or your own, for the community to take advantage of.
     </Card>
-    <Card
-        title="Based on well-known standards"
-        icon="material-symbols:book-2-rounded"
-    >
+    <Card title="Based on well-known standards" icon="open-book">
         The format of your OS images is the familiar OCI image format, famously
         used by Docker & Podman. With [Fedora's Native Container
         support](https://fedoraproject.org/wiki/Changes/OstreeNativeContainerStable),
         it becomes possible to boot natively into a OCI compatible image.
     </Card>
-    <Card title="Free & open-source" icon="ri:open-source-fill">
+    <Card title="Free & open-source" icon="github">
         BlueBuild is an open-source project built by the community for the
         community. Feel free to peek at & tinker with the [source
         code](https://github.com/blue-build/)! GitHub also provides CI/CD & a
         container registry for free, though other providers are supported as
         well.
     </Card>
-    <Card title="Effortless reliability" icon="ph:scales-bold">
+    <Card title="Effortless reliability" icon="laptop">
         With your custom images being based on reliable atomic distributions,
         your setup will be rock solid. As all errors related to customizing your
         environment happen during the build process in the cloud, it's way
         harder to end up with a bricked system.
     </Card>
-    <Card title="Build on the best" icon="material-symbols:stacks-rounded">
+    <Card title="Build on the best" icon="rocket">
         Build your custom images on [Universal
-        Blue](https://universal-blue.org/)'s awesome base images, with the option to
-        build on [atomic Fedora
+        Blue](https://universal-blue.org/)'s awesome base images, with the
+        option to build on [atomic Fedora
         desktops](https://fedoraproject.org/atomic-desktops/), and more options
         being supported soon.
     </Card>

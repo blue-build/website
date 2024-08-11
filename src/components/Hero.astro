@@ -1,7 +1,7 @@
 ---
 import LogoDark from "@assets/logo-round-dark.svg";
 import LogoLight from "@assets/logo-round-light.svg";
-// import { Icon } from "astro-icon/components";
+import { Icon } from "@astrojs/starlight/components";
 const hero = Astro.props.entry.data.hero as {
     title: string;
     tagline: string;
@@ -51,7 +51,7 @@ const hero = Astro.props.entry.data.hero as {
                         href={a.link}
                         class:list={[
                             "p-4 px-8 text-xl text-gray-800 no-underline hover:underline dark:text-gray-200",
-                            "flex flex-row gap-2",
+                            "flex flex-row items-center gap-2",
                             {
                                 "bg-gradient-to-b from-gray-300 to-gray-200 outline outline-1                          outline-gray-900 hover:outline-2                          dark:from-gray-900 dark:to-gray-800 dark:shadow-glow dark:outline-0 dark:hover:shadow-glow-active":
                                     a.variant === "primary",
@@ -61,14 +61,7 @@ const hero = Astro.props.entry.data.hero as {
                         ]}
                     >
                         {a.text}
-                        {/* {a.icon && (
-                            // Astro uses some "clever" validation to make sure only valid icons are used.
-                            // Now that the property is hijacked, this ugly workaround is required instead.
-                            // <Icon
-                            //     name={a.icon.html.replace("<svg ", "")}
-                            //     class="self-center"
-                            // />
-                        )} */}
+                        <Icon {...a.icon} />
                     </a>
                 ))
             }
