@@ -17,7 +17,7 @@ We, and many others in the community have recommended previously that the system
 Technically, files written to `/etc/` in the custom image are what populates `/usr/etc/` on a system rebased to that image. 
 
 It is thanks to a recent discovery by the [Universal Blue folks](https://github.com/ublue-os) & the [Rechunk](https://github.com/hhd-dev/rechunk) developer [Antheas](https://github.com/antheas) that `ostree` has different behavior regarding `/usr/etc/` & `/etc/` in build-time vs in run-time.  
-Thanks to the [RedHat employee & `ostree` maintainer Colin Walters](https://github.com/cgwalters) who directly notified 1 of the Universal Blue folks of this.
+Thanks to the [RedHat employee & `ostree` maintainer Colin Walters](https://github.com/cgwalters) who directly notified Universal Blue folks of this.
 
 ## Why to transition
 When files are placed to `/usr/etc/` in build-time, currently there are no issues & everything works as expected *for now*. 
