@@ -1,5 +1,5 @@
 ---
-title: Place your system configuration files in `/etc/` 
+title: Place your system configuration files in /etc/
 description: Why we're no longer recommending writing to /usr/etc/ in custom images of atomic Fedora
 date: 2024-08-11
 authors:
@@ -14,18 +14,20 @@ In this blog post, I will explain why the usage of `/etc/` is now recommended ov
 
 We, and many others in the community have recommended previously that the system configuration files in custom images should be placed in `/usr/etc/`, while files in `/etc/` are reserved for local-users. While it is true that in run-time the `/usr/etc/` directory contains the original configuration of the image, this is technically undefined behavior build-time.
 
-Technically, files written to `/etc/` in the custom image are what populates `/usr/etc/` on a system rebased to that image. 
+Technically, files written to `/etc/` in the custom image are what populates `/usr/etc/` on a system rebased to that image.
 
 It is thanks to a recent discovery by the [Universal Blue folks](https://github.com/ublue-os) & the [Rechunk](https://github.com/hhd-dev/rechunk) developer [Antheas](https://github.com/antheas) that `ostree` has different behavior regarding `/usr/etc/` & `/etc/` in build-time vs in run-time.  
 Thanks to the [RedHat employee & `ostree` maintainer Colin Walters](https://github.com/cgwalters) who directly notified Universal Blue folks of this.
 
 ## Why to transition
-When files are placed to `/usr/etc/` in build-time, currently there are no issues & everything works as expected *for now*. 
+
+When files are placed to `/usr/etc/` in build-time, currently there are no issues & everything works as expected _for now_.
 
 However, it is still not the ideal thing to do, since we are relying on undefined `rpm-ostree` behavior, which may stop working some time in the future.
-Quoting Antheas:  
+Quoting Antheas:
+
 > When OSTree commits get converted to OCI, /usr/etc/ becomes /etc/. Then during deployment, new /etc/ files are silently moved to /usr/etc/.
-> 
+>
 > Relying on /usr/etc/ to place modified files in customized packages is a hack and relies on undefined behavior in the rpm-ostree source code that performs the path rewriting.
 
 (Take a note that we are utilizing an OCI image, so this part can be ignored: `When OSTree commits get converted to OCI, /usr/etc/ becomes /etc/.`)
@@ -37,6 +39,8 @@ As can be seen from the 1st paragraph of the note above, this is how `ostree` fu
 
 0. It is highly recommended that you follow & complete [The Caching Update](https://blue-build.org/blog/caching-update/) & [Updating the directory structure](https://blue-build.org/blog/config-files/) blog post updates
 1. If you're working with a _1-to-1 filetree mapping_ structure, where you copy files & folders to the root (`/`) folder, then do the following (source-folder is the folder defined in `source` key inside files module recipe entry):
-  - Move files from `files/system/usr/etc/` to `files/system/etc/` (or replace `system` with the name of the specific directory)
+
+-   Move files from `files/system/usr/etc/` to `files/system/etc/` (or replace `system` with the name of the specific directory)
+
 2. If you copy files to the image in other ways, then any files that go to `/usr/etc/` should be copied to go to `/etc/` according, including files copied by custom scripts.
 3. You're good to go! Commit your changes and wait to see that your custom image builds correctly.
