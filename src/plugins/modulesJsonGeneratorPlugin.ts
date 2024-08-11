@@ -19,11 +19,11 @@ export default function modulesJsonGeneratorPlugin(
                     yml: string;
                 }> = [];
                 for (const moduleSource of options.moduleSources) {
-                    const modulesRes = await fetch(moduleSource.source, {
+                    const modulesRes = await fetch(moduleSource.source, process.env.GH_TOKEN ? {
                         headers: {
                             Authorization: `Bearer ${process.env.GH_TOKEN}`,
                         },
-                    });
+                    } : {});
                     const modulesJson = (await modulesRes.json()) as Array<{
                         name: string;
                         url: string;
