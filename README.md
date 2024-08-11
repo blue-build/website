@@ -16,15 +16,12 @@ Custom components are used to implement custom designs and new features. The cod
 
 Icons can be used anywhere on this site with the `Icon` component from [`astro-icon`](https://www.astroicon.dev/). Use [Icones](https://icones.js.org/) to search for icons. New icon sets need to be added with `pnpm add @iconify-json/<collectionName>`.
 
-## Creator (not implemented)
-
-The tooling part of this site will be written in [`src/pages/creator/`](./src/pages/creator/) mostly using [Svelte](https://svelte.dev/).
-
 ## Local development
 
 This project requires `node` and `npm` or [`pnpm`](https://pnpm.io/) for local development.
-- A [Mise](https://mise.jdx.dev/) configuration is provided and works out-of-the-box in a Mise-activated shell.
-- A [Devbox](https://www.jetpack.io/devbox/) configuration is provided and can be activated by running `devbox shell` in the project directory (if Devbox is installed).
+
+-   A [Mise](https://mise.jdx.dev/) configuration is provided and works out-of-the-box in a Mise-activated shell.
+-   A [Devbox](https://www.jetpack.io/devbox/) configuration is provided and can be activated by running `devbox shell` in the project directory (if Devbox is installed).
 
 To get started with local development install the dependencies:
 
