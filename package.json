@@ -11,10 +11,10 @@
         "fmt": "prettier --write . --plugin=prettier-plugin-astro --plugin=prettier-plugin-tailwindcss"
     },
     "dependencies": {
-        "@astrojs/check": "^0.4.1",
-        "@astrojs/rss": "^4.0.5",
-        "@astrojs/starlight": "^0.16.0",
-        "@astrojs/starlight-tailwind": "^2.0.1",
+        "@astrojs/check": "^0.9.2",
+        "@astrojs/rss": "^4.0.7",
+        "@astrojs/starlight": "^0.25.4",
+        "@astrojs/starlight-tailwind": "^2.0.3",
         "@astrojs/tailwind": "^5.1.0",
         "@fontsource-variable/rubik": "^5.0.20",
         "@fontsource/atkinson-hyperlegible": "^5.0.18",
@@ -23,7 +23,7 @@
         "@iconify-json/material-symbols": "^1.1.71",
         "@iconify-json/ph": "^1.1.10",
         "@iconify-json/ri": "^1.1.19",
-        "astro": "^4.2.1",
+        "astro": "^4.13.3",
         "astro-icon": "^1.0.3",
         "astro-og-canvas": "^0.4.2",
         "canvaskit-wasm": "^0.39.1",
