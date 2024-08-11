@@ -52,15 +52,19 @@ Every module is ran in an environment containing the following environment varia
 
 ### `CONFIG_DIRECTORY`
 
-Environment variable containing the path to the configuration files for the build (`/tmp/config`).
+Environment variable containing the path to the files for the build (`/tmp/files` or `/tmp/config`).
 
 ### `MODULE_DIRECTORY`
 
-Environment variable containing the path to the directory containing all the modules of the module repository the current module is from (`/tmp/modules` for default modules).
+Environment variable containing the path to the directory containing all the modules of the module repository the current module is from (`/tmp/modules`).
 
 ### `IMAGE_NAME`
 
 Environment variable containing the name of the image declared in `recipe.yml`.
+
+### `IMAGE_REGISTRY`
+
+Environment variable containing the registry URL and namespace (usually `ghcr.io/<username>`). Can be used with `IMAGE_NAME` to get the full image URL.
 
 ### `BASE_IMAGE`
 
@@ -89,10 +93,6 @@ The name of the module, same as the name of the directory and script.
 ### `shortdesc:`
 
 A short description of the module, ideally not more than one sentence long. This is used in website metadata or anywhere a shorter module description is needed.
-
-### `readme:`
-
-The URL to the raw contents of the module's `README.md` in plain text, not HTML. The README may include a top-level heading for readability, but it will be stripped out in favor of `name:` when the README is ingested for the website.
 
 ### `example:`
 
