@@ -40,6 +40,8 @@ pnpm dev
 npm run dev
 ```
 
+The `dev` script among others can take in a `GH_TOKEN` environment variable, which takes in a GitHub token with read access to all public, which will be used to bypass GitHub rate-limits. Without it, the module reference pages may fail to load.
+
 ## Linting & formatting
 
 This project uses linting with ESLint and formatting with Prettier. To format all files locally, run `pnpm run fmt` (or `npm run fmt`). If you're using VSCode, some recommended plugins and default settings are supplied with this project, and formatting should work directly in the editor.
