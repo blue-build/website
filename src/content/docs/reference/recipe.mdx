@@ -72,7 +72,7 @@ stages:
   - name: bluebuild
     from: docker.io/library/rust:1.77
     modules: # same as the top-level modules key, but executed in the custom stage
-      - type: script
+      - type: scripts
         no-cache: true
         snippets:
           - cargo install --locked --all-features blue-build
@@ -107,7 +107,7 @@ type: rpm-ostree
 # recipes/common-packages.yml
 # multiple modules
 modules:
-  - type: script
+  - type: scripts
     # rest of the module config...
   - type: rpm-ostree
     # rest of the module config...

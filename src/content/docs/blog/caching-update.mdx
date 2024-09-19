@@ -85,10 +85,10 @@ base_image: ghcr.io/ublue-os/bazzite
 image_version: '39'
 modules:
 # ...
-- type: script
+- type: scripts
   scripts:
   - setup-selinux-dockersock.sh
-- type: script
+- type: scripts
   scripts:
   - setup-kubectl.sh
 - type: rpm-ostree
@@ -101,7 +101,7 @@ modules:
   - helix
   - alacritty
   - gh
-- type: script
+- type: scripts
   scripts:
   - install-mkcert.sh
   - install-codelldb.sh
@@ -116,10 +116,10 @@ base_image: ghcr.io/ublue-os/bazzite
 image_version: '39'
 modules:
 # ...
-- type: script
+- type: scripts
   scripts:
   - setup-selinux-dockersock.sh
-- type: script
+- type: scripts
   scripts:
   - setup-kubectl.sh
 - type: rpm-ostree
@@ -131,7 +131,7 @@ modules:
   - helix
   - alacritty
   - gh
-- type: script
+- type: scripts
   scripts:
   - install-mkcert.sh
   - install-codelldb.sh
