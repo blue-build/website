@@ -24,37 +24,17 @@ The examples in this section assume the use of a bash-compatible shell. Temporar
 
 ### Fresh install from an ISO
 
-You can use JasonN3's [build-container-installer](https://github.com/JasonN3/build-container-installer) to generate an offline ISO of your image locally. See the project's README for more information it and its configuration. This procedure only requires either `podman` or `docker` be installed.
+You can use the `bluebuild generate-iso` to generate an offline ISO of your image locally with BlueBuild CLI. The command runs JasonN3's [build-container-installer](https://github.com/JasonN3/build-container-installer) under the hood. See the upstream project's README for more information and instructions for advanced use cases.
 
 1.  Generate the ISO:
 
-    -   With `podman`:
+    ```bash
+    # Generate ISO from a built and published image
+    bluebuild generate-iso weird-os image ghcr.io/octocat/weird-os
 
-        ```bash
-        # iso command:
-        mkdir ./iso-output
-        sudo podman run --rm --privileged --volume ./iso-output:/build-container-installer/build --security-opt label=disable --pull=newer \
-        ghcr.io/jasonn3/build-container-installer:latest \
-        # iso config:
-        IMAGE_REPO=ghcr.io/octocat \
-        IMAGE_NAME=weird-os \
-        IMAGE_TAG=latest \
-        VARIANT=Silverblue # should match the variant your image is based on
-        ```
-
-    -   With `docker`:
-
-        ```bash
-        # iso command:
-        mkdir ./iso-output
-        sudo docker run --rm --privileged --volume ./iso-output:/build-container-installer/build --pull=always \
-        ghcr.io/jasonn3/build-container-installer:latest \
-        # iso config:
-        IMAGE_REPO=ghcr.io/octocat \
-        IMAGE_NAME=weird-os \
-        IMAGE_TAG=latest \
-        VARIANT=Silverblue # should match the variant your image is based on
-        ```
+    # Build image and generate ISO from a local recipe
+    bluebuild generate-iso weird-os recipe ./recipes/recipe.yml
+    ```
 
 2.  Flash the ISO onto a USB drive ([Fedora Media Writer](https://www.fedoraproject.org/en/workstation/download) is recommended) and boot it, or boot it directly with a virtual machine.
 
