@@ -3,7 +3,7 @@ title: Thinking like a distribution
 description: A guide in my new Starlight docs site.
 ---
 
-Making a custom image is similar to making a _distribution_. You modify the system defaults themselves. You make configuration changes in `/usr/etc/` and `/usr/lib/`, not `/usr/local/` or `~/.config/`. You have to think about what to include and what not to include in the image you are building,
+Making a custom image is similar to making a _distribution_. You modify the system defaults themselves. You make configuration changes in `/etc/` and `/usr/share/`, not `/usr/local/` or `~/.config/`. You have to think about what to include and what not to include in the image you are building,
 
 This documentation will use "you" to refer to the creator of the custom image, and "the user" to refer to its users. If you are making an image only for yourself, you are both parties, and can get away with more things.
 
@@ -15,6 +15,6 @@ Also remember that these systems are atomic, you don't need to manually clean up
 
 ## What is and isn't possible
 
-When making a custom image, it isn't possible to do things that require a booted system, like creating user accounts and groups or writing to `/var/` where the user's files are stored. Instead, you should write to system directories like `/usr/bin/` and `/usr/etc/`, which is the proper place for default system configuration that is applied to the `/etc/` directory when the image is booted.
+When making a custom image, it isn't possible to do things that require a booted system, like creating user accounts and groups or writing to `/var/` and `/home/` where the user's files are stored. Instead, you should write to system directories like `/usr/bin/` and `/etc/`.
 
 Some RPM packages might have issues because they try to create users or user groups. The easiest workaround in these cases is to manually layer them on the booted image.
