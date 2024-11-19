@@ -1,0 +1,43 @@
+---
+title: How to use BlueBuild modules from a Containerfile
+description: A minimal setup for using BlueBuild modules from a manually written Containerfile.
+---
+
+The [BlueBuild CLI](https://github.com/blue-build/cli) is used to build a [recipe](/reference/recipe/) into a [Containerfile](https://github.com/containers/common/blob/main/docs/Containerfile.5.md), and then building that Containerfile into an OCI image, which can be switched to and booted on an atomic Fedora system. If you're using recipes, you probably don't need this guide.
+
+0. To follow this tutorial, you need to have a setup with a Containerfile that is used to build a custom image of atomic Fedora.
+    - If you don't already have such as setup and don't know where to get started the [`ublue-os/image-template`](https://github.com/ublue-os/image-template/) is a good minimal place to start.
+1. Make the following changes to your Containerfile
+    - Add this below each of the `FROM` lines that define images you wish to use BlueBuild modules in
+        ```bash frame="none"
+        # Many BlueBuild modules use yq to parse yaml
+        # and it can also be used to pass modules configuration written in yaml
+        COPY --from=docker.io/mikefarah/yq /usr/bin/yq /usr/bin/yq
+        ```
+2. Add a `RUN` statement for the module you wish to use
+    ```bash frame="none"
+    # Run BlueBuild's gnome-extensions module
+    RUN \
+      # add in the module source code
+      --mount=type=bind,from=ghcr.io/blue-build/modules:latest,src=/modules,dst=/tmp/modules,rw \
+      # add in the script that sets up the module run environment
+      --mount=type=bind,from=ghcr.io/blue-build/cli/build-scripts:latest,src=/scripts/,dst=/tmp/scripts/ \
+      # run the module
+      /tmp/scripts/run_module.sh 'gnome-extensions' \
+        '{"type":"gnome-extensions","install":["Vitals","GSConnect","Burn My Windows","PaperWM","Gnome 4x UI Improvements"]}'
+    ```
+    - The `run_module.sh` script takes in two arguments; the module's name and it's configuration as a JSON string.
+    - If you wish to provide the module configuration as YAML instead of JSON, you can use the following code snippet at the bottom of the `RUN` statement shown above instead. (make sure to add `\n\` to the end of each line)
+        ```bash frame="none"
+        # run the module
+        config=$'\
+        type: gnome-extensions \n\
+        install: \n\
+            - Vitals # https://extensions.gnome.org/extension/1460/vitals/ \n\
+            - GSConnect # https://extensions.gnome.org/extension/1319/gsconnect/ \n\
+            - Burn My Windows # https://extensions.gnome.org/extension/4679/burn-my-windows/ \n\
+            - PaperWM # https://extensions.gnome.org/extension/6099/paperwm/ \n\
+            - Gnome 4x UI Improvements # https://extensions.gnome.org/extension/4158/gnome-40-ui-improvements/ \n\
+        ' && \
+        /tmp/scripts/run_module.sh "$(echo "$config" | yq eval '.type')" "$(echo "$config" | yq eval -o=j -I=0)"
+        ```
