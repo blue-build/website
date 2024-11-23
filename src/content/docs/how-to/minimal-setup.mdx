@@ -41,3 +41,4 @@ The [BlueBuild CLI](https://github.com/blue-build/cli) is used to build a [recip
         ' && \
         /tmp/scripts/run_module.sh "$(echo "$config" | yq eval '.type')" "$(echo "$config" | yq eval -o=j -I=0)"
         ```
+    - If you wish to use a module that expects you to include some files, you can copy those to `/tmp/files/` as that is to the directory where the `./files/` directory is accessible in a standard BlueBuild build.
