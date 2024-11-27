@@ -1,0 +1,41 @@
+---
+title: Release of v0.9.0
+description: Brand new features to make building your images easier!
+date: 2024-11-26
+authors:
+    - name: Gerald (Jerry) Pinder
+      img: https://avatars.githubusercontent.com/u/4626052
+      github: gmpinder
+---
+:::tip[TLDR]
+The BlueBuild CLI `v0.9.0` update introduces new features and breaking changes. [What do I need to do to migrate?](#breaking_changes)
+:::
+
+# Features
+
+- Generate ISOs for a fresh install
+- New `init` command for creating a new BlueBuild project
+- Stages for compiling your favorite programs while keeping dev tools out of your image
+- Copy module for copying programs from stages into your final image
+- A new `switch` command consolidates `upgrade`/`rebase` commands
+- A new `login` command for logging into registries for all tools like `docker`, `skopeo`, `cosign`, etc.
+- A new `validate` command and check before building that will tell you where you have errors in your recipes
+- A new `prune` command to easily clean build space for the build drivers
+- The `sigstore` driver that can handle signing if you don't have `cosign` installed
+- The ability to build multiple recipes at the same time
+
+# Breaking Changes
+
+- Local modules must now have the `source` property set to `local`
+
+```yaml
+modules:
+  - type: custom-module
+    source: local
+    input:
+      - value 1
+      - value 2
+```
+
+- Removal of `yq` and the `get_yaml_array` bash function from the build in favor of `jq` and the new `get_json_array`
+- Minimum supported version of `buildah` is now `1.29` up from `1.24`
