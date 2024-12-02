@@ -56,7 +56,7 @@ INFO  => Created new BlueBuild project in ./weird-os
 
 ### Build stages for compiling programs from source while keeping your image clean
 
-You can define stages with a new top-level `stages:` key in the recipe before the `modules:`. Stages use the same module ssystem as the rest of the build, but you'll probably find the [`script`](/reference/modules/script/) module most useful.
+You can define stages with a new top-level `stages:` key in the recipe before the `modules:`. Stages use the same module system as the rest of the build, but you'll probably find the [`script`](/reference/modules/script/) module most useful.
 
 After building something in a stage, you can use the newly stable [`copy`](/reference/modules/copy/) module to copy files from the stage. This maps directly to a `COPY` statement in the `Containerfile`.
 
@@ -119,11 +119,11 @@ modules:
 
 ### Phasing out official support for [blue-build/legacy-template](blue-build/legacy-template)
 
-With the switch to `jq` and `get_json_array` as talked about above, the 'legacy template', aka the old 'startingpoint', is starting to become ever more broken. As such we will no longer be updating the template to accomodate for new changes. The repository is now archived, and a message is left in the README.
+With the switch to `jq` and `get_json_array` as talked about above, the 'legacy template', aka the old 'startingpoint', is starting to become ever more broken. As such, we will no longer be updating the template to accommodate for new changes. The repository is now archived, and a message is left in the README.
 
 If you're _one of the few people who still_ run their image builds from a repository based on it, and you are still not considering [migration to the new system](/blog/introducing-bluebuild/#how-to-migrate), _you shall be crowned the new absolute ruler of your repository, in charge of keeping the builds running without someone telling you what to do._
 
-Some things that might help you on your quest are [our guide to running BlueBuild modules from a Containerfile directly](/how-to/minimal-setup/), and plain-old reading the source code of [BlueBuild's CLI](https://github.com/blue-build/cli), especially the file containing the [bash exports for modules](https://github.com/blue-build/cli/blob/main/scripts/exports.sh) and the [Containerfile template used by BlueBuild images](https://github.com/blue-build/cli/blob/main/template/templates/Containerfile.j2).
+Some things that might help you on your quest are [our guide to running BlueBuild modules from a Containerfile directly](/how-to/minimal-setup/) and plain-old reading the source code of [BlueBuild's CLI](https://github.com/blue-build/cli), especially the file containing the [bash exports for modules](https://github.com/blue-build/cli/blob/main/scripts/exports.sh) and the [Containerfile template used by BlueBuild images](https://github.com/blue-build/cli/blob/main/template/templates/Containerfile.j2).
 
 ### Miscellaneous
 
@@ -131,5 +131,5 @@ Some things that might help you on your quest are [our guide to running BlueBuil
 
 ## Final words
 
-Happy holidays everyone! Have fun with the new features, and enjoy your free time whenever you have the chance.
-_Stay tuned for the eventual v1!_
+Happy holidays, everyone! Have fun with the new features, and enjoy your free time whenever you have the chance.
+_Stay tuned for the eventual `v1.0.0`!_
