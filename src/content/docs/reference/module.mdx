@@ -82,7 +82,7 @@ Bash function that helps with reading arrays from the module's configuration.
 get_json_array OUTPUT_VAR_NAME '.key.to.array[]' "${1}"
 ```
 
-or less readable, but more safe command for extracting array values:
+or less readable, but safer command for extracting array values:
 
 ```bash frame="none"
 get_json_array OUTPUT_VAR_NAME '.["key"].["to"].["array"][]' "${1}"

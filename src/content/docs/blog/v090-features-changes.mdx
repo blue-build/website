@@ -101,6 +101,8 @@ echo "$VAR"
 + get_json_array ARRAY '.["array"][]' "$1"
 ```
 
+Read more on the [updated custom module how to -guide](/how-to/making-modules/).
+
 #### New way to use a local modules
 
 Local modules must now have the `source` property set to `local`. Local modules are those that live inside the same repository as your custom image, inside the `./modules/` folder. This change allows us to validate recipes properly while not causing errors when custom modules are used.

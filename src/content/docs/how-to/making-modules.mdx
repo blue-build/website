@@ -23,18 +23,20 @@ If you want to extend your image with custom functionality that requires configu
 
 This guide only includes the bare minimum information to get you started on your coding adventure. Check out the [module reference](/reference/module/) for more technical information about modules.
 
-When being launched, your module receives its configuration as a JSON string as the first argument. It can be read from in bash using `jq` or `yq` like this:
+When being launched, your module receives its configuration as a JSON string as the first argument. It can be read from in bash using `jq` like this:
 
 ```bash title="modules/<name-of-your-module>/<name-of-your-module>.sh"
 #!/usr/bin/env bash
 set -euo pipefail
 
 # read a single variable from the configuration
-VAR=$(echo "$1" | yq -I=0 ".var") # `-I=0` makes sure the output isn't indented
+# `try` makes the command output 'null' if the key is not found, otherwise it will error out and the build will fail
+# the `.["var"]` syntax is optional and could be replaced with the less safe and more error-prone `.var` syntax
+VAR=$(echo "$1" | jq -r 'try .["var"]')
 echo "$VAR"
 
 # read an array from the configuration
-get_yaml_array ARRAY '.array[]' "$1"
+get_json_array ARRAY '.["array"][]' "$1"
 # loop over the array
 for THING in "${ARRAY[@]}"; do
     echo "$THING"
