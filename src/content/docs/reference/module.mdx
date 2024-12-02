@@ -74,12 +74,18 @@ Environment variable containing the URL of the OCI image used as the base.
 
 Environment variable containing the major version of running operating system. The value is gathered from the `VERSION_ID` in `/etc/os-release`.
 
-### `get_yaml_array`
+### `get_json_array`
 
 Bash function that helps with reading arrays from the module's configuration.
 
 ```bash frame="none"
-get_yaml_array OUTPUT_VAR_NAME '.yq.key.to.array[]' "$1"
+get_json_array OUTPUT_VAR_NAME '.key.to.array[]' "${1}"
+```
+
+or less readable, but more safe command for extracting array values:
+
+```bash frame="none"
+get_json_array OUTPUT_VAR_NAME '.["key"].["to"].["array"][]' "${1}"
 ```
 
 ## `module.yml`
