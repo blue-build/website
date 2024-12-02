@@ -79,7 +79,7 @@ Internal changes and refactors always might affect your custom modules, but we t
 
 #### Removal of [`yq`](https://github.com/mikefarah/yq)
 
-We no longer include `yq` by default in images built with BlueBuild, and have refactored all modules to use `jq` instead. This comes in tandem with our experimentation [with using Nushell](https://github.com/blue-build/modules/issues/212) to build some new modules, and a concern of `yq` being included unconditionally regardless of it is actually needed in an image, increasing attack surface. Read more about this from the [related GitHub issue](https://github.com/blue-build/cli/issues/261).
+We no longer include `yq` by default in images built with BlueBuild, and have refactored all modules to use `jq` instead. This comes in tandem with our experimentation [with using Nushell](https://github.com/blue-build/modules/issues/212) to build some new modules, and a concern of `yq` being included unconditionally regardless of if it's actually needed in an image, increasing attack surface. Read more about this from the [related GitHub issue](https://github.com/blue-build/cli/issues/261).
 
 What this means for you:
 
