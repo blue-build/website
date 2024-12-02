@@ -36,7 +36,7 @@ VAR=$(echo "$1" | jq -r 'try .["var"]')
 echo "$VAR"
 
 # read an array from the configuration
-get_json_array ARRAY '.["array"][]' "$1"
+get_json_array ARRAY 'try .["array"][]' "$1"
 # loop over the array
 for THING in "${ARRAY[@]}"; do
     echo "$THING"

@@ -79,13 +79,13 @@ Environment variable containing the major version of running operating system. T
 Bash function that helps with reading arrays from the module's configuration.
 
 ```bash frame="none"
-get_json_array OUTPUT_VAR_NAME '.key.to.array[]' "${1}"
+get_json_array OUTPUT_VAR_NAME 'try .key.to.array[]' "${1}"
 ```
 
 or less readable, but safer command for extracting array values:
 
 ```bash frame="none"
-get_json_array OUTPUT_VAR_NAME '.["key"].["to"].["array"][]' "${1}"
+get_json_array OUTPUT_VAR_NAME 'try .["key"].["to"].["array"][]' "${1}"
 ```
 
 ## `module.yml`
