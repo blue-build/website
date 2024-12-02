@@ -117,6 +117,14 @@ modules:
           - value 2
 ```
 
+### Phasing out official support for [blue-build/legacy-template](blue-build/legacy-template)
+
+With the switch to `jq` and `get_json_array` as talked about above, the 'legacy template', aka the old 'startingpoint', is starting to become ever more broken. As such we will no longer be updating the template to accomodate for new changes. The repository is now archived, and a message is left in the README.
+
+If you're _one of the few people who still_ run their image builds from a repository based on it, and you are still not considering [migration to the new system](/blog/introducing-bluebuild/#how-to-migrate), _you shall be crowned the new absolute ruler of your repository, in charge of keeping the builds running without someone telling you what to do._
+
+Some things that might help you on your quest are [our guide to running BlueBuild modules from a Containerfile directly](/how-to/minimal-setup/), and plain-old reading the source code of [BlueBuild's CLI](https://github.com/blue-build/cli), especially the file containing the [bash exports for modules](https://github.com/blue-build/cli/blob/main/scripts/exports.sh) and the [Containerfile template used by BlueBuild images](https://github.com/blue-build/cli/blob/main/template/templates/Containerfile.j2).
+
 ### Miscellaneous
 
 -   Minimum supported version of `buildah` is now `1.29`, up from `1.24`.
