@@ -1,7 +1,7 @@
 ---
 title: New CLI Features & Breaking Changes — v0.9.0
 description: Stay up-to-date on new CLI features and breaking changes related to custom modules.
-date: 2024-12-02
+date: 2024-12-06
 authors:
     - name: Gerald (Jerry) Pinder
       img: https://avatars.githubusercontent.com/u/4626052
@@ -17,13 +17,34 @@ The BlueBuild CLI `v0.9.0` update introduces **breaking changes**. [Show me what
 
 The BlueBuild CLI is the tool that builds all BlueBuild custom images. It is also installed on every image built with BlueBuild and can be used to build and tinker with images locally. Lately we _(gmpinder)_ have been hard at work on a new CLI version to automate many administrative tasks you have to do as a custom image creator. But enough of the fluff, let's get right to it!
 
+## How do I update?
+
+:::tip[Wait a moment...]
+It's recommended that you read the rest of the article before updating, but if you're busy, here's the instructions.
+:::
+
+Updates to the BlueBuild GitHub Action automatically update the CLI version as well. Your repository should also get an update PR for the new Action version thanks to Dependabot. If the Dependabot PR hasn't landed yet, though, you can manually delve into `build.yml` and make the following update.
+
+```diff lang="yaml"
+jobs:
+  bluebuild:
+    steps:
+      - name: Build Custom Image
+-       uses: blue-build/github-action@v1.7
++       uses: blue-build/github-action@v1.8
+```
+
+Voilà! That was easy.
+
+And if you're not using GitHub, just update wherever you might be specifying the CLI version to the latest one. With local builds, a simple rebuild should be enough to get the latest CLI version baked into your image at `/usr/bin/bluebuild`.
+
 ## New Features
 
 ### Generate ISOs for a fresh install
 
 You can now generate offline ISO installation images as shown in the [how-to guide](/how-to/generate-iso/). Under the hood this is a wrapper of [JasonN3's build-container-installer](https://github.com/JasonN3/build-container-installer). Feel free to report issues to the CLI repository first, and to the upstream project only if the issue is deemed to be caused by them.
 
-### Quickly start a new BlueBuild project from the command line
+### Quickstart a new BlueBuild project from the command line
 
 You can now use the `bluebuild new` and `bluebuild init` commands to start a new BlueBuild project from the command line. This will set up a new local git repository for you based on the [template](https://github.com/blue-build/template/) and some short configuration questions. (`new` creates a project in a new directory, `init` in the current empty one)
 
@@ -54,6 +75,14 @@ Public key written to cosign.pub
 INFO  => Created new BlueBuild project in ./weird-os
 ```
 
+### Image rechunking for more efficient diffs and updates
+
+You can now enable rechunking for all your ostree-based custom images to make your resulting images more efficient at the cost of some build time. Rechunking is done using [github.com/hhd-dev/rechunk](https://github.com/hhd-dev/rechunk), thanks to all the contributors for this enhancement!
+
+To enable rechunk on GitHub, add `rechunk: true` to the parameters given to the BlueBuild GitHub Action. Locally and elsewhere, it's just a `--rechunk` flag for the `bluebuild build` command. Read more on the [reference page](/reference/github-action/#rechunk-optional).
+
+If you're regularly making changes to your image and waiting to see if the build is successful, enabling rechunking will make the wait time slower. Feel free to not enable rechunk if you'd rather optimize build time than user bandwidth.
+
 ### Build stages for compiling programs from source while keeping your image clean
 
 You can define stages with a new top-level `stages:` key in the recipe before the `modules:`. Stages use the same module system as the rest of the build, but you'll probably find the [`script`](/reference/modules/script/) module most useful.
@@ -79,7 +108,7 @@ Internal changes and refactors always might affect your custom modules, but we t
 
 #### Removal of [`yq`](https://github.com/mikefarah/yq)
 
-We no longer include `yq` by default in images built with BlueBuild, and have refactored all modules to use `jq` instead. This comes in tandem with our experimentation [with using Nushell](https://github.com/blue-build/modules/issues/212) to build some new modules, and a concern of `yq` being included unconditionally regardless of if it's actually needed in an image, increasing attack surface. Read more about this from the [related GitHub issue](https://github.com/blue-build/cli/issues/261).
+We no longer include `yq` by default in images built with BlueBuild, and have refactored all modules to use `jq` instead (as such, modules using `get_json_array` are now also broken on older CLI versions). This comes in tandem with our experimentation [with using Nushell](https://github.com/blue-build/modules/issues/212) to build some new modules, and a concern of `yq` being included unconditionally regardless of if it's actually needed in an image, increasing attack surface. Read more about this from the [related GitHub issue](https://github.com/blue-build/cli/issues/261).
 
 What this means for you:
 
