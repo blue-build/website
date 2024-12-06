@@ -3,6 +3,8 @@ title: How to build an ISO based on your custom image of Fedora Atomic
 description: Using the `bluebuild generate-iso` command
 ---
 
+_BlueBuild's ISO command uses [JasonN3's build-container-installer](https://github.com/JasonN3/build-container-installer/) under the hood. Feel free to read it's documentation for more information and usecases. File issues with the `bluebuild` command in the [CLI repository](https://github.com/blue-build/cli) first; they can be re-filed upstream if deemed to not be caused by us._
+
 First you need to choose whether to generate the ISO from remote image or a recipe.
 
 -   Generate from remote image if...
@@ -28,3 +30,5 @@ First you need to choose whether to generate the ISO from remote image or a reci
         - Once booted, you should be presented with a screen similar to this:
 
             ![](./ublue-iso.png)
+
+        - Lastly, just completele all the outlined install configuration steps, and follow the instructions of the installer
