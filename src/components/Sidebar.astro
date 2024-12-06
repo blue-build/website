@@ -19,7 +19,7 @@ const sidebarPostList: StarlightRouteData["sidebar"] = blogPosts
             badge: undefined,
             href: url,
             isCurrent: Astro.url.pathname.includes(url || ""),
-            label: ` ${p.frontmatter.title} – ${new Date(p.frontmatter.date).toISOString().substring(0, 10)}`,
+            label: ` ${p.frontmatter.title} (${new Date(p.frontmatter.date).toISOString().substring(0, 10)})`,
             type: "link",
         } as SidebarEntry;
     });

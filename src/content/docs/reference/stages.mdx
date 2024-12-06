@@ -3,10 +3,6 @@ title: Stages
 description: A stage is a separate image build flow executed in parallel with the main build.
 ---
 
-:::note
-This feature is experimental and currently only available when using `use_unstable_cli` option in the [GitHub Action](/reference/github-action/) or using the `stages` feature when compiling.
-:::
-
 This property will allow users to define a list of Containerfile stages each with their own modules. Stages can be used to compile programs, perform parallel operations, and copy the results into the final image without contaminating the final image.
 
 ## Module Support

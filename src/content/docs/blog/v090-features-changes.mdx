@@ -1,0 +1,199 @@
+---
+title: New CLI Features & Breaking Changes — v0.9.0
+description: Stay up-to-date on new CLI features and breaking changes related to custom modules.
+date: 2024-12-06
+authors:
+    - name: Gerald (Jerry) Pinder
+      img: https://avatars.githubusercontent.com/u/4626052
+      github: gmpinder
+    - name: xyny
+      img: https://avatars.githubusercontent.com/u/60004820
+      github: xynydev
+---
+
+:::caution[TLDR]
+The BlueBuild CLI `v0.9.0` update introduces **breaking changes**. [Show me what you broke!](#breaking-changes)
+:::
+
+The BlueBuild CLI is the tool that builds all BlueBuild custom images. It is also installed on every image built with BlueBuild and can be used to build and tinker with images locally. Lately we _(gmpinder)_ have been hard at work on a new CLI version to automate many administrative tasks you have to do as a custom image creator. But enough of the fluff, let's get right to it!
+
+## How do I update?
+
+:::tip[Wait a moment...]
+It's recommended that you read the rest of the article before updating, but if you're busy, here's the instructions.
+:::
+
+Updates to the BlueBuild GitHub Action automatically update the CLI version as well. Your repository should also get an update PR for the new Action version thanks to Dependabot. If the Dependabot PR hasn't landed yet, though, you can manually delve into `build.yml` and make the following update.
+
+```diff lang="yaml"
+jobs:
+  bluebuild:
+    steps:
+      - name: Build Custom Image
+-       uses: blue-build/github-action@v1.7
++       uses: blue-build/github-action@v1.8
+```
+
+Voilà! That was easy.
+
+And if you're not using GitHub, just update wherever you might be specifying the CLI version to the latest one. With local builds, a simple rebuild should be enough to get the latest CLI version baked into your image at `/usr/bin/bluebuild`.
+
+## New Features
+
+### Generate ISOs for a fresh install
+
+You can now generate offline ISO installation images as shown in the [how-to guide](/how-to/generate-iso/). Under the hood this is a wrapper of [JasonN3's build-container-installer](https://github.com/JasonN3/build-container-installer). Feel free to report issues to the CLI repository first, and to the upstream project only if the issue is deemed to be caused by them.
+
+### Quickstart a new BlueBuild project from the command line
+
+You can now use the `bluebuild new` and `bluebuild init` commands to start a new BlueBuild project from the command line. This will set up a new local git repository for you based on the [template](https://github.com/blue-build/template/) and some short configuration questions. (`new` creates a project in a new directory, `init` in the current empty one)
+
+Here's a sneak peek:
+
+```bash
+❯ bluebuild new ./weird-os
+✔ What would you like to name your image? · weird-os
+✔ What is the registry for the image? (e.g. ghcr.io or registry.gitlab.com) · ghcr.io
+✔ What is the name of your org/username? · octocat
+✔ Write a short description of your image: · this is my weird custom OS :3
+✔ Are you building on Github or Gitlab? · Github
+Private key written to cosign.key
+Public key written to cosign.pub
+[main (root-commit) 994d18c] chore: Initial Commit
+ 11 files changed, 355 insertions(+)
+ create mode 100644 .github/dependabot.yml
+ create mode 100644 .github/workflows/build.yml
+ create mode 100644 .gitignore
+ create mode 100644 LICENSE
+ create mode 100644 README.md
+ create mode 100644 cosign.pub
+ create mode 100644 files/scripts/example.sh
+ create mode 100644 files/system/etc/.gitkeep
+ create mode 100644 files/system/usr/.gitkeep
+ create mode 100644 modules/.gitkeep
+ create mode 100644 recipes/recipe.yml
+INFO  => Created new BlueBuild project in ./weird-os
+```
+
+### Image rechunking for more efficient diffs and updates
+
+You can now enable rechunking for all your ostree-based custom images to make your resulting images more efficient at the cost of some build time. Rechunking is done using [github.com/hhd-dev/rechunk](https://github.com/hhd-dev/rechunk), thanks to all the contributors for this enhancement!
+
+To enable rechunk on GitHub, add `rechunk: true` to the parameters given to the BlueBuild GitHub Action. Locally and elsewhere, it's just a `--rechunk` flag for the `bluebuild build` command. Read more on the [reference page](/reference/github-action/#rechunk-optional).
+
+If you're regularly making changes to your image and waiting to see if the build is successful, enabling rechunking will make the wait time slower. Feel free to not enable rechunk if you'd rather optimize build time than user bandwidth.
+
+### Build stages for compiling programs from source while keeping your image clean
+
+You can define stages with a new top-level `stages:` key in the recipe before the `modules:`. Stages use the same module system as the rest of the build, but you'll probably find the [`script`](/reference/modules/script/) module most useful.
+
+After building something in a stage, you can use the newly stable [`copy`](/reference/modules/copy/) module to copy files from the stage. This maps directly to a `COPY` statement in the `Containerfile`.
+
+Read more on the [dedicated Stages-page](https://blue-build.org/reference/stages/).
+
+### Miscellaneous
+
+-   A new `login` command for logging into registries for all tools like `docker`, `skopeo`, `cosign`, etc.
+-   A new `validate` command and check before building that will tell you where you have errors in your recipes
+-   A new `prune` command to easily clean build space for the build drivers
+-   The `sigstore` driver can now handle signing if you don't have `cosign` installed
+-   A new `switch` command consolidates `upgrade`/`rebase` commands
+-   The ability to build multiple recipes at the same time
+
+## Breaking Changes
+
+### Related to custom modules
+
+Internal changes and refactors always might affect your custom modules, but we try to be transparent when making such changes and announce them, so that you aren't left with broken builds without any apparent reason.
+
+#### Removal of [`yq`](https://github.com/mikefarah/yq)
+
+We no longer include `yq` by default in images built with BlueBuild, and have refactored all modules to use `jq` instead (as such, modules using `get_json_array` are now also broken on older CLI versions). This comes in tandem with our experimentation [with using Nushell](https://github.com/blue-build/modules/issues/212) to build some new modules, and a concern of `yq` being included unconditionally regardless of if it's actually needed in an image, increasing attack surface. Read more about this from the [related GitHub issue](https://github.com/blue-build/cli/issues/261).
+
+What this means for you:
+
+-   Reading module configuration with `yq` and `get_yaml_array` will break with the new update
+-   You now have to use `jq` and `get_json_array` instead
+
+Here's how you should refactor your module code:
+
+```diff lang=bash
+#!/usr/bin/env bash
+
+# read a single variable from the configuration
+- VAR=$(echo "$1" | yq -I=0 '.var')
++ VAR=$(echo "$1" | jq -r 'try .["var"]')
+echo "$VAR"
+
+# read an array from the configuration
+- get_yaml_array ARRAY '.array[]' "$1"
++ get_json_array ARRAY 'try .["array"][]' "$1"
+```
+
+Read more on the [updated custom module how-to guide](/how-to/making-modules/).
+
+#### New way to use a local modules
+
+Local modules must now have the `source` property set to `local`. Local modules are those that live inside the same repository as your custom image, inside the `./modules/` folder. This change allows us to validate recipes properly while not causing errors when custom modules are used.
+
+```yaml ins={4}
+modules:
+    # use the module `./modules/custom-module/`
+    - type: custom-module
+      source: local
+      input:
+          - value 1
+          - value 2
+```
+
+### Phasing out official support for [blue-build/legacy-template](blue-build/legacy-template)
+
+With the switch to `jq` and `get_json_array` as talked about above, the 'legacy template', aka the old 'startingpoint', is starting to become ever more broken. As such, we will no longer be updating the template to accommodate for new changes. The repository is now archived, and a message is left in the README.
+
+If you're _one of the few people who still_ run their image builds from a repository based on it, and you are still not considering [migration to the new system](/blog/introducing-bluebuild/#how-to-migrate), _you shall be crowned the new absolute ruler of your repository, in charge of keeping the builds running without someone telling you what to do._
+
+Some things that might help you on your quest are [our guide to running BlueBuild modules from a Containerfile directly](/how-to/minimal-setup/) and plain-old reading the source code of [BlueBuild's CLI](https://github.com/blue-build/cli), especially the file containing the [bash exports for modules](https://github.com/blue-build/cli/blob/main/scripts/exports.sh) and the [Containerfile template used by BlueBuild images](https://github.com/blue-build/cli/blob/main/template/templates/Containerfile.j2).
+
+### Recipe validation strictness
+
+Recipe validation, which runs by default on every build, might break your build if you you include in your recipe the key of an object or array, but do not populate the it with anything. This is because the parser fails to see the type of the parameter as an object or an array, and fails with an `incorrect type` error. In this case, you either need to delete the whole configuration key, or alternatively declare the value to either be `{}` (an empty object) or `[]` (an empty array).
+
+For example:
+
+```yaml ins="{}" ins="[]" del={24}
+modules:
+    # This will fail validation
+    - type: default-flatpaks
+      user:
+          install:
+              - org.mozilla.firefox
+          remove:
+      system:
+
+    # This will validate
+    # (no Flatpaks will be removed, but the system Flathub repo will be set up)
+    - type: default-flatpaks
+      user:
+          install:
+              - org.mozilla.firefox
+          remove: []
+      system: {}
+
+    # But you can also just leave out the `remove:` intirely
+    # without changing what the module does
+    - type: default-flatpaks
+      user:
+          install:
+              - org.mozilla.firefox
+          remove:
+      system: {}
+```
+
+### Miscellaneous
+
+-   Minimum supported version of `buildah` is now `1.29`, up from `1.24`.
+
+## Final words
+
+Happy holidays, everyone! Have fun with the new features, and enjoy your free time whenever you have the chance.
+_Stay tuned for the eventual `v1.0.0`!_

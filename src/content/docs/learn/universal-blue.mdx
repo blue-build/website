@@ -24,49 +24,7 @@ The examples in this section assume the use of a bash-compatible shell. Temporar
 
 ### Fresh install from an ISO
 
-You can use JasonN3's [build-container-installer](https://github.com/JasonN3/build-container-installer) to generate an offline ISO of your image locally. See the project's README for more information it and its configuration. This procedure only requires either `podman` or `docker` be installed.
-
-1.  Generate the ISO:
-
-    -   With `podman`:
-
-        ```bash
-        # iso command:
-        mkdir ./iso-output
-        sudo podman run --rm --privileged --volume ./iso-output:/build-container-installer/build --security-opt label=disable --pull=newer \
-        ghcr.io/jasonn3/build-container-installer:latest \
-        # iso config:
-        IMAGE_REPO=ghcr.io/octocat \
-        IMAGE_NAME=weird-os \
-        IMAGE_TAG=latest \
-        VARIANT=Silverblue # should match the variant your image is based on
-        ```
-
-    -   With `docker`:
-
-        ```bash
-        # iso command:
-        mkdir ./iso-output
-        sudo docker run --rm --privileged --volume ./iso-output:/build-container-installer/build --pull=always \
-        ghcr.io/jasonn3/build-container-installer:latest \
-        # iso config:
-        IMAGE_REPO=ghcr.io/octocat \
-        IMAGE_NAME=weird-os \
-        IMAGE_TAG=latest \
-        VARIANT=Silverblue # should match the variant your image is based on
-        ```
-
-2.  Flash the ISO onto a USB drive ([Fedora Media Writer](https://www.fedoraproject.org/en/workstation/download) is recommended) and boot it, or boot it directly with a virtual machine.
-
-        - The ISO file should be in a directory called `iso-output` inside your working directory and called something like `deploy.iso`.
-
-        - Once booted, you should be presented with a screen similar to this:
-
-            ![](./ublue-iso.png)
-
-3.  Complete the installation by completing all steps and following the installer's instructions.
-
-    -   Dual booting is only possible when using separate disks or doing [manual partitioning](https://docs.fedoraproject.org/en-US/fedora-silverblue/installation/#manual-partition) (unsupported).
+Follow the [how-to guide](/how-to/generate-iso/).
 
 ### By rebasing from an existing installation of Fedora atomic (or a derivative)
 

@@ -7,13 +7,14 @@ authors:
       img: https://avatars.githubusercontent.com/u/4626052
       github: gmpinder
 ---
+
 :::tip[TLDR]
 A recent BlueBuild CLI update makes builds and updates much faster. [What do I need to do to take advantage?](#migration)
 :::
 
 Hello! I'm Jerry and I'm the creator and maintainer of the Rust-based `bluebuild` CLI tool. I started creating this tool as a way to extend the work that [XYNY](https://github.com/xynydev) did with the recipe standard, but make it so that I didn't have to manage the `Containerfile` directly. The tool is an integral part of the project that handles Containerfile generation from the recipe, the building of container images, and pushing them to the registry.
 
-For the past month or so, we've been working on trying to make the building experience better for our users. One of the biggest concerns brought up was the size of updates when using `rpm-ostree upgrade` to pull your new changes. The size of the updates would end up being bigger than the original single `RUN build.sh` instruction that was used. While this was really great for the time, more advanced uses of the legacy `startingpoint` repo required users to know how to manage a `Containerfile`. This can be really intimidating to less-technical users. One of the `bluebuild` CLI's goals is to perform most of the optimizations for the user so they don't have to worry about setting that up. 
+For the past month or so, we've been working on trying to make the building experience better for our users. One of the biggest concerns brought up was the size of updates when using `rpm-ostree upgrade` to pull your new changes. The size of the updates would end up being bigger than the original single `RUN build.sh` instruction that was used. While this was really great for the time, more advanced uses of the legacy `startingpoint` repo required users to know how to manage a `Containerfile`. This can be really intimidating to less-technical users. One of the `bluebuild` CLI's goals is to perform most of the optimizations for the user so they don't have to worry about setting that up.
 
 ## Migration
 
@@ -23,11 +24,24 @@ I'm happy to announce that we have now released `v0.8.4` of `bluebuild` CLI (and
     - This does not include all the other files/directories in your `./config/` like `./config/scripts/` or `./config/files/`
     - Any `.yml`/`.yaml` file that contains information for the modules to build your image are your recipe files.
     - Be sure to update any use of `from-file:` to account for any changes in your directory structure
-      - For example if the recipes were in `./config/recipes/` and extended recipe files in `./config/recipes/image_configs/`.
-      - One of the recipes calls `from-file: recipes/image_configs/common.yml`.
-      ```
-      config
-      └─recipes
+        - For example if the recipes were in `./config/recipes/` and extended recipe files in `./config/recipes/image_configs/`.
+        - One of the recipes calls `from-file: recipes/image_configs/common.yml`.
+        ```
+        config
+        └─recipes
+          ├── image_configs
+          │   ├── common.yml
+          │   ├── gnome.yml
+          │   └── kde.yml
+          ├── recipe-gnome-nvidia.yml
+          ├── recipe-gnome.yml
+          ├── recipe-kde-nvidia.yml
+          └── recipe-kde.yml
+        ```
+        - You could move `recipes` up a level to be:
+        ```
+        config
+        recipes
         ├── image_configs
         │   ├── common.yml
         │   ├── gnome.yml
@@ -36,24 +50,11 @@ I'm happy to announce that we have now released `v0.8.4` of `bluebuild` CLI (and
         ├── recipe-gnome.yml
         ├── recipe-kde-nvidia.yml
         └── recipe-kde.yml
-      ```
-      - You could move `recipes` up a level to be:
-      ```
-      config
-      recipes
-      ├── image_configs
-      │   ├── common.yml
-      │   ├── gnome.yml
-      │   └── kde.yml
-      ├── recipe-gnome-nvidia.yml
-      ├── recipe-gnome.yml
-      ├── recipe-kde-nvidia.yml
-      └── recipe-kde.yml
-      ```
-      - Then `from-file:` can have the path set to `image_configs/common.yml`
+        ```
+        - Then `from-file:` can have the path set to `image_configs/common.yml`
     - Be sure to update your workflow file too
-      - If your `recipe.yml` was located in `./config/` and you moved it to `./recipes/`, the GHA will already take that into account
-      - The thing to look out for is the recipe's relative location to the "root" of recipe locations
+        - If your `recipe.yml` was located in `./config/` and you moved it to `./recipes/`, the GHA will already take that into account
+        - The thing to look out for is the recipe's relative location to the "root" of recipe locations
 2. It's also suggested to move the `./config/containerfiles/` directory into the root of your repo too.
     - You can see the docs for the `containerfile` module [here](https://blue-build.org/reference/modules/containerfile/).
 3. Update your GHA to be at least `v1.4`
@@ -82,29 +83,29 @@ Here's a snippet of my recipe before the change.
 name: jp-laptop
 description: The image of Wunker OS for JP's Laptop.
 base_image: ghcr.io/ublue-os/bazzite
-image_version: '39'
+image_version: "39"
 modules:
-# ...
-- type: script
-  scripts:
-  - setup-selinux-dockersock.sh
-- type: script
-  scripts:
-  - setup-kubectl.sh
-- type: rpm-ostree
-  repos:
-  - https://pkg.earthly.dev/earthly.repo
-  - https://cli.github.com/packages/rpm/gh-cli.repo
-  install:
-  - earthly
-  - neovim
-  - helix
-  - alacritty
-  - gh
-- type: script
-  scripts:
-  - install-mkcert.sh
-  - install-codelldb.sh
+    # ...
+    - type: script
+      scripts:
+          - setup-selinux-dockersock.sh
+    - type: script
+      scripts:
+          - setup-kubectl.sh
+    - type: rpm-ostree
+      repos:
+          - https://pkg.earthly.dev/earthly.repo
+          - https://cli.github.com/packages/rpm/gh-cli.repo
+      install:
+          - earthly
+          - neovim
+          - helix
+          - alacritty
+          - gh
+    - type: script
+      scripts:
+          - install-mkcert.sh
+          - install-codelldb.sh
 ```
 
 And here's the change. I'm removing `neovim` cause I'm a filthy `helix` user.
@@ -113,28 +114,28 @@ And here's the change. I'm removing `neovim` cause I'm a filthy `helix` user.
 name: jp-laptop
 description: The image of Wunker OS for JP's Laptop.
 base_image: ghcr.io/ublue-os/bazzite
-image_version: '39'
+image_version: "39"
 modules:
-# ...
-- type: script
-  scripts:
-  - setup-selinux-dockersock.sh
-- type: script
-  scripts:
-  - setup-kubectl.sh
-- type: rpm-ostree
-  repos:
-  - https://pkg.earthly.dev/earthly.repo
-  - https://cli.github.com/packages/rpm/gh-cli.repo
-  install:
-  - earthly
-  - helix
-  - alacritty
-  - gh
-- type: script
-  scripts:
-  - install-mkcert.sh
-  - install-codelldb.sh
+    # ...
+    - type: script
+      scripts:
+          - setup-selinux-dockersock.sh
+    - type: script
+      scripts:
+          - setup-kubectl.sh
+    - type: rpm-ostree
+      repos:
+          - https://pkg.earthly.dev/earthly.repo
+          - https://cli.github.com/packages/rpm/gh-cli.repo
+      install:
+          - earthly
+          - helix
+          - alacritty
+          - gh
+    - type: script
+      scripts:
+          - install-mkcert.sh
+          - install-codelldb.sh
 ```
 
 So we re-run the build.
@@ -146,7 +147,6 @@ So we re-run the build.
  => CACHED [stage-keys 1/1] COPY cosign.pub /keys/jp-desktop-gaming.pub                                                                                   0.0s
  => CACHED [stage-4  2/16] RUN --mount=type=bind,from=stage-keys,src=/keys,dst=/tmp/keys   mkdir -p /usr/etc/pki/containers/   && cp /tmp/keys/* /usr/et  0.0s
  => CACHED [stage-bins 1/3] COPY --from=gcr.io/projectsigstore/cosign /ko-app/cosign /bins/cosign                                                         0.0s
- => CACHED [stage-bins 2/3] COPY --from=docker.io/mikefarah/yq /usr/bin/yq /bins/yq                                                                       0.0s
  => CACHED [stage-bins 3/3] COPY --from=ghcr.io/blue-build/cli:main-installer /out/bluebuild /bins/bluebuild                                              0.0s
  => CACHED [stage-4  3/16] RUN --mount=type=bind,from=stage-bins,src=/bins,dst=/tmp/bins   mkdir -p /usr/bin/   && cp /tmp/bins/* /usr/bin/   && ostree   0.0s
  => CACHED [stage-4  4/16] RUN   --mount=type=tmpfs,target=/var   --mount=type=bind,from=stage-config,src=/config,dst=/tmp/config,rw   --mount=type=bind  0.0s
@@ -185,6 +185,6 @@ No you don't. We will continue to support the legacy method for the time being.
 
 ## Final words
 
-Hopefully I was able to explain how these changes will help you in your building ventures. We'll be working more on creating useful features as well as optimizing your building experience. 
+Hopefully I was able to explain how these changes will help you in your building ventures. We'll be working more on creating useful features as well as optimizing your building experience.
 
 Happy building!
