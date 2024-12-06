@@ -154,6 +154,41 @@ If you're _one of the few people who still_ run their image builds from a reposi
 
 Some things that might help you on your quest are [our guide to running BlueBuild modules from a Containerfile directly](/how-to/minimal-setup/) and plain-old reading the source code of [BlueBuild's CLI](https://github.com/blue-build/cli), especially the file containing the [bash exports for modules](https://github.com/blue-build/cli/blob/main/scripts/exports.sh) and the [Containerfile template used by BlueBuild images](https://github.com/blue-build/cli/blob/main/template/templates/Containerfile.j2).
 
+### Recipe validation strictness
+
+Recipe validation, which runs by default on every build, might break your build if you you include in your recipe the key of an object or array, but do not populate the it with anything. This is because the parser fails to see the type of the parameter as an object or an array, and fails with an `incorrect type` error. In this case, you either need to delete the whole configuration key, or alternatively declare the value to either be `{}` (an empty object) or `[]` (an empty array).
+
+For example:
+
+```yaml ins="{}" ins="[]" del={24}
+modules:
+    # This will fail validation
+    - type: default-flatpaks
+      user:
+          install:
+              - org.mozilla.firefox
+          remove:
+      system:
+
+    # This will validate
+    # (no Flatpaks will be removed, but the system Flathub repo will be set up)
+    - type: default-flatpaks
+      user:
+          install:
+              - org.mozilla.firefox
+          remove: []
+      system: {}
+
+    # But you can also just leave out the `remove:` intirely
+    # without changing what the module does
+    - type: default-flatpaks
+      user:
+          install:
+              - org.mozilla.firefox
+          remove:
+      system: {}
+```
+
 ### Miscellaneous
 
 -   Minimum supported version of `buildah` is now `1.29`, up from `1.24`.
@@ -162,3 +197,7 @@ Some things that might help you on your quest are [our guide to running BlueBuil
 
 Happy holidays, everyone! Have fun with the new features, and enjoy your free time whenever you have the chance.
 _Stay tuned for the eventual `v1.0.0`!_
+
+```
+
+```
