@@ -156,7 +156,7 @@ Some things that might help you on your quest are [our guide to running BlueBuil
 
 ### Recipe validation strictness
 
-Recipe validation, which runs by default on every build, might break your build if you include the key of an object or array, but do not populate it with anything. This is because the recipe parser fails to see the type of the parameter as an object or an array, and fails with an `incorrect type` error. In this case, you either need to delete the whole configuration key, or alternatively declare the value to either be `{}` (an empty object) or `[]` (an empty array).
+Recipe validation, which runs by default on every build, might break your build if you include the key of an object or array in your recipe, but do not populate it with anything. This is because the recipe parser fails to see the type of the parameter as an object or an array, and fails with an `incorrect type` error. In this case, you either need to delete the whole configuration key, or alternatively declare the value to either be `{}` (an empty object) or `[]` (an empty array).
 
 For example:
 
