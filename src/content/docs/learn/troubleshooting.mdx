@@ -49,7 +49,7 @@ This issue can usually be fixed by setting `maximize_build_space: true` in the o
 
 ### `ghcr.io: denied: permission_denied: write_package`
 
-If you're trying to build an image with the same name as something you've already built from a new repository, you might get this GitHub permission error. This happens because the GitHub package entry was created by the other repository, which is now attached to it.  
+If you're trying to build an image with the same name as something you've already built from another repository, you might get this GitHub permission error. This happens because the GitHub package entry was created by the other repository. The repository that created the package entry automatically has the necessary permissions to the package, but your new repo does not.  
 To fix this issue:
 
 1. Go to the "Packages" tab on your GitHub profile.
