@@ -4,7 +4,7 @@
 import type { StarlightPlugin } from "@astrojs/starlight/types";
 import path from "node:path";
 import * as fs from "fs";
-import { parse } from "yaml";
+import type { Module } from "./modulesJsonGeneratorPlugin";
 
 export default function moduleReferencePlugin(): StarlightPlugin {
     return {
@@ -42,13 +42,7 @@ export default function moduleReferencePlugin(): StarlightPlugin {
 
                 const modules = JSON.parse(
                     fs.readFileSync("public/modules.json", "utf-8"),
-                ) as Array<{
-                    name: string;
-                    readme: string;
-                    sh: string;
-                    tsp: string;
-                    yml: string;
-                }>;
+                ) as Module[];
 
                 for (const module of modules) {
                     generateReferencePage(module, outputPath).catch((err) => {
@@ -63,61 +57,130 @@ export default function moduleReferencePlugin(): StarlightPlugin {
 }
 
 async function generateReferencePage(
-    module: {
-        name: string;
-        readme: string;
-        sh: string;
-        tsp: string;
-        yml: string;
-    },
+    module: Module,
     outputPath: string,
 ): Promise<void> {
-    console.log("Fetching: " + module.yml);
-    const moduleYmlRes = await fetch(module.yml);
-    const moduleYmlStr = await moduleYmlRes.text();
-    const moduleYml = parse(moduleYmlStr);
-    console.log("Generating page for: " + moduleYml.name);
+    console.log("Generating page for: " + module.name);
 
-    const readmeRes = await fetch(module.readme);
-    const readme = await readmeRes.text();
+    if (module.versions !== undefined) {
+        for (const [idx, version] of module.versions.entries()) {
+            if (version.readme !== undefined) {
+                const readmeRes = await fetch(version.readme);
+                const readme = await readmeRes.text();
 
-    const schemaRes = await fetch(
-        `https://schema.blue-build.org/modules/${moduleYml.name}.json`,
-    );
-    const schema = await schemaRes.json().catch(() => {});
+                const schemaRes = await fetch(
+                    `https://schema.blue-build.org/modules/${module.name}.json`,
+                );
+                const schema = await schemaRes.json().catch(() => {});
+
+                fs.mkdir(
+                    path.join(outputPath, module.name),
+                    { recursive: true },
+                    (err) => {
+                        if (err != null) {
+                            throw new Error(
+                                "Failed to create module reference directory: " +
+                                    err.message,
+                            );
+                        } else {
+                            writeReferencePage(
+                                module.name + "@" + version.version,
+                                module.shortdesc ?? "",
+                                version.examples ?? [],
+                                schema as {
+                                    properties: object;
+                                    required: string[];
+                                },
+                                readme,
+                                rawUrlToEditUrl(version.readme),
+                                {
+                                    hidden: true,
+                                },
+                                path.join(
+                                    outputPath,
+                                    module.name,
+                                    version.version + ".md",
+                                ),
+                            );
+                        }
+                    },
+                );
+                if (idx === module.versions.length - 1) {
+                    writeReferencePage(
+                        module.name,
+                        module.shortdesc ?? "",
+                        version.examples ?? [],
+                        schema as { properties: object; required: string[] },
+                        `:::note
+This documentation page is for the latest version (${version.version}) of this module.  
+All available versions: ${module.versions.map((v) => `[${v.version}](${v.version})`).join(", ")}.
+:::
+` + readme,
+                        rawUrlToEditUrl(version.readme),
+                        {},
+                        path.join(outputPath, module.name + ".md"),
+                    );
+                }
+            }
+        }
+    } else {
+        const readmeRes = await fetch(module.readme);
+        const readme = await readmeRes.text();
+
+        const schemaRes = await fetch(
+            `https://schema.blue-build.org/modules/${module.name}.json`,
+        );
+        const schema = await schemaRes.json().catch(() => {});
+
+        writeReferencePage(
+            module.name,
+            module.shortdesc ?? "",
+            module.examples ?? [],
+            schema as { properties: object; required: string[] },
+            readme,
+            rawUrlToEditUrl(module.readme),
+            {},
+            path.join(outputPath, module.name + ".md"),
+        );
+    }
+}
+
+function writeReferencePage(
+    name: string,
+    shortdesc: string,
+    examples: string[],
+    schema: object,
+    readme: string,
+    editUrl: string,
+    sidebar: Record<string, any>,
+    outputFile: string,
+): void {
     const optionReference = generateOptionReference(
         schema as { properties: object; required: string[] },
     );
 
     const content = `\
 ---
-title: "${moduleYml.name}"
-description: ${moduleYml.shortdesc}
-editUrl: "${rawUrlToEditUrl(module.readme)}"
+title: "${name}"
+description: ${shortdesc}
+editUrl: "${editUrl}"
+sidebar: ${JSON.stringify(sidebar)}
 ---
 ${readme.replace(/^#{1}\s.*$/gm, "")}
 ## Example configuration
 \`\`\`yaml
-${moduleYml.example}
+${examples[0]}
 \`\`\`
 ${optionReference !== "" ? `## Configuration options\n ${optionReference}` : ""}
 `;
-    fs.writeFile(
-        path.join(outputPath, moduleYml.name + ".md"),
-        content,
-        (err) => {
-            if (err != null) {
-                throw new Error(
-                    "Failed to write reference page: " + err.message,
-                );
-            } else {
-                console.log(
-                    "Reference page written successfully: " +
-                        path.join(outputPath, moduleYml.name + ".md"),
-                );
-            }
-        },
-    );
+
+    fs.writeFile(outputFile, content, (err) => {
+        if (err != null) {
+            throw new Error("Failed to write reference page: " + err.message);
+        } else {
+            console.log("Reference page written successfully: " + outputFile);
+        }
+    });
 }
 
 // transforms the raw url to the github.com url for editing,
