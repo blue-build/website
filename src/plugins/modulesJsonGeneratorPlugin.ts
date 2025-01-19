@@ -61,7 +61,10 @@ export default function modulesJsonGeneratorPlugin(
                         for (const file of moduleFiles) {
                             if (file.name === "README.md") {
                                 module.readme = file.download_url;
-                            } else if (file.name === `${module.name}.sh`) {
+                            } else if (
+                                file.name === `${module.name}.sh` ||
+                                file.name === `${module.name}.nu`
+                            ) {
                                 module.sh = file.download_url;
                             } else if (file.name === `${module.name}.tsp`) {
                                 module.tsp = file.download_url;
