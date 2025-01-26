@@ -96,7 +96,7 @@ export default defineConfig({
                 modulesJsonGeneratorPlugin({
                     moduleSources: [
                         {
-                            source: "https://api.github.com/repos/blue-build/modules/contents/modules",
+                            source: "https://api.github.com/repos/blue-build/modules/contents/modules?ref=nu-flatpaks",
                         },
                         {
                             source: "https://api.github.com/repos/blue-build/cli/contents/template/templates/modules",
