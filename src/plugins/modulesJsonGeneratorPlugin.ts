@@ -91,11 +91,20 @@ export default function modulesJsonGeneratorPlugin(
                                     : {},
                         });
                         const moduleYmlStr = await moduleYmlRes.text();
-                        const moduleYml = parse(moduleYmlStr);
+                        const moduleYml = parse(moduleYmlStr) as {
+                            name: string;
+                            shortdesc: string;
+                            example?: string;
+                            versions?: Array<{
+                                version: string;
+                                example: string;
+                            }>;
+                        };
 
                         module.shortdesc = moduleYml.shortdesc;
 
                         if (moduleYml.versions !== undefined) {
+                            // @ts-expect-error just initializing the object
                             module.versions = await Promise.all(
                                 moduleYml.versions.map(async (v) => {
                                     const versionFilesURL = moduleFiles.find(
@@ -115,7 +124,11 @@ export default function modulesJsonGeneratorPlugin(
                                         },
                                     );
                                     const versionFiles =
-                                        await versionFilesRes.json();
+                                        (await versionFilesRes.json()) as Array<{
+                                            name: string;
+                                            download_url: string;
+                                            url: string;
+                                        }>;
 
                                     return {
                                         version: v.version,
@@ -140,7 +153,7 @@ export default function modulesJsonGeneratorPlugin(
                             module.sh = moduleFiles.find(
                                 (file) => file.name === `${module.name}.sh`,
                             )?.download_url;
-                            module.examples = [moduleYml.example];
+                            module.examples = [moduleYml.example ?? ""];
                         }
 
                         modules.push(module);

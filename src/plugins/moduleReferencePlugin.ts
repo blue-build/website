@@ -92,7 +92,7 @@ async function generateReferencePage(
                                     required: string[];
                                 },
                                 readme,
-                                rawUrlToEditUrl(version.readme),
+                                rawUrlToEditUrl(version.readme ?? ""),
                                 {
                                     hidden: true,
                                 },
@@ -124,7 +124,7 @@ All available versions: ${module.versions.map((v) => `[${v.version}](${v.version
             }
         }
     } else {
-        const readmeRes = await fetch(module.readme);
+        const readmeRes = await fetch(module.readme ?? "");
         const readme = await readmeRes.text();
 
         const schemaRes = await fetch(
@@ -138,7 +138,7 @@ All available versions: ${module.versions.map((v) => `[${v.version}](${v.version
             module.examples ?? [],
             schema as { properties: object; required: string[] },
             readme,
-            rawUrlToEditUrl(module.readme),
+            rawUrlToEditUrl(module.readme ?? ""),
             {},
             path.join(outputPath, module.name + ".md"),
         );
