@@ -5,8 +5,6 @@ import type { StarlightPlugin } from "@astrojs/starlight/types";
 import * as fs from "fs";
 import { parse } from "yaml";
 
-// TODO: refactor this to include the file content adapted from module.yml and not just the URLs
-
 export interface Module {
     name: string;
     shortdesc: string | undefined;
