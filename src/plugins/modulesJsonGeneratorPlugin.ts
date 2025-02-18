@@ -3,6 +3,30 @@
 
 import type { StarlightPlugin } from "@astrojs/starlight/types";
 import * as fs from "fs";
+import { parse } from "yaml";
+
+export interface Module {
+    name: string;
+    shortdesc: string | undefined;
+    examples: string[] | undefined;
+    readme: string | undefined;
+    sh: string | undefined;
+    tsp: string | undefined;
+    versions:
+        | Array<{
+              version: string;
+              examples: string[] | undefined;
+              readme: string | undefined;
+              sh: string | undefined;
+          }>
+        | undefined;
+}
+
+export interface modulesJsonGeneratorPluginOptions {
+    moduleSources: Array<{
+        source: string;
+    }>;
+}
 
 export default function modulesJsonGeneratorPlugin(
     options: modulesJsonGeneratorPluginOptions,
@@ -11,60 +35,125 @@ export default function modulesJsonGeneratorPlugin(
         name: "modulesJsonGeneratorPlugin",
         hooks: {
             async setup() {
-                const modules: Array<{
-                    name: string;
-                    readme: string;
-                    sh: string;
-                    tsp: string;
-                    yml: string;
-                }> = [];
+                const modules: Module[] = [];
                 for (const moduleSource of options.moduleSources) {
-                    const modulesRes = await fetch(moduleSource.source, process.env.GH_TOKEN ? {
-                        headers: {
-                            Authorization: `Bearer ${process.env.GH_TOKEN}`,
-                        },
-                    } : {});
+                    const modulesRes = await fetch(moduleSource.source, {
+                        headers:
+                            process.env.GH_TOKEN !== undefined
+                                ? {
+                                      Authorization: `Bearer ${process.env.GH_TOKEN}`,
+                                  }
+                                : {},
+                    });
                     const modulesJson = (await modulesRes.json()) as Array<{
                         name: string;
                         url: string;
                     }>;
                     for (const moduleJson of modulesJson) {
                         const moduleFilesRes = await fetch(moduleJson.url, {
-                            headers: {
-                                Authorization: `Bearer ${process.env.GH_TOKEN}`,
-                            },
+                            headers:
+                                process.env.GH_TOKEN !== undefined
+                                    ? {
+                                          Authorization: `Bearer ${process.env.GH_TOKEN}`,
+                                      }
+                                    : {},
                         });
                         const moduleFilesJson = await moduleFilesRes.json();
                         if (!Array.isArray(moduleFilesJson)) continue;
                         const moduleFiles = moduleFilesJson as Array<{
                             name: string;
                             download_url: string;
+                            url: string;
                         }>;
-                        const module: {
-                            name: string;
-                            readme: string;
-                            sh: string;
-                            tsp: string;
-                            yml: string;
-                        } = {
+
+                        // @ts-expect-error object is to be initialized
+                        const module: Module = {
                             name: moduleJson.name,
-                            readme: "",
-                            sh: "",
-                            tsp: "",
-                            yml: "",
+                            tsp: moduleFiles.find(
+                                (file) =>
+                                    file.name === `${moduleJson.name}.tsp`,
+                            )?.download_url,
                         };
-                        for (const file of moduleFiles) {
-                            if (file.name === "README.md") {
-                                module.readme = file.download_url;
-                            } else if (file.name === `${module.name}.sh`) {
-                                module.sh = file.download_url;
-                            } else if (file.name === `${module.name}.tsp`) {
-                                module.tsp = file.download_url;
-                            } else if (file.name === "module.yml") {
-                                module.yml = file.download_url;
-                            }
+
+                        const moduleYmlUrl = moduleFiles.find(
+                            (file) => file.name === "module.yml",
+                        )?.download_url;
+                        if (moduleYmlUrl === undefined) continue;
+
+                        const moduleYmlRes = await fetch(moduleYmlUrl, {
+                            headers:
+                                process.env.GH_TOKEN !== undefined
+                                    ? {
+                                          Authorization: `Bearer ${process.env.GH_TOKEN}`,
+                                      }
+                                    : {},
+                        });
+                        const moduleYmlStr = await moduleYmlRes.text();
+                        const moduleYml = parse(moduleYmlStr) as {
+                            name: string;
+                            shortdesc: string;
+                            example?: string;
+                            versions?: Array<{
+                                version: string;
+                                example: string;
+                            }>;
+                        };
+
+                        module.shortdesc = moduleYml.shortdesc;
+
+                        if (moduleYml.versions !== undefined) {
+                            // @ts-expect-error just initializing the object
+                            module.versions = await Promise.all(
+                                moduleYml.versions.map(async (v) => {
+                                    const versionFilesURL = moduleFiles.find(
+                                        (file) => file.name === v.version,
+                                    )?.url;
+                                    if (versionFilesURL === undefined) return;
+                                    const versionFilesRes = await fetch(
+                                        versionFilesURL,
+                                        {
+                                            headers:
+                                                process.env.GH_TOKEN !==
+                                                undefined
+                                                    ? {
+                                                          Authorization: `Bearer ${process.env.GH_TOKEN}`,
+                                                      }
+                                                    : {},
+                                        },
+                                    );
+                                    const versionFiles =
+                                        (await versionFilesRes.json()) as Array<{
+                                            name: string;
+                                            download_url: string;
+                                            url: string;
+                                        }>;
+
+                                    return {
+                                        version: v.version,
+                                        examples: [v.example],
+                                        readme: versionFiles.find(
+                                            (file) => file.name === "README.md",
+                                        )?.download_url,
+                                        sh: versionFiles.find(
+                                            (file) =>
+                                                file.name ===
+                                                    `${module.name}.sh` ||
+                                                file.name ===
+                                                    `${module.name}.nu`,
+                                        )?.download_url,
+                                    };
+                                }),
+                            );
+                        } else {
+                            module.readme = moduleFiles.find(
+                                (file) => file.name === "README.md",
+                            )?.download_url;
+                            module.sh = moduleFiles.find(
+                                (file) => file.name === `${module.name}.sh`,
+                            )?.download_url;
+                            module.examples = [moduleYml.example ?? ""];
                         }
-                        if (module.yml === "") continue;
+
                         modules.push(module);
                     }
                 }
@@ -82,10 +171,4 @@ export default function modulesJsonGeneratorPlugin(
             },
         },
     };
-}
-
-export interface modulesJsonGeneratorPluginOptions {
-    moduleSources: Array<{
-        source: string;
-    }>;
 }
