@@ -69,7 +69,7 @@ async function generateReferencePage(
                 const readme = await readmeRes.text();
 
                 const schemaRes = await fetch(
-                    `https://schema.blue-build.org/modules/${module.name}.json`,
+                    `https://schema.blue-build.org/modules/${module.name}-${version.version}.json`,
                 );
                 const schema = await schemaRes.json().catch(() => {});
 
@@ -128,7 +128,7 @@ All available versions: ${module.versions.map((v) => `[${v.version}](${v.version
         const readme = await readmeRes.text();
 
         const schemaRes = await fetch(
-            `https://schema.blue-build.org/modules/${module.name}.json`,
+            `https://schema.blue-build.org/modules/${module.name}-latest.json`,
         );
         const schema = await schemaRes.json().catch(() => {});
 
