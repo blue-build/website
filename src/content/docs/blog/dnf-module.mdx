@@ -51,5 +51,6 @@ To switch to the `dnf` module, switch the module type from `rpm-ostree` to `dnf`
   - The list of packages also supports including sublists of packages to install from a specific repository or with specific flags.
 - Changes to the `replace:` section
   - While the syntax remains the same, the `replace:` section in the `dnf` module supports setting flags for the package manager.
+  - The `from-repo:` parameter now takes the name of the repository to replace from, and the repository has to be added earlier in the `repos:` section.
 - New sections
   - The `group-install:` and `group-remove:` sections are new to the `dnf` module.
