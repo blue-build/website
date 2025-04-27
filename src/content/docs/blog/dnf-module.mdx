@@ -16,7 +16,7 @@ This made the Fedora project [shift towards replacing](https://fedoraproject.org
 
 ## The [`dnf`](/reference/module/dnf) module
 
-For the past few months, the BlueBuild team has been working on a new module called `dnf` that works as a repository and package management wrapper for `dnf5` (and `dnf` if `dnf5` isn't available). The configuration structure for the module has been designed from the ground up to be intuitive and featureful. New features compared to the `rpm-ostree` module are, for example, package group installation, installing packages from specific repositories, and managing COPR repositories.
+For the past few months, the BlueBuild team has been working on a new module called `dnf` that works as a repository and package management wrapper for `dnf5` (and `dnf4` if `dnf5` isn't available). The configuration structure for the module has been designed from the ground up to be intuitive and featureful. New features compared to the `rpm-ostree` module are, for example, package group installation, installing packages from specific repositories, and managing COPR repositories.
 
 The module is a part of our new batch of modules that are written in [Nushell](https://www.nushell.sh/), a modern shell that is built on top of the [Rust programming language](https://www.rust-lang.org/). This approach makes the modules more maintainable and the source code more readable. You can read more about this change and decision process in the [GitHub Issue](https://github.com/blue-build/modules/issues/212) and possibly a future blog post.
 
