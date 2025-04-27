@@ -1,6 +1,6 @@
 ---
 import Default from "@astrojs/starlight/components/Search.astro";
-import type { StarlightRouteData } from "node_modules/@astrojs/starlight/utils/route-data";
+import type { StarlightRouteData } from '@astrojs/starlight/route-data';
 ---
 
 {
@@ -14,4 +14,4 @@ import type { StarlightRouteData } from "node_modules/@astrojs/starlight/utils/r
     )
 }
 
-<Default {...Astro.props as StarlightRouteData} />
+<Default {...Astro.locals.starlightRoute as StarlightRouteData} />

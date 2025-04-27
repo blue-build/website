@@ -2,7 +2,7 @@
 import LogoDark from "@assets/logo-round-dark.svg";
 import LogoLight from "@assets/logo-round-light.svg";
 import { Icon } from "@astrojs/starlight/components";
-const hero = Astro.props.entry.data.hero as {
+const hero = Astro.locals.starlightRoute.entry.data.hero as {
     title: string;
     tagline: string;
     actions: Array<any>;
