@@ -1,0 +1,55 @@
+---
+title: "Introducing: the dnf module"
+description: "Finally modern package management!"
+date: 2025-07-27
+authors:
+  - name: xyny
+    img: https://avatars.githubusercontent.com/u/60004820
+    github: xynydev
+---
+
+When BlueBuild was created, Fedora Atomic only used [`rpm-ostree`](https://coreos.github.io/rpm-ostree/) to build images, install packages, and manage installed systems. `rpm-ostree` is basically a mash-up of [`libostree`](https://ostreedev.github.io/ostree/) and [`libdnf`](https://github.com/rpm-software-management/libdnf), which was made to handle composing OSTree images and managing OSTree-based systems, while existing in the RPM ecosystem.
+
+However, focus slowly [shifted to enabling bootable native container images](https://fedoraproject.org/wiki/Changes/OstreeNativeContainer) based on the [OCI standard](https://github.com/opencontainers/image-spec), allowing the usage of standard tools such as `docker` or `buildah` to build images. This lessened the need for `rpm-ostree` as a separate build tool for the images, since it was now just called from the OCI container build process just like any other package manager. Additionally, the lackluster UX and potentially confusing architecture was starting to show, and for example dependency resolution had issues not present in `dnf`.
+
+This made the Fedora project [shift towards replacing](https://fedoraproject.org/wiki/Changes/DNFAndBootcInImageModeFedora) `rpm-ostree` with [`dnf5`](https://github.com/rpm-software-management/dnf5), while would be updated handle package management on OSTree-based systems, and [`bootc`](https://github.com/bootc-dev/bootc), which would handle deploying the bootable container images alongside system administration tasks such as updating and switching base images. Since F41, `bootc` and `dnf5` have been included in all official images, and are now [the main way to build and manage Atomic systems](https://docs.fedoraproject.org/en-US/bootc/rpm-ostree/), replacing `rpm-ostree`.
+
+## The [`dnf`](/reference/module/dnf) module
+
+For the past few months, the BlueBuild team has been working on a new module called `dnf` that works as a repository and package management wrapper for `dnf5` (and `dnf` if `dnf5` isn't available). The configuration structure for the module has been designed from the ground-up to be intuitive and featureful. New features compared to the `rpm-ostree` module are for example package group installation, installing packages from specific repositories, and managing COPR repositories.
+
+The module is a part of our new batch of modules that are written in [Nushell](https://www.nushell.sh/), a modern shell that is built on top of the [Rust programming language](https://www.rust-lang.org/). This approach makes the modules more maintainable and the source code more readable. You can read more more about this change and decision process in the [GitHub Issue](https://github.com/blue-build/modules/issues/212) and possibly a future blog post.
+
+And yes, it can install Steam (this was a headache with `rpm-ostree` because of depedency resolution issues).
+
+```yaml
+type: dnf
+repos:
+  files:
+    - https://negativo17.org/repos/fedora-steam.repo
+install:
+  packages:
+    - install-weak-deps: false
+      packages:
+        - steam
+        - kernel-modules-extra
+```
+
+## Switching from `rpm-ostree` to `dnf`
+
+To switch to the `dnf` module, switch the module type from `rpm-ostree` to `dnf`. Make sure to check out the [module reference page](/reference/module/dnf) to see how to use the new module. Below is a short list of the main differences between the two modules.
+
+- Changes to the `repos:` section
+  - The `rpm-ostree` module used to have a `repos:` section that was a list of repo files.
+  - The `dnf` module's `repos:` section supports adding repositories from files and COPR directly, adding repository keys, and choosing a nonfree repository (rpmfusion or negativo17).
+  - The section `repos: files:` in the `dnf` module is equivalent to the `repos:` section in the `rpm-ostree` module.
+  - The proper way to add COPR repositories is to use the `repos: copr:` section in the `dnf` module.
+- Changes to the `install:` and `remove:` sections
+  - The `rpm-ostree` module used to have `install:` and `remove:` sections that were a lists of packages to install/remove.
+  - The `dnf` module's `install:` and `remove:` sections support setting flags for the package manager..
+  - The section `install: packages:` in the `dnf` module is equivalent to the `install:` section in the `rpm-ostree` module.
+  - The list of packages also supports including sublists of packages to install from a specific repostory or with specific flags.
+- Changes to the `replace:` section
+  - While the syntax is remains the same, the `replace:` section in the `dnf` module supports setting flags for the package manager.
+- New sections
+  - The `group-install:` and `group-remove:` sections are new to the `dnf` module.
