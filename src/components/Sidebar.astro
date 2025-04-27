@@ -6,43 +6,43 @@ import type { SidebarEntry } from "node_modules/@astrojs/starlight/utils/routing
 const isBlog = Astro.locals.starlightRoute.id.includes("blog");
 const blogPosts = await Astro.glob("../content/docs/blog/*.mdx");
 const sidebarPostList: StarlightRouteData["sidebar"] = blogPosts
-    .filter((p) => !p.url?.includes("index"))
-    .sort(
-        (a, b) =>
-            new Date(b.frontmatter.date).getTime() -
-            new Date(a.frontmatter.date).getTime(),
-    )
-    .map((p) => {
-        const url = p.url?.replace("src/content/docs", "").replace(".mdx", "");
-        return {
-            attrs: {},
-            badge: undefined,
-            href: url,
-            isCurrent: Astro.url.pathname.includes(url || ""),
-            label: ` ${p.frontmatter.title} (${new Date(p.frontmatter.date).toISOString().substring(0, 10)})`,
-            type: "link",
-        } as SidebarEntry;
-    });
+  .filter((p) => !p.url?.includes("index"))
+  .sort(
+    (a, b) =>
+      new Date(b.frontmatter.date).getTime() -
+      new Date(a.frontmatter.date).getTime(),
+  )
+  .map((p) => {
+    const url = p.url?.replace("src/content/docs", "").replace(".mdx", "");
+    return {
+      attrs: {},
+      badge: undefined,
+      href: url,
+      isCurrent: Astro.url.pathname.includes(url || ""),
+      label: ` ${p.frontmatter.title} (${new Date(p.frontmatter.date).toISOString().substring(0, 10)})`,
+      type: "link",
+    } as SidebarEntry;
+  });
 const blogSidebar: StarlightRouteData["sidebar"] = [
-    {
-        attrs: {},
-        badge: undefined,
-        href: "/blog",
-        isCurrent: Astro.locals.starlightRoute.id === "blog/index.mdx",
-        label: "BlueBuild blog",
-        type: "link",
-    },
-    {
-        badge: undefined,
-        label: "All posts",
-        type: "group",
-        collapsed: false,
-        entries: sidebarPostList,
-    },
+  {
+    attrs: {},
+    badge: undefined,
+    href: "/blog",
+    isCurrent: Astro.locals.starlightRoute.id === "blog/index.mdx",
+    label: "BlueBuild blog",
+    type: "link",
+  },
+  {
+    badge: undefined,
+    label: "All posts",
+    type: "group",
+    collapsed: false,
+    entries: sidebarPostList,
+  },
 ];
 ---
 
 <Default
-    {...Astro.locals.starlightRoute as StarlightRouteData}
-    sidebar={isBlog ? blogSidebar : Astro.locals.starlightRoute.sidebar}
+  {...Astro.locals.starlightRoute as StarlightRouteData}
+  sidebar={isBlog ? blogSidebar : Astro.locals.starlightRoute.sidebar}
 />

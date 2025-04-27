@@ -1,37 +1,38 @@
 ---
-const blogPosts = await Astro.glob("../content/docs/blog/*.mdx");
-const p = blogPosts.find((p) =>
-    Astro.url.pathname.includes(
-        p.url?.replace("src/content/docs", "").replace(".mdx", "") || "",
-    ),
-);
+import { getEntry } from "astro:content";
+
+const p = await getEntry("docs", Astro.locals.starlightRoute.id);
 ---
 
-<hr class="mb-2 pt-4" />
-Published on {new Date(p?.frontmatter.date).toISOString().substring(0, 10)}.
-<br />
-Authors:
-<div class="flex flex-col gap-8 pt-4">
-    {
-        p?.frontmatter.authors.map(
-            (a: { github: string; img: string; name: string }) => (
-                <a
-                    href={"https://github.com/" + a.github}
-                    class="group ml-4 mr-2 flex flex-row gap-2 no-underline outline outline-1 outline-gray-900 dark:outline-gray-200"
-                >
-                    <img
-                        src={a.img}
-                        class="w-24 -translate-x-4 -translate-y-4 outline outline-1 outline-gray-900 dark:outline-gray-200"
-                    />
-                    <div class="flex flex-col text-gray-800 dark:text-gray-200">
-                        {a.name}
-                        <br />
-                        <span class="group-hover:text-gray-700 group-hover:underline group-focus:underline group-active:underline dark:group-hover:text-gray-400    ">
-                            @{a.github}
-                        </span>
-                    </div>
-                </a>
-            ),
-        )
-    }
-</div>
+{
+  !p?.filePath?.includes("index") && (
+    <div>
+      <hr class="mb-2 pt-4" />
+      Published on {p?.data.date?.toISOString().substring(0, 10)}.
+      <br />
+      Authors:
+      <div class="flex flex-col gap-8 pt-4">
+        {p?.data.authors?.map(
+          (a: { github: string; img: string; name: string }) => (
+            <a
+              href={"https://github.com/" + a.github}
+              class="group ml-4 mr-2 flex flex-row gap-2 no-underline outline outline-1 outline-gray-900 dark:outline-gray-200"
+            >
+              <img
+                src={a.img}
+                class="w-24 -translate-x-4 -translate-y-4 outline outline-1 outline-gray-900 dark:outline-gray-200"
+              />
+              <div class="flex flex-col text-gray-800 dark:text-gray-200">
+                {a.name}
+                <br />
+                <span class="group-hover:text-gray-700 group-hover:underline group-focus:underline group-active:underline dark:group-hover:text-gray-400    ">
+                  @{a.github}
+                </span>
+              </div>
+            </a>
+          ),
+        )}
+      </div>
+    </div>
+  )
+}
