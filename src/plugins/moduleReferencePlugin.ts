@@ -149,7 +149,7 @@ function writeReferencePage(
   outputFile: string,
 ): void {
   const optionReference = generateOptionReference(
-    schema as { properties: object; required: string[] },
+    schema as { properties: object; required: string[]; $defs: object },
   );
 
   const content = `\
