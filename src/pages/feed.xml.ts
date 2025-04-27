@@ -9,7 +9,7 @@ export const GET: APIRoute = async ({ site }): Promise<Response> => {
     const docs = await getCollection("docs");
     const blog = docs
         .filter((p) => p.id.startsWith("blog/") && p.id !== "blog/index.mdx")
-        // @ts-ignore
+        // @ts-expect-error data.date could be undefined, but on our blog it should always be defined
         .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
     console.log(blog);
     return await rss({
@@ -27,8 +27,8 @@ export const GET: APIRoute = async ({ site }): Promise<Response> => {
             title: post.data.title,
             pubDate: post.data.date,
             description: post.data.description,
-            link: post.slug,
-            content: sanitizeHtml(parser.render(post.body), {
+            link: post.id,
+            content: sanitizeHtml(parser.render(post.body ?? ""), {
                 allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
             }),
         })),

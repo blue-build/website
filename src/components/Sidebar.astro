@@ -1,9 +1,9 @@
 ---
 import Default from "@astrojs/starlight/components/Sidebar.astro";
-import type { StarlightRouteData } from "node_modules/@astrojs/starlight/utils/route-data";
-import type { SidebarEntry } from "node_modules/@astrojs/starlight/utils/navigation";
+import type { StarlightRouteData } from "@astrojs/starlight/route-data";
+import type { SidebarEntry } from "node_modules/@astrojs/starlight/utils/routing/types";
 
-const isBlog = Astro.props.id.includes("blog");
+const isBlog = Astro.locals.starlightRoute.id.includes("blog");
 const blogPosts = await Astro.glob("../content/docs/blog/*.mdx");
 const sidebarPostList: StarlightRouteData["sidebar"] = blogPosts
     .filter((p) => !p.url?.includes("index"))
@@ -28,7 +28,7 @@ const blogSidebar: StarlightRouteData["sidebar"] = [
         attrs: {},
         badge: undefined,
         href: "/blog",
-        isCurrent: Astro.props.id === "blog/index.mdx",
+        isCurrent: Astro.locals.starlightRoute.id === "blog/index.mdx",
         label: "BlueBuild blog",
         type: "link",
     },
@@ -43,6 +43,6 @@ const blogSidebar: StarlightRouteData["sidebar"] = [
 ---
 
 <Default
-    {...Astro.props as StarlightRouteData}
-    sidebar={isBlog ? blogSidebar : Astro.props.sidebar}
+    {...Astro.locals.starlightRoute as StarlightRouteData}
+    sidebar={isBlog ? blogSidebar : Astro.locals.starlightRoute.sidebar}
 />
