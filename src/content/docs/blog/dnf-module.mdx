@@ -28,11 +28,10 @@ repos:
   files:
     - https://negativo17.org/repos/fedora-steam.repo
 install:
+  install-weak-deps: false
   packages:
-    - install-weak-deps: false
-      packages:
-        - steam
-        - kernel-modules-extra
+    - steam
+    - kernel-modules-extra
 ```
 
 ## Switching from `rpm-ostree` to `dnf`
