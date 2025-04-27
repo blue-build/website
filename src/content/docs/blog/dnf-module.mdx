@@ -14,7 +14,7 @@ However, focus slowly [shifted to enabling bootable native container images](htt
 
 This made the Fedora project [shift towards replacing](https://fedoraproject.org/wiki/Changes/DNFAndBootcInImageModeFedora) `rpm-ostree` with [`dnf5`](https://github.com/rpm-software-management/dnf5), which would be updated to handle package management on OSTree-based systems, and [`bootc`](https://github.com/bootc-dev/bootc), which would handle deploying the bootable container images alongside system administration tasks such as updating and switching base images. Since F41, `bootc` and `dnf5` have been included in all official images and are now [the main way to build and manage Atomic systems](https://docs.fedoraproject.org/en-US/bootc/rpm-ostree/), replacing `rpm-ostree`.
 
-## The [`dnf`](/reference/module/dnf) module
+## The [`dnf`](/reference/modules/dnf) module
 
 For the past few months, the BlueBuild team has been working on a new module called `dnf` that works as a repository and package management wrapper for `dnf5` (and `dnf4` if `dnf5` isn't available). The configuration structure for the module has been designed from the ground up to be intuitive and featureful. New features compared to the `rpm-ostree` module are, for example, package group installation, installing packages from specific repositories, and managing COPR repositories.
 
