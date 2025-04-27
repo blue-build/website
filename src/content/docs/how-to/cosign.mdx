@@ -5,7 +5,7 @@ sidebar:
     order: 1 # ensure this guide will be below setup
 ---
 
-This guide shows you how to set up [Sigstore](https://www.sigstore.dev/) container signing for a BlueBuild custom image repository. This guide is useful when manually setting up a new repository, or regenerating keys for a pre-existing one. Setting up container signing is important for security and verifiability. This guide requires either [`cosign`](https://github.com/sigstore/cosign) or [`skopeo`](https://github.com/containers/skopeo), so make sure one of those is installed before proceeding. If you don't already have either one of those installed, it is recommended you [install cosign](https://docs.sigstore.dev/system_config/installation/).
+This guide shows you how to set up [Sigstore](https://www.sigstore.dev/) container signing for a BlueBuild custom image repository. This guide is useful when manually setting up a new repository, or regenerating keys for a pre-existing one. Setting up container signing is important for security and verifiability. This guide requires either [`cosign`](https://github.com/sigstore/cosign) or [`skopeo`](https://github.com/containers/skopeo), so make sure one of those is installed before proceeding. If you don't already have either one of those installed, it is recommended you [install cosign](https://docs.sigstore.dev/cosign/system_config/installation/).
 
 1. Inside your repository, generate a new key pair. Do NOT put in a password when it asks you to, just press enter. The signing key will be used in GitHub Actions and will not work if it is encrypted.
     - with cosign:
