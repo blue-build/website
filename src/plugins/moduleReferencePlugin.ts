@@ -19,7 +19,7 @@ export default function moduleReferencePlugin(): StarlightPlugin {
               "Module reference directory cleared successfully before recreating: " +
                 outputPath,
             );
-          } catch (err) {
+          } catch (err: unknown) {
             throw new Error(
               "Failed to clear module reference directory before recreating: " +
                 (err as Error).message,
@@ -43,11 +43,13 @@ export default function moduleReferencePlugin(): StarlightPlugin {
         ) as Module[];
 
         for (const module of modules) {
-          generateReferencePage(module, outputPath).catch((err) => {
+          try {
+            await generateReferencePage(module, outputPath);
+          } catch (err: unknown) {
             throw new Error(
-              "Failed to generate reference page: " + err.message,
+              "Failed to generate reference page: " + (err as Error).message,
             );
-          });
+          }
         }
       },
     },
