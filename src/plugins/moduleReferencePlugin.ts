@@ -19,7 +19,7 @@ export default function moduleReferencePlugin(): StarlightPlugin {
               "Module reference directory cleared successfully before recreating: " +
                 outputPath,
             );
-          } catch (err) {
+          } catch (err: Error) {
             throw new Error(
               "Failed to clear module reference directory before recreating: " +
                 (err as Error).message,
