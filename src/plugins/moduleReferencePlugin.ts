@@ -43,11 +43,13 @@ export default function moduleReferencePlugin(): StarlightPlugin {
         ) as Module[];
 
         for (const module of modules) {
-          generateReferencePage(module, outputPath).catch((err) => {
+          try {
+            await generateReferencePage(module, outputPath);
+          } catch (err) {
             throw new Error(
               "Failed to generate reference page: " + err.message,
             );
-          });
+          }
         }
       },
     },
