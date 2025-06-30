@@ -25,6 +25,18 @@ The URL of the module repository (an OCI image) to pull the module from. If left
 
 When set to `true`, the module is run regardless if previous layers in the build have been cached. This is useful in [stages](/reference/stages) where the goal is to build the latest version of a program from a git repository. Otherwise, the module wouldn't run again unless previous layers were also re-ran.
 
+### `env:` (optional)
+
+If there are environment variables that you want to set for a module call (i.e. a re-used script), you can set key/value pairs.
+
+```yaml
+type: script
+env:
+  TEST: 'test'
+snippets:
+  - '[ -n "$TEST" ]'
+```
+
 ## How modules are launched
 
 A module added into an image's configuration is turned into a `RUN`-statement that launches the module with a JSON version of its configuration in the generated Containerfile (or an equivalent dynamic bash command if using the legacy template).
