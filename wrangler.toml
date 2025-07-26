@@ -4,5 +4,8 @@ compatibility_date = "2025-07-26"
 [assets]
 directory = "./dist/"
 
+[build]
+command = "pnpm build"
+
 [vars]
 PNPM_VERSION = "9.1.0-0"
