@@ -1,6 +1,6 @@
 ---
 title: default-flatpaks v2
-description: The module for adding flatpaks has been rewritten with breaking changes. Learn why and how.
+description: The module for adding Flatpaks has been rewritten with breaking changes. Learn why and how.
 date: 2025-07-26
 authors:
   - name: xyny
@@ -8,7 +8,7 @@ authors:
     github: xynydev
 ---
 
-The [`default-flatpaks`](/reference/modules/default-flatpaks/) module is one of the earliest BlueBuild modules. As such, the module contained a few issues that made it imperfect and prevented it being useful for some usecases. Additionally, the module was pretty complicated and the bash shell code was quite hard to read and maintain. As such, the module has been rewritten using Nushell and a new configuration format.
+The [`default-flatpaks`](/reference/modules/default-flatpaks/) module is one of the earliest BlueBuild modules. As such, the module contained a few issues that made it imperfect and prevented it from being useful for some use cases. Additionally, the module was pretty complicated, and the bash shell code was quite hard to read and maintain. As such, the module has been rewritten using Nushell and a new configuration format.
 
 ## Changes
 
@@ -38,7 +38,7 @@ configurations:
       - org.gnome.Loupe
 ```
 
-By default, these will be user flatpaks and the installer will notify the user on each boot. You can change this by setting the configuration options as follows:
+By default, these will be user Flatpaks, and the installer will notify the user on each boot. You can change this by setting the configuration options as follows:
 
 ```yaml
 type: default-flatpaks
