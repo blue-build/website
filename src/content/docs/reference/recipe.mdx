@@ -61,6 +61,14 @@ The tag of the base image to build on. Used to select a version explicitly (`40`
 image-version: 40
 ```
 
+### `blue-build-tag:` (optional)
+
+Version of the BlueBuild CLI to pull into your image. Supply the tag of the cli release container to pull, see [the list of available tags](https://github.com/blue-build/cli/pkgs/container/cli/versions?filters%5Bversion_type%5D=tagged) for reference. Useful for testing out pre-release versions of BlueBuild CLI. Default: `latest-installer`. Set to to `none` to opt out of installing the CLI into your image. 
+
+### `nushell-version:` (optional)
+
+Version of nushell to pull to `/usr/libexec/bluebuild/nu/nu` for use by modules. Change only if you need a specific version of Nushell, changing this might break some BlueBuild modules. Set to to `none` to opt out of installing Nushell into your image (this will break modules that depend on it). 
+
 ### `stages:` (optional)
 
 A list of [stages](/reference/stages/) that are executed before the build of the final image. This is useful for compiling programs from source without polluting the final bootable image.

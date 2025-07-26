@@ -107,7 +107,7 @@ async function generateReferencePage(
             version.examples ?? [],
             schema as { properties: object; required: string[] },
             `:::note
-This documentation page is for the latest version (${version.version}) of this module.  
+This documentation page is for the latest version (${version.version}) of this module.
 All available versions: ${module.versions.map((v) => `[${v.version}](${v.version})`).join(", ")}.
 :::
 ` + readme,
@@ -207,7 +207,13 @@ function generateOptionReference(schema: {
     let out = "";
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     for (const [key, value] of Object.entries(properties)) {
-      if (key === "type" || key === "no-cache") continue;
+      if (
+        key === "type" ||
+        key === "no-cache" ||
+        key === "env" ||
+        key === "secrets"
+      )
+        continue;
       const object =
         value.$ref !== undefined
           ? schema.$defs[

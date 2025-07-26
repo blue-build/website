@@ -27,7 +27,7 @@ When set to `true`, the module is run regardless if previous layers in the build
 
 ### `env:` (optional)
 
-If there are environment variables that you want to set for a module call (i.e. a re-used script), you can set key/value pairs.
+A list of environment variables to set when running the module. These variables are available to the module's script and can be used to customize its behavior. Set these as key-value pairs.
 
 ```yaml
 type: script
@@ -36,6 +36,10 @@ env:
 snippets:
   - '[ -n "$TEST" ]'
 ```
+
+### `secrets:` (optional)
+
+A list of secrets to mount when running the module. These secrets are available to the module's script and can be used only by it.
 
 ## How modules are launched
 

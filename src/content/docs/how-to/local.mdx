@@ -53,16 +53,12 @@ You can see that the BlueBuild GitHub Action [uses the same `build` command][blu
 
 You can see the complete list of available options using `bluebuild build --help`.
 
-### Rebase/Upgrade
+### Switch
 
-:::caution
-These commands will be replaced by `switch` in `v0.9.0`. It will be aliased with `rebase` and `upgrade` so as to not break existing scripts. Right now, `upgrade` must be called when building the same image you called `rebase` on earlier. The `switch` command removes this ambiguity.
-:::
-
-The `rebase` command is a workflow command. It will build your image, export it to a `.tar.gz` file, and call `rpm-ostree rebase` with the file as the target instead of a OCI image:
+The `switch` command is a workflow command. It will build your image, export it to a `.tar.gz` file, and call `rpm-ostree rebase`/`rpm-ostree upgrade` with the file as the target instead of a OCI image:
 
 ```bash
-bluebuild rebase ./recipes/recipe.yml
+bluebuild switch ./recipes/recipe.yml
 ```
 
-After you've rebased, you can use the `upgrade` command to do the same thing except call `rpm-ostree upgrade`. To trigger an immediate reboot for either command, you can pass in the `--reboot/-r` argument.
+To trigger an immediate reboot for either command, you can pass in the `--reboot/-r` argument.
