@@ -1,0 +1,83 @@
+---
+title: default-flatpaks v2
+description: The module for adding Flatpaks has been rewritten with breaking changes. Learn why and how.
+date: 2025-07-26
+authors:
+  - name: xyny
+    img: https://avatars.githubusercontent.com/u/60004820
+    github: xynydev
+---
+
+The [`default-flatpaks`](/reference/modules/default-flatpaks/) module is one of the earliest BlueBuild modules. As such, the module contained a few issues that made it imperfect and prevented it from being useful for some use cases. Additionally, the module was pretty complicated, and the bash shell code was quite hard to read and maintain. As such, the module has been rewritten using Nushell and a new configuration format.
+
+## Changes
+
+- It is now possible to enable multiple Flatpak repositories.
+  - Previously setting the system or user repository in the module overrode the last one set.
+- The ability to do local modifications to the Flatpak install list was removed.
+  - This niche feature made the module more complex and mixed up the purpose of modules, which is to set up the image's default configuration and not to provide configuration to end-users.
+- The ability to configure automatic removal of Flatpaks was removed.
+  - This is considered an anti-feature, as setting up automatic removal of a Flatpak that an end-user relies on would cause unexpected nuisance to the user. There is no way to automatically differentiate between Flatpaks that were manually installed by the user and are part of their workflow, and Flatpaks that were installed by the maintainer of the image that are now unneeded.
+- A new CLI tool called `bluebuild-flatpak-manager` has been added to let end-users easily turn off and on the automatic Flatpak setup and to manually execute Flatpak setup.
+- The new configuration format is based on a list of `configurations:` which are appended to `/usr/share/bluebuild/default-flatpaks/configuration.yaml`.
+  - This means that all Flatpak configuration done in the base image of the image and in previous module calls are retained, and each module call can do their own configuration without being affected by others.
+
+## Usage
+
+Most users will probably only need one Flatpak setup configuration. The most common use case is to install Flatpaks from the Flathub repository. To do this, you can adapt from the following configuration:
+
+```yaml
+type: default-flatpaks
+configurations:
+  - install:
+      - org.mozilla.firefox
+      - com.github.tchx84.Flatseal
+      - io.github.flattool.Warehouse
+      - io.missioncenter.MissionCenter
+      - com.github.rafostar.Clapper
+      - org.gnome.Loupe
+```
+
+By default, these will be user Flatpaks, and the installer will notify the user on each boot. You can change this by setting the configuration options as follows:
+
+```yaml
+type: default-flatpaks
+configurations:
+  - notify: false
+    scope: system
+    install:
+      - org.mozilla.firefox
+      - com.github.tchx84.Flatseal
+      - io.github.flattool.Warehouse
+      - io.missioncenter.MissionCenter
+      - com.github.rafostar.Clapper
+      - org.gnome.Loupe
+```
+
+To specify custom repo details, use the `repo:` key in the configuration:
+
+```yaml
+type: default-flatpaks
+configurations:
+  - notify: false
+    scope: system
+    repo:
+      url: https://flathub.org/beta-repo/flathub-beta.flatpakrepo
+      name: flathub-beta
+      title: Flathub Beta
+    install:
+      - org.mozilla.firefox
+      - com.github.tchx84.Flatseal
+      - io.github.flattool.Warehouse
+      - io.missioncenter.MissionCenter
+      - com.github.rafostar.Clapper
+      - org.gnome.Loupe
+```
+
+## How to Migrate
+
+To migrate to the new configuration format, simply create the top-level `configurations:` key and copy the configurations from under `user:` and `system:` to be under it under it. Remove the `user:` and `system:` keys, and set the `scope:` key to `user` or `system` as appropriate. Then, if you have configured repositories, move the `repo-` keys under the `repo:` section and remove the `repo-` prefix from them.
+
+## How to *not* Migrate
+
+Your current configuration is likely set to use the latest version of the module with `type: default-flatpaks`. To switch to the now-deprecated older version of the module, set `type: default-flatpaks@v1`.
