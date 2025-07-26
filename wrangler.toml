@@ -1,6 +1,8 @@
 name = "bluebuild-website"
-pages_build_output_dir = "dist"
-compatibility_date = "2024-04-01"
+compatibility_date = "2025-07-26"
+
+[assets]
+directory = "./dist/"
 
 [vars]
 PNPM_VERSION = "9.1.0-0"

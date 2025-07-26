@@ -8,6 +8,9 @@ import githubActionReferencePlugin from "./src/plugins/githubActionReferencePlug
 import modulesJsonGeneratorPlugin from "./src/plugins/modulesJsonGeneratorPlugin";
 
 
+import cloudflare from "@astrojs/cloudflare";
+
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://blue-build.org/",
@@ -146,4 +149,6 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
+
+  adapter: cloudflare(),
 });
