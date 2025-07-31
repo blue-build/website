@@ -27,7 +27,15 @@ When set to `true`, the module is run regardless if previous layers in the build
 
 ### `env:` (optional)
 
-A list of environment variables to set when running the module. These variables are available to the module's script and can be used to customize its behavior.
+A list of environment variables to set when running the module. These variables are available to the module's script and can be used to customize its behavior. Set these as key-value pairs.
+
+```yaml
+type: script
+env:
+  TEST: 'test'
+snippets:
+  - '[ -n "$TEST" ]'
+```
 
 ### `secrets:` (optional)
 
