@@ -5,6 +5,14 @@ description: A `recipe.yml` file is used to configure a custom image.
 
 A `recipe.yml` file describes the build process of a custom image. The top-level keys set the metadata and base for the image, and modules are build steps that add things on top of the base.
 
+:::tip
+You can add the lines below to the top of your recipe to get yaml completion in your favorite editor.
+```
+---
+# yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
+```
+:::
+
 ### `name:`
 
 The image name. Used when publishing to GHCR as `ghcr.io/<user>/<name>`.
