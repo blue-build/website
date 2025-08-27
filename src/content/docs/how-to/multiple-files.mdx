@@ -9,6 +9,9 @@ This guide shows you how to include module configuration into your recipe from a
 2. Add your module configuration into the file.
     - The file can configure just one module like this:
         ```yaml
+        ---
+        # yaml-language-server: $schema=https://schema.blue-build.org/module-v1.json
+
         # recipes/common-flatpaks.yml
         type: default-flatpaks
         system:
@@ -17,6 +20,9 @@ This guide shows you how to include module configuration into your recipe from a
         ```
     - Or it can configure multiple modules by declaring them under `modules:`:
         ```yaml
+        ---
+        # yaml-language-server: $schema=https://schema.blue-build.org/module-list-v1.json
+
         # recipes/common-modules.yml
         modules:
             - type: signing
