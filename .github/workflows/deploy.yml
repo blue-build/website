@@ -19,9 +19,19 @@ jobs:
       - name: Install dependencies (mise)
         uses: jdx/mise-action@v2
 
-      - name: Build & deploy
+      - name: Build & deploy (production)
         uses: cloudflare/wrangler-action@v3
+        if: github.ref == 'refs/heads/main'
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build & deploy (preview)
+        uses: cloudflare/wrangler-action@v3
+        if: github.ref != 'refs/heads/main'
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          command: versions upload --preview-alias ${{ github.head_ref || github.ref_name }}
