@@ -25,6 +25,7 @@
         "@iconify-json/ri": "^1.2.5",
         "@tailwindcss/vite": "^4.1.4",
         "astro": "^5.12.3",
+        "astro-d2": "^0.8.0",
         "astro-og-canvas": "^0.4.2",
         "canvaskit-wasm": "^0.39.1",
         "sharp": "^0.34.3",
