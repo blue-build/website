@@ -149,7 +149,7 @@ export default defineConfig({
         },
       ],
     }),
-    d2(),
+    d2({ inline: true }),
     // icon(),
   ],
 
