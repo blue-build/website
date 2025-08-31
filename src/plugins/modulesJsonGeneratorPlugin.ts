@@ -45,6 +45,14 @@ export default function modulesJsonGeneratorPlugin(
                                   }
                                 : {},
                     });
+                    if (!modulesRes.ok) {
+                        console.log("Failed to fetch modules from GitHub. Probably rate-limited. Skipping...");
+                        fs.writeFileSync(
+                            "public/modules.json",
+                            "[]",
+                        );
+                        return
+                    }
                     const modulesJson = (await modulesRes.json()) as Array<{
                         name: string;
                         url: string;
