@@ -15,8 +15,11 @@ jobs:
       deployments: write
     steps:
       - uses: actions/checkout@v4
-      - uses: jdx/mise-action@v2
-      - name: Deploy
+
+      - name: Install dependencies (mise)
+        uses: jdx/mise-action@v2
+
+      - name: Build & deploy
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
