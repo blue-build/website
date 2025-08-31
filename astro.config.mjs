@@ -7,7 +7,6 @@ import moduleReferencePlugin from "./src/plugins/moduleReferencePlugin";
 import githubActionReferencePlugin from "./src/plugins/githubActionReferencePlugin";
 import modulesJsonGeneratorPlugin from "./src/plugins/modulesJsonGeneratorPlugin";
 
-
 // https://astro.build/config
 export default defineConfig({
   site: "https://blue-build.org/",

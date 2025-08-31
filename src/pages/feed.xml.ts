@@ -11,7 +11,6 @@ export const GET: APIRoute = async ({ site }): Promise<Response> => {
         .filter((p) => p.id.startsWith("blog/") && p.id !== "blog/index.mdx")
         // @ts-expect-error data.date could be undefined, but on our blog it should always be defined
         .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
-    console.log(blog);
     return await rss({
         // `<title>` field in output xml
         title: "BlueBuild Blog",

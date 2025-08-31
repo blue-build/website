@@ -12,8 +12,8 @@
     },
     "dependencies": {
         "@astrojs/check": "^0.9.4",
-        "@astrojs/rss": "^4.0.11",
-        "@astrojs/starlight": "^0.34.1",
+        "@astrojs/rss": "^4.0.12",
+        "@astrojs/starlight": "^0.35.1",
         "@astrojs/starlight-tailwind": "^4.0.1",
         "@astrojs/tailwind": "^6.0.2",
         "@fontsource-variable/rubik": "^5.2.5",
@@ -24,10 +24,10 @@
         "@iconify-json/ph": "^1.2.2",
         "@iconify-json/ri": "^1.2.5",
         "@tailwindcss/vite": "^4.1.4",
-        "astro": "^5.7.5",
+        "astro": "^5.12.3",
         "astro-og-canvas": "^0.4.2",
         "canvaskit-wasm": "^0.39.1",
-        "sharp": "^0.32.6",
+        "sharp": "^0.34.3",
         "tailwindcss": "^4.1.4",
         "yaml": "^2.7.1"
     },
