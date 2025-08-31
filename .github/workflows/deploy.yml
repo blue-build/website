@@ -23,6 +23,7 @@ jobs:
         uses: cloudflare/wrangler-action@v3
         if: github.ref == 'refs/heads/main'
         with:
+          wranglerVersion: 4.33.1
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
@@ -31,6 +32,7 @@ jobs:
         uses: cloudflare/wrangler-action@v3
         if: github.ref != 'refs/heads/main'
         with:
+          wranglerVersion: 4.33.1
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
