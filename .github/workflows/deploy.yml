@@ -56,3 +56,6 @@ jobs:
           message: |
             ## :red_circle: Build unsuccessful... :red_circle:
             Preview deployment: https://${{ github.head_ref || github.ref_name }}-bluebuild-website.xyny.workers.dev/
+
+      - name: Trigger schema rebuild
+        run: echo "schemas:" && curl -X POST -d {} ${{ secrets.SCHEMAS_DEPLOY_HOOK }}
