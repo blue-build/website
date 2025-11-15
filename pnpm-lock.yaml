@@ -50,6 +50,9 @@ importers:
       astro:
         specifier: ^5.12.3
         version: 5.12.3(@types/node@22.15.2)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.40.0)(typescript@5.8.3)(yaml@2.7.1)
+      astro-d2:
+        specifier: ^0.8.0
+        version: 0.8.0(astro@5.12.3(@types/node@22.15.2)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.40.0)(typescript@5.8.3)(yaml@2.7.1))
       astro-og-canvas:
         specifier: ^0.4.2
         version: 0.4.2(astro@5.12.3(@types/node@22.15.2)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.40.0)(typescript@5.8.3)(yaml@2.7.1))
@@ -1291,6 +1294,12 @@ packages:
   astring@1.9.0:
     resolution: {integrity: sha512-LElXdjswlqjWrPpJFg1Fx4wpkOCxj1TDHlSV4PlaRxHGWko024xICaa97ZkMfs6DRKlCguiAI+rbXv5GWwXIkg==}
     hasBin: true
+
+  astro-d2@0.8.0:
+    resolution: {integrity: sha512-vs1crOjTmYeQg+kHUymB8AhcmFRZyiQBuK1bsuMoTbX1upX3ljhny8DdvOWoiEVUBQAwlUojjwO5bB8tRo8hCw==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      astro: '>=5.0.0'
 
   astro-eslint-parser@0.16.3:
     resolution: {integrity: sha512-CGaBseNtunAV2DCpwBXqTKq8+9Tw65XZetMaC0FsMoZuLj0gxNIkbCf2QyKYScVrNOU7/ayfNdVw8ZCSHBiqCg==}
@@ -5290,6 +5299,13 @@ snapshots:
   ast-types-flow@0.0.8: {}
 
   astring@1.9.0: {}
+
+  astro-d2@0.8.0(astro@5.12.3(@types/node@22.15.2)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.40.0)(typescript@5.8.3)(yaml@2.7.1)):
+    dependencies:
+      astro: 5.12.3(@types/node@22.15.2)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.40.0)(typescript@5.8.3)(yaml@2.7.1)
+      hast-util-from-html: 2.0.3
+      hast-util-to-html: 9.0.5
+      unist-util-visit: 5.0.0
 
   astro-eslint-parser@0.16.3:
     dependencies:
