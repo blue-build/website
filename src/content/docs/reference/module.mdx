@@ -88,7 +88,11 @@ Environment variable containing the URL of the OCI image used as the base.
 
 ### `OS_VERSION`
 
-Environment variable containing the major version of running operating system. The value is gathered from the `VERSION_ID` in `/etc/os-release`.
+Environment variable containing the major version of the OS image. The value is gathered from the `VERSION_ID` in `/etc/os-release`.
+
+### `OS_ARCH`
+
+Environment variable containing the architecture codename of the OS image. F.e. `x86_64`, `aarch64`, etc.
 
 ### `get_json_array`
 
