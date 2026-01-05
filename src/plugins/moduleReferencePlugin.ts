@@ -5,6 +5,8 @@ import type { StarlightPlugin } from "@astrojs/starlight/types";
 import path from "node:path";
 import * as fs from "fs";
 import type { Module } from "./modulesJsonGeneratorPlugin";
+import { jsonschemaToMarkdown } from "../lib/jsonschemaToMarkdown";
+import type { JSONSchema } from "json-schema-typed";
 
 export default function moduleReferencePlugin(): StarlightPlugin {
   return {
@@ -89,10 +91,7 @@ async function generateReferencePage(
                 module.name + "@" + version.version,
                 module.shortdesc ?? "",
                 version.examples ?? [],
-                schema as {
-                  properties: object;
-                  required: string[];
-                },
+                schema as object,
                 readme,
                 rawUrlToEditUrl(version.readme ?? ""),
                 {
@@ -108,7 +107,7 @@ async function generateReferencePage(
             module.name,
             module.shortdesc ?? "",
             version.examples ?? [],
-            schema as { properties: object; required: string[] },
+            schema as object,
             `:::note
 This documentation page is for the latest version (${version.version}) of this module.
 All available versions: ${module.versions.map((v) => `[${v.version}](${v.version})`).join(", ")}.
@@ -153,9 +152,7 @@ function writeReferencePage(
   sidebar: Record<string, any>,
   outputFile: string,
 ): void {
-  const optionReference = generateOptionReference(
-    schema as { properties: object; required: string[]; $defs: object },
-  );
+  const optionReference = generateOptionReference(schema);
 
   const content = `\
 ---
@@ -169,7 +166,7 @@ ${readme.replace(/^#{1}\s.*$/gm, "")}
 \`\`\`yaml
 ${examples[0]}
 \`\`\`
-${optionReference !== "" ? `## Configuration options\n ${optionReference}` : ""}
+${optionReference ?? ""}
 `;
 
   fs.writeFile(outputFile, content, (err) => {
@@ -194,97 +191,17 @@ function rawUrlToEditUrl(url: string): string {
   return `${baseURL}/edit/${refAndFilePath}`;
 }
 
-function generateOptionReference(schema: {
-  properties: object;
-  required: string[];
-  $defs: object;
-}): string {
-  if (schema === undefined) return "";
+function generateOptionReference(schemaObj: object): string {
+  if (schemaObj === undefined) return "";
 
-  let out = "";
+  const schema: JSONSchema = schemaObj;
 
-  function generatePropReferences(
-    properties: object,
-    headerLevel: string,
-  ): string {
-    let out = "";
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    for (const [key, value] of Object.entries(properties)) {
-      if (
-        key === "type" ||
-        key === "no-cache" ||
-        key === "env" ||
-        key === "secrets"
-      )
-        continue;
-      const object =
-        value.$ref !== undefined
-          ? schema.$defs[
-              value.$ref.replace("#/$defs/", "") as keyof typeof schema.$defs
-            ]
-          : value;
-      const prop = object as {
-        type: string;
-        description?: string;
-        default?: string;
-        anyOf?: Array<{ type: string; const: string }>;
-        properties?: object;
-        items?: {
-          $ref?: string;
-          anyOf: Array<{ type: string; const: string }>;
-        };
-      };
-      const required = schema.required?.includes(key) ? "required" : "optional";
-      const type =
-        prop.type ?? (object.anyOf !== undefined ? "enum" : "unknown");
+  const docs = jsonschemaToMarkdown(schema, {
+    prefix: "Configuration options",
+    includeDescription: false,
+    includeType: false,
+    excludedProps: ["type", "no-cache", "env", "secrets"],
+  });
 
-      out += `${headerLevel} \`${key}:\` (${required} ${type})
-${prop.description ?? "*No description provided...*"}
-
-${type === "object" ? generatePropReferences(prop.properties ?? {}, headerLevel + "#") : ""}
-${type === "array" && prop.items?.anyOf !== undefined ? "Possible values: " + prop.items.anyOf?.map((v) => "`" + parseSchemaValue(v) + "`").join(", ") + "<br>" : ""}
-${type === "enum" ? "Possible values: " + prop.anyOf?.map((v) => "`" + parseSchemaValue(v) + "`").join(", ") + "<br>" : ""}
-${prop.default !== undefined ? `Default: \`${prop.default}\`` : ""}
-            \n`;
-    }
-    return out;
-  }
-
-  function parseSchemaValue(v: any): string {
-    if (v.const !== undefined) return v.const;
-
-    if (v.items !== undefined) {
-      if (v.items.$ref === "#/$defs/RecordString") return "string: string";
-      if (v.items.type === "object") {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        return `{ ${Object.entries(v.items.properties)
-          .map((p) => `${p[0]}: ${(p[1] as { type: string }).type}`)
-          .join(", ")} }`;
-      }
-      if (v.items.type === "string") {
-        return v.items.const;
-      }
-      if (v.items.$ref !== undefined) {
-        return parseSchemaValue(
-          schema.$defs[
-            v.items.$ref.replace("#/$defs/", "") as keyof typeof schema.$defs
-          ],
-        );
-      }
-    }
-
-    if (v.$ref !== undefined) {
-      return parseSchemaValue(
-        schema.$defs[
-          v.$ref.replace("#/$defs/", "") as keyof typeof schema.$defs
-        ],
-      );
-    }
-
-    return "Unknown type";
-  }
-
-  out += generatePropReferences(schema.properties, "###");
-
-  return out;
+  return docs;
 }
