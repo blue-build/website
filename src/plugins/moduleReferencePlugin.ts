@@ -47,7 +47,10 @@ export default function moduleReferencePlugin(): StarlightPlugin {
             await generateReferencePage(module, outputPath);
           } catch (err: unknown) {
             throw new Error(
-              "Failed to generate reference page: " + (err as Error).message,
+              "Failed to generate reference page for " +
+                module.name +
+                ": " +
+                (err as Error).message,
             );
           }
         }
