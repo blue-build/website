@@ -197,11 +197,14 @@ function generateOptionReference(schemaObj: object): string {
   const schema: JSONSchema = schemaObj;
 
   const docs = jsonschemaToMarkdown(schema, {
-    prefix: "Configuration options",
     includeDescription: false,
     includeType: false,
+    useLevel: false,
     excludedProps: ["type", "no-cache", "env", "secrets"],
   });
 
-  return docs;
+  return (
+    "## Configuration options\n\n" +
+    (docs.trim() !== "" ? docs : "_No options..._")
+  );
 }

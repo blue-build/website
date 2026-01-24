@@ -20,7 +20,7 @@ export function jsonschemaToMarkdown(
       "###",
       "####",
       "#####",
-      "",
+      // "",
       "-",
       "\t-",
       "\t\t-",
@@ -112,12 +112,12 @@ export function jsonschemaToMarkdown(
       extraDocs: propDocs,
     });
   } else if (type === "enum") {
-    let validDocs = "\n" + levels[level + 1] + " Valid values\n";
+    let validDocs = " with valid values:\n\n";
 
     const enumTypes = schema.anyOf as Array<Exclude<JSONSchema, boolean>>;
     for (const enumType of enumTypes) {
       const typeDocs = jsonschemaToMarkdown(enumType, {
-        level: level + 2,
+        level: level < 4 ? 4 : level + 1,
         root,
         includeDescription: false,
       });
@@ -188,10 +188,58 @@ function buildString(options: {
   desc: string;
   extraDocs?: string;
 }): string {
-  return `${options.levelStr} \
-${options.prefix}${options.prefix !== "" && options.includeType ? "," : ""} \
-${options.required ? "required" : ""} \
-${options.includeType ? `\`${options.type}\`` : ""}${options.type !== "array" && options.includeDescription ? `\n${options.desc ?? (options.levelStr.includes("#") ? "_No description provided..._" : "")}\n` : ""} \
-${options.type === "array" ? "of" : ""} ${options.extraDocs ?? ""}
-${options.type === "array" ? options.desc : ""} \n`;
+  let result = options.levelStr + " ";
+
+  if (options.prefix !== "") {
+    result += `\`${options.prefix}${options.type === "array" ? "[]:" : ":"}\``;
+    if (options.required) {
+      result += " (required)";
+    }
+    if (options.levelStr.includes("#")) {
+      result += "\n\n";
+    } else {
+      result += " ";
+    }
+  }
+
+  if (options.includeType) {
+    result += `\`${options.type}\``;
+  }
+
+  if (options.type === "array") {
+    result += " of ";
+    result += (options.extraDocs || "").trim();
+    if (options.includeDescription) {
+      if (options.levelStr.includes("#")) {
+        result += "\n\n";
+      } else {
+        result += " ";
+      }
+      result += options.desc || "";
+    }
+  } else {
+    result += options.extraDocs || "";
+  }
+
+  if (options.type !== "array" && options.includeDescription) {
+    const description =
+      options.desc ||
+      (options.levelStr.includes("#") ? "_No description provided..._" : "");
+
+    if (options.levelStr.includes("#")) {
+      result += "\n\n";
+    } else {
+      result += " ";
+    }
+    result += `${description.trim()}`;
+    if (options.levelStr.includes("#")) {
+      result += "\n\n";
+    } else {
+      result += " ";
+    }
+  }
+
+  result += "\n\n";
+
+  return result;
 }

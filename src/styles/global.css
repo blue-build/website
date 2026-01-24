@@ -1,53 +1,53 @@
 @layer base, starlight, theme, components, utilities;
 
-@import '@astrojs/starlight-tailwind';
-@import 'tailwindcss/theme.css' layer(theme);
-@import 'tailwindcss/utilities.css' layer(utilities);
+@import "@astrojs/starlight-tailwind";
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
 
 /* Custom styles start here */
 
 @theme {
-    --color-accent-50: #f0faff;
-    --color-accent-100: #e0f3ff;
-    --color-accent-200: #a8dfff;
-    --color-accent-300: #81cdf8;
-    --color-accent-400: #4babe7;
-    --color-accent-500: #2086d5;
-    --color-accent-600: #1466b8;
-    --color-accent-700: #124e97;
-    --color-accent-800: #113e78;
-    --color-accent-900: #163464;
-    --color-accent-950: #102042;
+  --color-accent-50: #f0faff;
+  --color-accent-100: #e0f3ff;
+  --color-accent-200: #a8dfff;
+  --color-accent-300: #81cdf8;
+  --color-accent-400: #4babe7;
+  --color-accent-500: #2086d5;
+  --color-accent-600: #1466b8;
+  --color-accent-700: #124e97;
+  --color-accent-800: #113e78;
+  --color-accent-900: #163464;
+  --color-accent-950: #102042;
 
-    --color-gray-200: #dfe2fc;
-    --color-gray-300: #d0d4f2;
-    --color-gray-400: #92a4c8;
-    --color-gray-600: #6773a8;
-    --color-gray-700: #4f5379;
-    --color-gray-800: #272a47;
-    --color-gray-900: #141629;
+  --color-gray-200: #dfe2fc;
+  --color-gray-300: #d0d4f2;
+  --color-gray-400: #92a4c8;
+  --color-gray-600: #6773a8;
+  --color-gray-700: #4f5379;
+  --color-gray-800: #272a47;
+  --color-gray-900: #141629;
 
-    --color-highlight-50: #fdf9ed;
-    --color-highlight-100: #f9eecc;
-    --color-highlight-200: #f3dd99;
-    --color-highlight-300: #ecc45d;
-    --color-highlight-400: #e7ae38;
-    --color-highlight-500: #e09020;
-    --color-highlight-550: #ca811c;
-    --color-highlight-600: #c66e19;
-    --color-highlight-700: #a44f19;
-    --color-highlight-800: #863e1a;
-    --color-highlight-900: #6e3419;
-    --color-highlight-950: #3f1a09;
+  --color-highlight-50: #fdf9ed;
+  --color-highlight-100: #f9eecc;
+  --color-highlight-200: #f3dd99;
+  --color-highlight-300: #ecc45d;
+  --color-highlight-400: #e7ae38;
+  --color-highlight-500: #e09020;
+  --color-highlight-550: #ca811c;
+  --color-highlight-600: #c66e19;
+  --color-highlight-700: #a44f19;
+  --color-highlight-800: #863e1a;
+  --color-highlight-900: #6e3419;
+  --color-highlight-950: #3f1a09;
 
-    --color-white: #fff;
+  --color-white: #fff;
 
-    --font-display: "Atkinson Hyperlegible", "sans-serif";
-    --font-sans: "Rubik Variable", "system-ui", "sans-serif";
-    --font-mono: "IBM Plex Mono", "monospace";
+  --font-display: "Atkinson Hyperlegible", "sans-serif";
+  --font-sans: "Rubik Variable", "system-ui", "sans-serif";
+  --font-mono: "IBM Plex Mono", "monospace";
 
-    --shadow-glow: 2px 2px 6px rgb(166, 223, 255, 0.15);
-    --shadow-glow-active: 5px 5px 12px rgb(166, 223, 255, 0.15);
+  --shadow-glow: 2px 2px 6px rgb(166, 223, 255, 0.15);
+  --shadow-glow-active: 5px 5px 12px rgb(166, 223, 255, 0.15);
 }
 
 h1,
@@ -56,32 +56,42 @@ h3,
 h4,
 h5,
 h6 {
-    @apply font-display;
+  @apply font-display;
 }
 
 :root {
-    --sl-color-bg-nav: var(--sl-color-black);
-    --sl-color-bg-inline-code: var(--sl-color-gray-6);
-    --sl-color-bg-sidebar: var(--sl-color-bg);
-    --sl-color-hairline-shade: var(--sl-color-gray-6);
+  --sl-color-bg-nav: var(--sl-color-black);
+  --sl-color-bg-inline-code: var(--sl-color-gray-6);
+  --sl-color-bg-sidebar: var(--sl-color-bg);
+  --sl-color-hairline-shade: var(--sl-color-gray-6);
 }
 
 .sl-markdown-content code:not(:where(.not-content *)) {
-    color: var(--sl-color-gray-1);
+  color: var(--sl-color-gray-1);
 }
 
 .sl-markdown-content h2::before {
-    content: "## ";
-    opacity: 0.5;
-    font-weight: normal;
+  content: "## ";
+  opacity: 0.5;
+  font-weight: normal;
 }
 .sl-markdown-content h3::before {
-    content: "### ";
-    opacity: 0.5;
-    font-weight: normal;
+  content: "### ";
+  opacity: 0.5;
+  font-weight: normal;
 }
 .sl-markdown-content h4::before {
-    content: "#### ";
-    opacity: 0.5;
-    font-weight: normal;
+  content: "#### ";
+  opacity: 0.5;
+  font-weight: normal;
+}
+.sl-markdown-content h5::before {
+  content: "##### ";
+  opacity: 0.5;
+  font-weight: normal;
+}
+.sl-markdown-content h6::before {
+  content: "##### ";
+  opacity: 0.5;
+  font-weight: normal;
 }
