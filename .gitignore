@@ -24,5 +24,6 @@ pnpm-debug.log*
 public/modules.json
 src/content/docs/reference/modules/
 src/content/docs/reference/github-action.md
+src/content/docs/reference/recipe.mdx
 
 .wrangler

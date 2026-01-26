@@ -171,6 +171,8 @@ function getType(
       return getType(root, defSchema, defName);
     }
     return { type: "unknown", required, schema: defSchema };
+  } else if (schema.$ref !== undefined) {
+    return { type: "external", required, schema };
   } else if (schema.anyOf !== undefined) {
     return { type: "enum", required, schema };
   } else {
