@@ -135,6 +135,28 @@ export function jsonschemaToMarkdown(
       desc: inSchema.description ?? "",
       extraDocs: validDocs,
     });
+  } else if (type === "staticEnum") {
+    let validDocs = " with valid values:\n\n";
+
+    const enumTypes = schema.enum ?? [];
+    for (const enumType of enumTypes) {
+      const levelStr = levels[level < 4 ? 4 : level + 1];
+
+      const typeDocs = levelStr + " `" + enumType + "`";
+
+      validDocs += typeDocs + "\n";
+    }
+
+    return buildString({
+      levelStr,
+      prefix,
+      includeType,
+      type: "enum",
+      required,
+      includeDescription,
+      desc: inSchema.description ?? "",
+      extraDocs: validDocs,
+    });
   } else {
     return buildString({
       levelStr,
@@ -155,7 +177,9 @@ function getType(
 ): { type: string; required: boolean; schema: Exclude<JSONSchema, boolean> } {
   const required = (root.required ?? []).includes(propName);
 
-  if (
+  if (schema.enum !== undefined) {
+    return { type: "staticEnum", required, schema };
+  } else if (
     schema.type === "boolean" ||
     schema.type === "number" ||
     schema.type === "string" ||
