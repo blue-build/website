@@ -41,6 +41,130 @@ snippets:
 
 A list of secrets to mount when running the module. These secrets are available to the module's script and can be used only by it.
 
+Creating a secret takes 2 parts:
+
+1. Specifying an environment variable, command, or file on the host containing the secret
+2. Defining the environment variable or file in the build to contain the secret
+
+#### Host Side
+
+In order to use a secret in the build, you will have to have it accessible on the host machine. This can come in the form of an environment variable, a file, the ssh socket, or a command that's ran to retrieve the secret. The type of the secret can be specified with the `type:` property.
+
+##### Environment Variable
+
+You can use `type: env` to pull the value of an environment variable as a secret.
+
+```yaml
+modules:
+  - type: script
+    secrets:
+      - type: env
+        name: SECRET_ENV
+        mount:
+          type: env
+          name: SECRET_ENV
+    snippets:
+      - echo $SECRET_ENV | login-script.sh
+```
+
+##### File
+
+You can use `type: file` to read the contents of a file as a secret. Relative paths are relative to the root of the `bluebuild` project.
+
+```yaml
+modules:
+  - type: script
+    secrets:
+      - type: file
+        source: ./secret.txt
+        mount:
+          type: env
+          name: SECRET_ENV
+    snippets:
+      - echo $SECRET_ENV | login-script.sh
+```
+
+##### Command
+
+You can use `type: exec` to execute a program/script that will retrieve the secret for you. The command must output the secret to `stdout`.
+
+```yaml
+modules:
+  - type: script
+    secrets:
+      - type: exec
+        command: secret-manager-command
+        args:
+          - '-q'
+          - some/arg/for/secret-command
+        mount:
+          type: env
+          name: SECRET_ENV
+    snippets:
+      - echo $SECRET_ENV | login-script.sh
+```
+
+##### SSH
+
+You can use `type: ssh` to mount the SSH socket into the build. This is useful for pulling from private git repos, or SSHing into a private server to retrieve files. You will need to make sure you have an SSH session loaded before running the build. You can do this by running:
+
+```bash
+# Start the ssh-agent and load env variables
+eval "$(ssh-agent)"
+
+# Add your ssh key to the current agent
+ssh-add
+```
+
+Example:
+
+```yaml
+modules:
+  - type: script
+    secrets:
+      - type: ssh
+    snippets:
+      - git clone git@github.com:some/repo.git
+```
+
+#### Build side
+
+When a secret is loaded from the host side, you will need to specify where to store the secret for that module run. Above we were using the `type: env` mount for demonstration purposes. You can combine most of the host side secrets (`env`, `file`, `exec`) to either build side mount (`env`, `file`). The `type: ssh` secret is mounted into the build for you, so a mount cannot be specified.
+
+##### Environment variable
+
+With `type: env`, a secret can be mounted into the build as an environment variable.
+
+```yaml
+modules:
+  - type: script
+    secrets:
+      - type: env
+        name: SECRET_ENV
+        mount:
+          type: env
+          name: SECRET_ENV
+    snippets:
+      - echo $SECRET_ENV | login-script.sh
+```
+
+##### File
+
+With `type: file`, a secret can be mounted into the build as a file.
+
+```yaml
+modules:
+  - type: script
+    secrets:
+      - type: env
+        name: SECRET_ENV
+        mount:
+          type: file
+          destination: /tmp/secret_file
+    snippets:
+      - cat /tmp/secret_file | login-script.sh
+```
+
 ## How modules are launched
 
 A module added into an image's configuration is turned into a `RUN`-statement that launches the module with a JSON version of its configuration in the generated Containerfile (or an equivalent dynamic bash command if using the legacy template).
