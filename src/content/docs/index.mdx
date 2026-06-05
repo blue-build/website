@@ -40,7 +40,7 @@ import Card from "@components/Card.astro";
     <Card title="Based on well-known standards" icon="open-book">
         The format of your OS images is the familiar OCI image format, famously
         used by Docker & Podman. With [Fedora's Native Container
-        support](https://fedoraproject.org/wiki/Changes/OstreeNativeContainerStable),
+        support](https://fedoraproject.org/wiki/Changes/OstreeNativeContainerStable) and [`bootc`](https://github.com/bootc-dev/bootc),
         it becomes possible to boot natively into a OCI compatible image.
     </Card>
     <Card title="Free & open-source" icon="github">
@@ -60,8 +60,8 @@ import Card from "@components/Card.astro";
         Build your custom images on [Universal
         Blue](https://universal-blue.org/)'s awesome base images, with the
         option to build on [atomic Fedora
-        desktops](https://fedoraproject.org/atomic-desktops/), and more options
-        being supported soon.
+        desktops](https://fedoraproject.org/atomic-desktops/), [our base images](https://github.com/blue-build/base-images)
+        and more options being supported soon.
     </Card>
 </CardGrid>
 
@@ -95,6 +95,18 @@ _And in the FAQ writer's opinion, BlueBuild's documentation is better and the re
 Universal Blue is an open source project started by cloud developers that builds amazing custom images based on atomic Fedora along with related experiments, while BlueBuild only builds tools for custom image creation.
 The project now known as BlueBuild started out as just a part of Universal Blue, but was eventually split from it due to diverging from the scope and being mostly unrelated to the project's main maintainers.
 
+### Can I make other custom images with BlueBuild that are not Fedora-based?
+
+As of writing this (2026.06.05), yes. But it is not the stable and straight-forward process like with Fedora. It is rather experimental. For a long time, `rpm-ostree` was used as the only available tooling to make OCI custom image making and BlueBuild possible in Fedora land only. However, during the time of progression, `bootc` tool was made, and it got more stable and reliable for use. `bootc` is used as a generalized distro-agnostic tool for making OCI container images, which allows users to have custom images with Arch, Debian, OpenSuse and others as a base image. Check out this cool [`bootcrew` mono project](https://github.com/bootcrew/mono), which is a great template for distro-agnostic base `bootc` images. Also check (this custom image example)[https://github.com/fiftydinar/xfce-aerolike] based on Arch that utilizes BlueBuild as an inspiration (totally unbiased, made by this FAQ author). Note that those provided base images are very minimal compared to Fedora base images, so you have to add more stuff that you want or need.
+
+Current caveats with images other than Fedora that I am aware of are:
+
+-   No working ISO tooling - custom image installation is done by rebasing from Fedora image instead
+-   Rebasing from one distro to another (requires [a downstream dracut script patch](https://github.com/fiftydinar/xfce-aerolike/tree/6bf774a48c332ec40025f325b8ad9c033696733d/files/usr/lib/dracut/modules.d) and initramfs rebuild afterwards to make it working)
+-   No secure boot support
+-   Bootloader updater not working (bootupd - related to "No working ISO tooling")
+-   Bootloader (grub) is inherited from previous Fedora image (related to "No working ISO tooling")
+
 ### Why build an abstraction on top of Containerfiles? (recipe.yml)
 
 -   It is more accessible and helps onboard new users.
@@ -119,7 +131,7 @@ If you want to leverage BlueBuild's modules for making more complex customizatio
 
 ### Are you stable?
 
-Yes and no. We may make breaking changes and refactorings, but current existing configurations will be supported to the best of our abilities. Besides, changes in the tooling should not affect the stability of your actual operating system.
+Generally yes. We made some breaking changes and refactorings in the starting phases of the project, but we are stable for a long time as of writing this (2026.06.05). We made a well thought-out system that allows us to gain new features while retaining backwards compatibility with older configurations, which is our goal. However, note that in some cases you may need to update the versioned module manually if version increased to get the latest features (that is when module is significantly refactored in functionality and features). Changes in the CLI tooling itself should not affect the stability of your actual operating system.
 
 ### What's up with the logo?
 
