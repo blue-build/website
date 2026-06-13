@@ -1,0 +1,195 @@
+---
+title: Introducing Recipe V2
+description: Why we revamped the Recipe format, and what you need to do.
+date: 2026-06-13
+authors:
+    - name: xyny
+      img: https://avatars.githubusercontent.com/u/60004820
+      github: xynydev
+---
+
+:::tip[TLDR]
+No, you don't need to do anything. **Your builds will not break.** You may choose to refactor your recipe files to the new V2 format based on the [guide below](#refactoring-a-recipe-from-v1-to-v2). _You may also choose to read the technical waffling below, if you're interested in the reasoning for this update._
+:::
+
+For [over two years now](https://github.com/blue-build/cli/issues/180), I have been of the opinion that the Recipe format that BlueBuild has been using since the start is very much _not perfect_. It works, yes, and that's why we haven't been in a rush to change it, but over the years as the project has grown the format has become ever more cluttered. Though the format started with having just the four essential top-level keys (`name:`, `description:`, `base-image:` and `image-version:`), we now also have `alt-tags:`, `blue-build-tag:`, `cosign-version:` and `labels:` and many more. As such, it became clear to us that this mess needs some organization, with related options grouped together.
+
+Additionally, with `base-image:` and `image-version:` being used together to construct the [ref to the specific OCI image](https://oras.land/docs/concepts/reference/) with no way for the user to specify a full ref or a digest, we effectively made it impossible to build images on top of a specific digest.
+
+To fix all this, we recently [finalized the schema for Recipe V2](https://github.com/blue-build/schema/pull/19) and [implemented support for it in the CLI](https://github.com/blue-build/cli/pull/789) (thanks Jerry). The CLI version v0.9.36 should now fully support using Recipe V2 on an opt-in basis (add `version: 2` at the top of your recipe).
+
+As part of this transition we will also refactor the template to use Recipe V2 and the documentation to prefer Recipe V2 whenever applicable. You may still choose to keep using V1 and documentation for it will keep being available, even though we recommend using V2 first and foremost.
+
+## What does it look like, then?
+
+The easiest way to illustrate this point is to just show a recipe file declaring the exact same image in both the Recipe V1 and V2 formats.
+
+### V1
+
+```yaml
+# yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
+
+# metadata
+name: weird-os
+description: This is my personal OS image.
+
+# image ref
+base-image: ghcr.io/blue-build/base-images/fedora-silverblue
+image-version: gts
+
+# we're on the latest fedora version -1 so let's call it gts
+alt-tags: [gts]
+
+# we don't need these i guess
+cosign-version: none
+nushell-version: none
+
+# building arm images
+platforms:
+  - linux/amd64
+  - linux/arm64
+
+# add labels for the sake of it
+labels:
+  - my.custom.label: test
+
+stages:
+  # ... omitted, because nothing changed here
+
+modules:
+  # ... omitted, because nothing changed here
+```
+
+### V2
+
+```yaml
+# yaml-language-server: $schema=https://schema.blue-build.org/recipe-v2.json
+version: 2
+
+# metadata tells the world what the image is
+metadata:
+  name: weird-os
+  description: This is my personal OS image.
+  labels:
+    - my.custom.label: test
+
+# base is the image you are building on top of
+base:
+ # the whole ref can be defined at once 
+ image: ghcr.io/blue-build/base-images/fedora-silverblue:gts
+
+ # or it can be defined in parts
+ # image:
+ #   registry: ghcr.io
+ #   repository: bluebuild/base-images/fedora-silverblue
+ #   tag: gts
+ 
+ # we can now verify the base image using a public key
+ public-key: https://raw.githubusercontent.com/blue-build/base-images/refs/heads/main/cosign.pub
+
+# spec changes how the image is built
+spec:
+  # we're on the latest fedora version -1 so let's call it gts
+  tags: [gts]
+
+  # we don't need these i guess
+  tool-versions:
+    cosign: none
+    nushell: none
+
+  # building arm images
+  platforms:
+    - linux/amd64
+    - linux/arm64
+
+stages:
+  # ... omitted, because nothing changed here
+
+modules:
+  # ... omitted, because nothing changed here
+```
+
+## I don't like it!
+
+That's alright. You do not need to use it. 
+
+## Refactoring a Recipe from V1 to V2
+
+1. Replace the top of your Recipe to opt in to V2.
+
+    Before: 
+    ```yaml
+    # yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
+    ```
+    After:
+    ```yaml
+    # yaml-language-server: $schema=https://schema.blue-build.org/recipe-v2.json
+    version: 2
+    ```
+
+2. Add the mandatory `metadata:` top-level key and move your existing `name:`, `description:` and `labels:` declarations under it.
+
+    Before: 
+    ```yaml
+    name: weird-os
+    description: This is my personal OS image.
+    labels:
+      - my.custom.label: test
+    ```
+    After:
+    ```yaml
+    metadata:
+      name: weird-os
+      description: This is my personal OS image.
+      labels:
+        - my.custom.label: test
+    ```
+
+3. Add the mandatory `base:` top-level key and combine your `base-image:` and `image-version:` declarations into the `image:` declaration.
+
+    Before: 
+    ```yaml
+    base-image: ghcr.io/blue-build/base-images/fedora-silverblue
+    image-version: latest
+    ```
+    After:
+    ```yaml
+    base:
+      image: ghcr.io/blue-build/base-images/fedora-silverblue:latest
+    ```
+
+    After (alternative, if preferred):
+    ```yaml
+    base:
+      image:
+        registry: ghcr.io
+        repository: blue-build/base-images/fedora-silverblue
+        tag: latest
+    ```
+
+4. If applicable, add the optional `spec:` top-level key and move related declarations under it.
+
+    Before: 
+    ```yaml
+    alt-tags: [gts]
+    blue-build-tag: main
+    cosign-version: none
+    nushell-version: none
+    platforms:
+      - linux/amd64
+      - linux/arm64
+    ```
+    After:
+    ```yaml
+    spec:
+      tags: [gts]
+      tool-versions:
+        bluebuild: main
+        cosign: none
+        nushell: none
+      platforms:
+        - linux/amd64
+        - linux/arm64
+    ```
+
+5. You're done! `modules:` (and `stages:` if you're using them) do not need to be touched at all.
