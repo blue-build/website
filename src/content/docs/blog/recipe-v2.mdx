@@ -70,6 +70,7 @@ version: 2
 metadata:
   name: weird-os
   description: This is my personal OS image.
+  tags: [gts]
   labels:
     - my.custom.label: test
 
@@ -89,9 +90,6 @@ base:
 
 # spec changes how the image is built
 spec:
-  # we're on the latest fedora version -1 so let's call it gts
-  tags: [gts]
-
   # we don't need these i guess
   tool-versions:
     cosign: none
@@ -133,6 +131,7 @@ That's alright. You do not need to use it.
     ```yaml
     name: weird-os
     description: This is my personal OS image.
+    alt-tags: [gts]
     labels:
       - my.custom.label: test
     ```
@@ -141,6 +140,7 @@ That's alright. You do not need to use it.
     metadata:
       name: weird-os
       description: This is my personal OS image.
+      tags: [gts]
       labels:
         - my.custom.label: test
     ```
@@ -171,7 +171,6 @@ That's alright. You do not need to use it.
 
     Before: 
     ```yaml
-    alt-tags: [gts]
     blue-build-tag: main
     cosign-version: none
     nushell-version: none
@@ -182,7 +181,6 @@ That's alright. You do not need to use it.
     After:
     ```yaml
     spec:
-      tags: [gts]
       tool-versions:
         bluebuild: main
         cosign: none
