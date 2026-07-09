@@ -1,0 +1,12 @@
+<script>
+  import * as AsciinemaPlayer from "asciinema-player";
+  import * as css from "asciinema-player/dist/bundle/asciinema-player.css";
+  AsciinemaPlayer.create("/bluebuild.rec", document.getElementById("demo"), {
+    terminalFontSize: "small",
+    fit: "none",
+    speed: 2,
+    autoPlay: false,
+  });
+</script>
+<div id="demo" class="h-128 m-0"></div>
+<!-- TODO fix height, add dark mode -->
