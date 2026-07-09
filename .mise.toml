@@ -1,4 +1,5 @@
 [tools]
+"aqua:asciinema/asciinema" = "latest"
 pnpm = "9.1.0-0"
 
 [settings]

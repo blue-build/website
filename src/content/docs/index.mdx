@@ -4,7 +4,7 @@ description: The BlueBuild project creates accessible tools for you to create, c
 template: splash
 hero:
     title: The <strong class="text-highlight-550 dark:text-highlight-200">easiest</strong> way to build your own desktop Linux images.
-    tagline: The BlueBuild project creates accessible tools for you to create, configure & build custom images of atomic Fedora distributions.
+    tagline: The BlueBuild project creates accessible tools for you to create, configure & build custom images of image-based Linux distributions.
     actions:
         - text: Let's get started!
           link: /learn/getting-started/
@@ -19,122 +19,135 @@ banner:
         Hey! We're still a pretty new project and are moving fast, but trying to keep a degree of backwards compatibility when changes are made. <a href="https://blue-build.org/learn/contributing/">Contributions</a> are very welcome!
 ---
 
-import { CardGrid } from "@astrojs/starlight/components";
-import Card from "@components/Card.astro";
+import Asciinema from "@components/Asciinema.astro"
 
-## Features
+<details>
+<summary class="before:-translate-y-1/3">
+    <div class="sl-heading-wrapper level-h2 inline"><h2 id="wait-whats-a-custom-image">Wait, what’s a custom image?</h2><a class="sl-anchor-link" href="#wait-whats-a-custom-image"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “Wait, what’s a custom image?”</span></a></div>
+</summary>
 
-<hr class="opacity-0" />
-<CardGrid stagger>
-    <Card title="Easy configuration" icon="pencil">
-        The build process can be configured entirely in a straightforward YAML
-        format called a [recipe](/reference/recipe/). When building, the recipe
-        is transformed into a Containerfile by the BlueBuild cli tool.
-    </Card>
-    <Card title="Totally extensible" icon="puzzle">
-        The modular build system [can easily be
-        extended](/how-to/making-modules/) by just writing a shell script.
-        Modules you create can be added into the official BlueBuild repository,
-        or your own, for the community to take advantage of.
-    </Card>
-    <Card title="Based on well-known standards" icon="open-book">
-        The format of your OS images is the familiar OCI image format, famously
-        used by Docker & Podman. With [Fedora's Native Container
-        support](https://fedoraproject.org/wiki/Changes/OstreeNativeContainerStable) and [`bootc`](https://github.com/bootc-dev/bootc),
-        it becomes possible to boot natively into a OCI compatible image.
-    </Card>
-    <Card title="Free & open-source" icon="github">
-        BlueBuild is an open-source project built by the community for the
-        community. Feel free to peek at & tinker with the [source
-        code](https://github.com/blue-build/)! GitHub also provides CI/CD & a
-        container registry for free, though other providers are supported as
-        well.
-    </Card>
-    <Card title="Effortless reliability" icon="laptop">
-        With your custom images being based on reliable atomic distributions,
-        your setup will be rock solid. As all errors related to customizing your
-        environment happen during the build process in the cloud, it's way
-        harder to end up with a bricked system.
-    </Card>
-    <Card title="Build on the best" icon="rocket">
-        Build your custom images on [Universal
-        Blue](https://universal-blue.org/)'s awesome base images, with the
-        option to build on [atomic Fedora
-        desktops](https://fedoraproject.org/atomic-desktops/), [our base images](https://github.com/blue-build/base-images)
-        and more options being supported soon.
-    </Card>
-</CardGrid>
+A custom image refers to an edition of **an image-based Linux distribution** tailored specifically to **meet the needs of a single individual or a select group of users**.
 
-## FAQ
+An image-based Linux distribution refers to a distribution where the entire system is **continuously delivered to users as a single, whole package, called an image**. This is as opposed to traditional Linux distributions, where every system package, including the kernel and drivers, **are installed and updated each separately by a package manager**. 
 
-### What's a custom image? Can I use this to make my own distro?
+The techonology of image-based Linux has been pioneered by Fedora, specifically the so-called [atomic desktops](https://fedoraproject.org/atomic-desktops/) and [fedora-bootc](https://docs.fedoraproject.org/en-US/bootc/getting-started/), first with `rpm-ostree` and nowadays with bootc. **The [bootc](https://bootc.dev/) project enables ransactional, in-place operating system updates using [OCI container images](https://opencontainers.org/)** as the transport format. This allows us to leverage standard OCI container build techniques (like [Containerfiles](https://github.com/containers/common/blob/main/docs/Containerfile.5.md)) and infrastructure (like container registries built into Git forges, ex. [ghcr.io](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry)).
 
-A custom image in this context is a customized version of an image-based Linux distribution that can be switched to by the user of such a distribution without reinstalling. So about making your own distro, _maybe_, but not really. When making custom images, you're building on top of an existing distribution. You're most likely using its package manager and repositories and just adding your own flair with package set changes and configuration files. It's more like a more reliable version of maintaining/sharing your [dotfiles](https://wiki.archlinux.org/title/Dotfiles), but from the perspective of the operating system.
+This emerging technology has spawned development efforts such as:
+- The [Universal Blue community](https://universal-blue.org/) who build [Bazzite](https://bazzite.gg/) among other custom images intended for different userbases.
+  - Fun fact, BlueBuild was born as a small part of Universal Blue, before being spun out to be it's own thing!
+- [Bootcrew](https://github.com/bootcrew/) who build proof-of-concept image-based editions of other non-Fedora distributions.
 
-### So is this the type of workaround necessary to make 'immutable' distributions customizable?
+The lineage of image-based Linux distributions is related to and often confused with immutable distributions, butthe ease of modification of image-based Linux systems using OCI tooling or specialized tools such as BlueBuild proves that these systems are  **very much not immutable**, and are **usable & fun for tinkerers and nerds** as well. The read-only nature of system-level packages like the kernel, systemd, and drivers only serves to make your running systems **exceptionally stable**, since there is no way for the system to be broken by an incomplete update for example. The base system is rock-solid and not disturbed by userspace packages, which are handled by [Flatpak](https://flatpak.org/), [Brew](https://brew.sh/), [Mise](https://mise.jdx.dev/), or whatever tool is preferred.
 
-Someone might get turned off from so-called 'immutable' Linux distributions due to fears of the taking away them ability to tinker and change the system as you please. The term comes from the usage of immutable root filesystems in these distributions, but in reality most 'immutable' Linux distributions are still pretty _change-able_. So while BlueBuild is a tool that helps you tinker with these sorts of distributions, it's not giving you back some freedom that was taken away.
+```d2 pad=50 layout=elk
+"Traditional Linux distributions" {
+"kernel 7.0.14" -> "user's computer": "package manager"
+"systemd 259.7" -> "user's computer": "package manager"
+"bash 5.3.9"  -> "user's computer": "package manager"
+"package-wanted-by-user 1.0.0" -> "user's computer": "package manager"
+"random-gui-app 1.0" -> "user's computer": "package manager"
+}
+```
 
-Here's some terms that can be used to better describe these sorts of distributions:
+```d2 pad=50 layout=elk
+"Image-based Linux distributions" {
+"kernel 7.0.14" -> "base image": "package manager"
+"systemd 259.7" -> "base image": "package manager"
+"bash 5.3.9" -> "base image": "package manager"
 
-_Atomic:_ instead of new and updated packages being swapped on the running system live, they're queued up to be used after the next boot.  
-_Image-based:_ instead of each computer updating each of its system packages individually, the system updates are bundled (usually daily) as images that are pulled onto the user computers and queued up to be used after the next boot.
+"base image"
+"base image" -> BlueBuild."custom image"
 
-Read more [here](https://blog.verbum.org/2020/08/22/immutable-%E2%86%92-reprovisionable-anti-hysteresis/?ref=blue-build.org).
+"BlueBuild" {
+  "custom image"
+  "package-wanted-by-user 1.0.0"  -> "custom image": "package manager"
+}
 
-### What's the difference between BlueBuild and [VanillaOS' Vib](https://vib.vanillaos.org/)?
+BlueBuild."custom image" -> "user's computer": "bootc"
 
-BlueBuild and Vib seem very similar and both use similar concepts: [recipes](/reference/recipe/) and [modules](/reference/module/). While Vib technically does the same thing as BlueBuild, it is positioned more as a generalized tool to build any OCI container image that just happens to be what is used by Vanilla to build their desktop. BlueBuild focuses on image-based desktop Linux more than containers, using container images as just a distribution mechanism. As such, BlueBuild supports more features specifically useful on desktop by default, such as the [fonts module](/reference/modules/fonts/) to fetch a selection of fonts.
+"random-gui-app 1.0" -> user's computer: "flatpak"
+}
+```
+</details>
 
-BlueBuild also aims to support building custom images of VanillaOS in the near future.
+## 1. Define your image
 
-_And in the FAQ writer's opinion, BlueBuild's documentation is better and the recipe format is slightly cleaner._
+<div class="grid md:grid-cols-2">
+<div class="m-4 p-3 px-4 border">
+Our standardized [recipe format](/reference/recipe/) allows you to declare every part of your custom image in a **friendly** way, **designed for humans** (while being easily written programmatically as well).
 
-### What's the difference between BlueBuild and [Universal Blue](https://universal-blue.org/)?
+We offer **full IDE-autocompletion** through JSONSchema anywhere where the YAML language server is available.
 
-Universal Blue is an open source project started by cloud developers that builds amazing custom images based on atomic Fedora along with related experiments, while BlueBuild only builds tools for custom image creation.
-The project now known as BlueBuild started out as just a part of Universal Blue, but was eventually split from it due to diverging from the scope and being mostly unrelated to the project's main maintainers.
+BlueBuild enforces a standard structure for repositories, so you always feel at home, even when helping someone else:
+**one recipe file = one custom image**.
 
-### Can I make other custom images with BlueBuild that are not Fedora-based?
+The recipe file defines the name of the image, the [base image](/learn/base-images/) to use, and the customization to add on top using [modules](/learn/modules/). Module configuration [can easily be shared](/how-to/multiple-files/) between recipe files, though.
+</div>
+<div class="m-4 h-128 overflow-y-scroll">
+```yaml title="recipe.yml"
+# yaml-language-server: $schema=https://schema.blue-build.org/recipe-v2.json
+version: 2
 
-As of writing this (2026.06.05), yes. But it is not the stable and straight-forward process like with Fedora. It is rather experimental. For a long time, `rpm-ostree` was used as the only available tooling to make OCI custom image making and BlueBuild possible in Fedora land only. However, during the time of progression, `bootc` tool was made, and it got more stable and reliable for use. `bootc` is used as a generalized distro-agnostic tool for making OCI container images, which allows users to have custom images with Arch, Debian, OpenSuse and others as a base image. Check out this cool [`bootcrew` mono project](https://github.com/bootcrew/mono), which is a great template for distro-agnostic base `bootc` images. Also check [this custom image example](https://github.com/fiftydinar/xfce-aerolike) based on Arch that utilizes BlueBuild as an inspiration (totally unbiased, made by this FAQ author). Note that those provided base images are very minimal compared to Fedora base images, so you have to add more stuff that you want or need.
+metadata:
+  name: weird-os
+  description: This is my personal OS image.
+  
+base:
+ image: ghcr.io/blue-build/base-images/fedora-silverblue:latest
 
-Current caveats with images other than Fedora that I am aware of are:
+modules:
+  - type: files
+    files:
+      - source: system
+        destination: /
+      
+  - type: dnf
+    repos:
+      copr:
+        - atim/starship
+        - monkeygold/nautilus-open-any-terminal
+    install:
+      packages:
+        - micro
+        - foot
+        - starship
+        - tailscale
+        - android-tools
+        - nautilus-open-any-terminal
+  
+  - type: systemd
+    system:
+      enabled:
+        - tailscaled.service
+  
+  - type: gnome-extensions
+    install:
+      - Blur my Shell
+      
+  - type: fonts
+    fonts:
+      nerd-fonts:
+        - FiraCode
+        - JetBrainsMono
+```
+</div>
+</div>
 
--   No working ISO tooling - custom image installation is done by rebasing from Fedora image instead
--   Rebasing from one distro to another (requires [a downstream dracut script patch](https://github.com/fiftydinar/xfce-aerolike/tree/6bf774a48c332ec40025f325b8ad9c033696733d/files/usr/lib/dracut/modules.d) and initramfs rebuild afterwards to make it working)
--   No secure boot support
--   Bootloader updater not working (bootupd - related to "No working ISO tooling")
--   Bootloader (grub) is inherited from previous Fedora image (related to "No working ISO tooling")
+## 2. Build with BlueBuild
 
-### Why build an abstraction on top of Containerfiles? (recipe.yml)
+<div class="grid md:grid-cols-2">
+<div class="m-4 p-3 px-4 border">
+BlueBuild lets you **stop worrying about crafting pipelines or bespoke build scripts**. The [BlueBuild CLI](https://github.com/blue-build/cli) functions as a shared CI/CD pipeline, maintained by our community, and built in Rust instead of a flimsy scripting language (or god-forbid, GitHub Actions YAML).
 
--   It is more accessible and helps onboard new users.
-    -   Editing a configuration file is something most people are likely familiar with, but editing a Containerfile, bespoke build scripts, and a GitHub Action file is something most probably have no prior experience with.
--   It allows us to make harder things easier.
-    -   For just installing packages the system might be less useful, but for more complex customizations it becomes way easier to use a commonly maintained module instead.
--   It allows for parts of the build system be shared.
-    -   Less moving parts for everyone to maintain on their own.
-    -   Discuss and keep useful patterns up-to-date as community.
--   It allows for tooling to be created that programmatically configures custom images for users.
-    -   This is what [BlueBuild Workshop](https://github.com/blue-build/workshop/) is planned to be.
+The build system can be installed and used locally on any Linux system. It also runs comfortably on GitHub Actions, GitLab CI/CD, Forgejo Actions, or any other environment that can be used to build OCI container images with custom tools.
 
-### Is this project for me?
+BlueBuild CLI doesn't only implement the process of turning your `recipe.yml` into a `Containerfile` and building it, it also handles other useful and potentially complicated steps such as validating the base image signature, building multiplatform images, and tagging, pushing and signing images. And this is all automagically handled in one command, `bluebuild build`!
 
-If you want an easy way to package _your_ customization for use on multiple computers, or maybe even have a lab of full-fledged Linux computers that you want on the same centrally updatable base, BlueBuild might just be what you're looking for! Or maybe you're a tinkerer looking for a new and exciting space in Linux to dabble with, then this and related projects are definitely something to put on your radar.
+</div>
+<div class="m-4 border overflow-scroll">
+<Asciinema/>
+</div>
 
-But if you're a total Linux and cloud nerd, you know Containerfiles by heart and are comfortable building CI/CD, our abstractions might feel limiting to you. You should still come hang around if you're interested in building custom images!
+</div>
 
-If you're just looking to build a simple container image to run on the cloud or locally, a Containerfile might still be the easiest way to get the result you want. If you want to learn how to build OCI container images with Containerfiles by making a custom image of atomic Fedora, the [`ublue-os/image-template`](https://github.com/ublue-os/image-template/) is a good minimal place to start.
-
-If you want to leverage BlueBuild's modules for making more complex customizations to your image, while using a Containerfile directly, check out our [guide for a minimal BlueBuild module setup in a Containerfile](/how-to/minimal-setup/). Keep in mind that this approach is not guaranteed to be as seamless as using a recipe and to not have breaking changes. When not using a recipe, you're also losing out on a lot of the magic of the BlueBuild CLI, such as being able to switch to the image built from a recipe locally with just one command.
-
-### Are you stable?
-
-Generally yes. We made some breaking changes and refactorings in the starting phases of the project, but we are stable for a long time as of writing this (2026.06.05). We made a well thought-out system that allows us to gain new features while retaining backwards compatibility with older configurations, which is our goal. However, note that in some cases you may need to update the versioned module manually if version increased to get the latest features (that is when module is significantly refactored in functionality and features). Changes in the CLI tooling itself should not affect the stability of your actual operating system.
-
-### What's up with the logo?
-
-_It's our mascot, a [blue-billed duck](https://en.wikipedia.org/wiki/Blue-billed_duck) with a wrench! A good pun, and cute too! The writer of this FAQ is definitely not at all biased!_
-
-The logo (along with all the other BlueBuild branding) was designed by [@xynydev](https://github.com/xynydev) and is licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/).
+## 3. Enjoy your image
