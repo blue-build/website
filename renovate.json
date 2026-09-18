@@ -1,0 +1,13 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Update the pnpm version exported to the Cloudflare build",
+      "managerFilePatterns": ["/^wrangler\\.toml$/"],
+      "matchStrings": [
+        "PNPM_VERSION\\s*=\\s*\\\"(?<currentValue>[^\\\"]+)\\\"\\s*# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)"
+      ]
+    }
+  ]
+}

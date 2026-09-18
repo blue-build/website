@@ -8,4 +8,4 @@ directory = "./dist/"
 command = "pnpm build"
 
 [vars]
-PNPM_VERSION = "9.1.0-0"
+PNPM_VERSION = "9.1.0-0" # renovate: datasource=npm depName=pnpm
