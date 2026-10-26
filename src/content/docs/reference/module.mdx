@@ -19,7 +19,12 @@ The name of the module to run. This corresponds to the name of the directory as 
 A module can execute arbitrary code both in the image build and consequently on your booted system, so make sure you trust the source you specify.
 :::
 
-The URL of the module repository (an OCI image) to pull the module from. If left unspecified, the source use is a hybrid the default module repository at `ghcr.io/blue-build/modules` and the custom modules in the local `modules/` directory, where custom modules overwrite the default modules.
+The OCI reference of the module repository to pull the module from (e.g. `ghcr.io/blue-build/modules/dnf:latest`). If left unspecified, the source is the module image from our [official modules](https://github.com/blue-build/modules). In order to use custom modules in the local `modules/` directory, you will need to set `source: local`. The `type` of the local module must match the path and filename like `modules/new-module/new-module.sh` would need:
+
+```yaml
+type: new-module
+source: local
+```
 
 ### `no-cache:` (optional)
 
