@@ -1,6 +1,7 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 import tailwindcss from "@tailwindcss/vite";
+import svelte from "@astrojs/svelte";
 
 // import icon from "astro-icon";
 import moduleReferencePlugin from "./src/plugins/moduleReferencePlugin";
@@ -13,6 +14,7 @@ export default defineConfig({
   site: "https://blue-build.org/",
 
   integrations: [
+    svelte(),
     starlight({
       title: "BlueBuild",
       logo: {
