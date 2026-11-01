@@ -9,11 +9,93 @@ This page is a draft, so contents are unfinished or nonexistent.
 
 https://diataxis.fr/explanation/
 
--   recipe transformed into containerfile with cli
-    -   link to recipe reference
--   containerfile built
--   pulls in modules
-    -   what are modules
-    -   you could make your own (why?)
-        -   link to making your own modules and to modules reference
--   pushed to registry
+- recipe transformed into containerfile with cli
+  - link to recipe reference
+- containerfile built
+- pulls in modules
+  - what are modules
+  - you could make your own (why?)
+    - link to making your own modules and to modules reference
+- pushed to registry
+
+```d2 pad=50
+direction: right
+recipe: recipe.yml {
+    label.near: border-top-center
+    meta: Image metadata {
+        shape: sql_table
+
+        name: string
+        description: string
+    }
+    base: Base image {
+        shape: sql_table
+
+        base-image: oci image ref
+        image-version: oci image tag
+    }
+    modules: Modules {
+        label.near: border-top-center
+        files: |yaml
+            type: files
+            files:
+                - source: system
+                  destination: /
+        |
+        containerfile: |yaml
+            type: containerfile
+            snippets:
+                - RUN echo "Hello, world!"
+        |
+    }
+}
+containerfile: Containerfile {
+    label.near: border-top-center
+
+    from: |dockerfile
+        FROM ${base-image}:${image-version} AS ${name}
+    |
+    _.recipe.meta -> from: Containerfile.j2
+    _.recipe.base -> from: Containerfile.j2
+
+    modules: Modules {
+        label.near: border-top-center
+
+        files: |dockerfile
+            RUN /tmp/scripts/run_module.sh \
+             'files' '{"type":"files","files":[{"source":"system","destination":"/"}]}'
+        |
+        _._.recipe.modules.files -> files: modules.j2
+
+        containerfile: |dockerfile
+            RUN echo "Hello, world!"
+        |
+        _._.recipe.modules.containerfile -> containerfile: containerfile.j2
+    }
+}
+image: Final image {
+    label.near: border-top-center
+    _.containerfile -> _.image: BuildDriver
+
+    meta: Image metadata {
+        shape: sql_table
+
+        name: string
+        description: string
+    }
+    _.recipe.meta -> meta: BuildDriver
+}
+```
+
+```d2 pad=50
+shape: sequence_diagram
+You -> "recipe.yml": Configure image
+You -> BlueBuild: `bluebuild build`
+"recipe.yml" -> BlueBuild: Read build instructions
+BlueBuild -> Containerfile: Build a Containerfile based on recipe
+Containerfile -> You: Read the Containerfile if you want to peek under the hood
+BlueBuild -> Image: Build image
+Image -> You: You can `bluebuild switch` to a locally built image
+BlueBuild -> Registry: Push image to registry
+Registry -> You: Switch to the hosted image or get the latest version through auto-updates
+```

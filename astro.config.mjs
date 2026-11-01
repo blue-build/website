@@ -9,6 +9,8 @@ import githubActionReferencePlugin from "./src/plugins/githubActionReferencePlug
 import modulesJsonGeneratorPlugin from "./src/plugins/modulesJsonGeneratorPlugin";
 import recipeReferencePlugin from "./src/plugins/recipeReferencePlugin";
 
+import d2 from "astro-d2";
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://blue-build.org/",
@@ -149,6 +151,7 @@ export default defineConfig({
         },
       ],
     }),
+    d2(),
     // icon(),
   ],
 

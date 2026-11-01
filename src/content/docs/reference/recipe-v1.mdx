@@ -1,0 +1,205 @@
+
+---
+title: recipe.yml (v1)
+description: A `recipe.yml` file is used to configure a custom image.
+---
+
+A `recipe.yml` file describes the build process of a custom image. The top-level keys set the metadata and base for the image, and modules are build steps that add things on top of the base.
+
+:::tip
+This is the reference page for Recipe V1. We recommend using Recipe V2 instead. See the [Recipe V2 reference page](/reference/recipe-v2/). Don't know what this means or how to migrate from V1 to V2? Read the blog post: [Introducing Recipe V2](/blog/recipe-v2)
+:::
+
+:::tip
+You can add the lines below to the top of your recipe to get yaml completion in your favorite editor.
+```
+# yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
+```
+:::
+
+## Reference
+ 
+
+
+### `version:`
+
+`1`
+
+The version of the recipe file schema.
+
+
+
+
+### `name:` (required)
+
+`string`
+
+The image name. Used when publishing to GHCR as `ghcr.io/user/name`.
+
+
+
+
+### `description:` (required)
+
+`string`
+
+The image description. Published to GHCR in the image metadata.
+
+
+
+
+### `alt-tags[]:`
+
+`array` of `string`
+
+Allows setting custom tags on the recipe’s final image.
+Adding tags to this property will override the `latest` and timestamp tags.
+
+
+### `base-image:` (required)
+
+`string`
+
+The [OCI](https://opencontainers.org/) image to base your custom image on.
+Only atomic Fedora images and those based on them are officially supported as of now.
+[BlueBuild base images](github.com/blue-build/base-images) or [Universal Blue images](https://universal-blue.org/images/) are recommended.
+Other custom bootc images can be used as well.
+
+Example:
+```yaml
+base-image: ghcr.io/blue-build/base-images/fedora-silverblue
+```
+
+
+
+
+### `image-version:` (required)
+
+`enum` with valid values:
+
+- `string`
+
+
+- `integer`
+
+
+
+
+The tag of the base image to build on.
+Used to select a version explicitly (`40`) or to always use the latest stable version (`latest`).
+A list of all available tags can be viewed by pasting your `base-image` url into your browser.
+
+
+
+
+### `blue-build-tag:`
+
+`string`
+
+The tag to pull for the BlueBuild cli. This is mostly used for
+trying out specific versions of the cli without compiling it locally.
+Supply the tag of the cli release container to pull, see [the list of available tags](https://github.com/blue-build/cli/pkgs/container/cli) for reference.
+Default: `latest-installer`. Set to to `none` to opt out of installing the CLI into your image.
+
+
+
+
+### `cosign-version:`
+
+`string`
+
+The version of cosign that will be included in the image.
+This will override the default version set by the CLI.
+Setting to `none` will prevent installing cosign altogether.
+
+
+
+
+### `nushell-version:`
+
+`string`
+
+The version of nushell to include at `/usr/libexec/bluebuild/nu/nu` for use by modules in the image.
+This will override the default BlueBuild Nushell version.
+Change only if you need a specific version of Nushell, changing this might break some BlueBuild modules.
+Set to to `none` to opt out of installing Nushell into your image (this will break modules that use Nushell at run time in the final image, like `default-flatpaks`).
+
+
+
+
+### `platforms[]:`
+
+`array` of `enum` with valid values:
+
+- `linux/amd64`
+- `linux/amd64/v2`
+- `linux/arm64`
+- `linux/arm`
+- `linux/arm/v6`
+- `linux/arm/v7`
+- `linux/386`
+- `linux/loong64`
+- `linux/mips`
+- `linux/mipsle`
+- `linux/mips64`
+- `linux/mips64le`
+- `linux/ppc64`
+- `linux/ppc64le`
+- `linux/riscv64`
+- `linux/s390x`
+
+Specify a list of the platforms to build for your image.
+The resulting images will be added to a manifest list that allows your host’s container runtime to pull the correct image architecture for your hardware. The process of building a multi-architecture image will end up using emulation. Consequently, image builds will take significantly longer and more space will be required on the build host since each platform that is being built is its own image. If `platforms:` is not specified, the build host’s architecture will be used.
+
+
+### `labels:`
+
+`object`
+
+A collection of custom labels that will be applied to the image.
+
+Each item should be a `key: value` pair representing a label name mapping to label value.
+
+
+
+
+
+
+
+### `stages[]:`
+
+`array` of `enum` with valid values:
+
+- `external`
+
+
+- `external`
+
+A list of [stages](https://blue-build.org/reference/stages/) that are executed before the build of the final image.
+This is useful for compiling programs from source without polluting the final bootable image.
+
+
+### `modules[]:` (required)
+
+`array` of `enum` with valid values:
+
+- `external`
+
+
+- `external`
+
+A list of [modules](https://blue-build.org/reference/module/) that is executed in order. Multiple of the same module can be included.
+
+Each item in this list needs have at least a `type:` except if the configuration is included from an external file in the `recipes/` directory with [`from-file:`](https://blue-build.org/how-to/multiple-files/).
+
+Example:
+
+```yaml
+modules:
+ - from-file: common-packages.yml # an external module configuration file for installing commong packages
+ - type: signing # a module that doesn't require any configuration
+```
+
+
+
+
