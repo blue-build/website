@@ -11,10 +11,7 @@ const isFrontPage = Astro.url.pathname === "/";
         <>
             <hr class="mt-32" />
             <footer class="absolute left-0 h-16 w-screen bg-gradient-to-b from-accent-300/50 to-transparent dark:from-gray-600/50">
-                <div
-                    class="absolute flex h-16 -translate-y-3 translate-x-3 flex-row items-center gap-4 bg-white px-8 outline outline-1 outline-gray-900
-            dark:bg-gray-900 dark:outline-gray-200 sm:-translate-y-6 sm:translate-x-6 sm:gap-8 sm:px-16"
-                >
+                <div class="flex h-16 flex-row items-center justify-center md:justify-start gap-4 sm:gap-8 px-8">
                     <NavLinks {...Astro.locals.starlightRoute} />
                 </div>
             </footer>
