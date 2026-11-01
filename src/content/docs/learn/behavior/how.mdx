@@ -1,0 +1,80 @@
+---
+title: How BlueBuild works
+description: A high level understanding of the BlueBuild workflow.
+---
+
+:::caution
+This page is a draft, so contents are unfinished or nonexistent.
+:::
+
+BlueBuild is a CICD integration tool for building custom `bootc` images that integrates with major CI providers (Gitlab CI, Github Actions). The purpose is to allow the user to focus more on setting up their image with recipes that conatin easy-to-use modules for installing software, adding files, and configuring the system. This page will detail how BlueBuild works to translate recipes into `bootc` images.
+
+## Determining Build Strategy
+
+Since BlueBuild integrates with CI providers and build tools, it needs to determine:
+
+- What CI environment it's operating in
+- What build tools are available
+- What boot management drivers are available (used for the `switch` subcommand)
+
+The `Driver::init()` function in the `blue_build_process_management` crate takes in user-defined options to override the various drivers that are used. If there aren't any overrides, the program will pick the most optimal based on the environment. The drivers that are currently available are:
+
+- CI Drivers
+    - Github
+    - Gitlab
+    - Local
+- Build Drivers
+    - Docker
+    - Podman
+    - Buildah
+- Run Drivers
+    - Docker
+    - Podman
+- Boot Drivers
+    - RPM-OSTree
+    - Bootc
+
+### CI Drivers
+
+The CI Driver is used to generate the appropriate tags, generate the image name (if an override isn't provided), and determine if it's building on the default branch of the repo.
+
+#### Github
+
+The Github CI driver will be selected automatically when the `GITHUB_ACTIONS` environment variable is present.
+
+#### Gitlab
+
+The Gitlab CI driver will be selected automatically when the `GITLAB_CI` environment variable is present.
+
+#### Local
+
+The local CI driver will be used if other's aren't detected.
+
+### Build Drivers
+
+These drivers are responsible for actually building the `bootc` image. These drivers need to be able to read a `Containerfile` and build it. They are also responsible for tagging and pushing the image.
+
+### Run Drivers
+
+These drivers are used for chunking the image or generating an ISO.
+
+### Boot Drivers
+
+These drivers are used for rebasing/switching to a locally built `bootc` image.
+
+## File Validation
+
+We host our recipe schema at `https://schema.blue-build.org/` which we use to validate the recipes before trying to template the `Containerfile`. If the image is being pushed and signed, it will also check for the public and private key and make sure they match.
+
+## `Containerfile` Generation
+
+
+
+-   recipe transformed into containerfile with cli
+    -   link to recipe reference
+-   containerfile built
+-   pulls in modules
+    -   what are modules
+    -   you could make your own (why?)
+        -   link to making your own modules and to modules reference
+-   pushed to registry

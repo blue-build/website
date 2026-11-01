@@ -50,10 +50,6 @@ export default defineConfig({
               link: "/learn/universal-blue/",
             },
             {
-              label: "How BlueBuild works",
-              link: "/learn/how/",
-            },
-            {
               label: "Troubleshooting, reporting bugs, and common issues",
               link: "/learn/troubleshooting/",
             },
@@ -64,6 +60,19 @@ export default defineConfig({
             {
               label: "Scope",
               link: "/learn/scope/",
+            },
+            {
+                label: "Behavior",
+                items: [
+                    {
+                        label: "How BlueBuild works",
+                        link: "/learn/behavior/how/",
+                    },
+                    {
+                        label: "How BlueBuild tags",
+                        link: "/learn/behavior/tags/",
+                    }
+                ]
             },
           ],
         },
