@@ -109,7 +109,7 @@ export function jsonschemaToMarkdown(
       required,
       includeDescription,
       desc: inSchema.description ?? "",
-      extraDocs: propDocs,
+      nextDocs: propDocs,
     });
   } else if (type === "enum") {
     let validDocs = " with valid values:\n\n";
@@ -213,6 +213,7 @@ function buildString(options: {
   includeDescription: boolean;
   desc: string;
   extraDocs?: string;
+  nextDocs?: string;
 }): string {
   let result = options.levelStr + " ";
 
@@ -263,6 +264,11 @@ function buildString(options: {
     } else {
       result += " ";
     }
+  }
+
+  if (options.nextDocs !== undefined) {
+    result += "\n\n";
+    result += options.nextDocs;
   }
 
   result += "\n\n";
